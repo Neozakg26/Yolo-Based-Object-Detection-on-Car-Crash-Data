@@ -6,11 +6,14 @@ import logging
 from logging.handlers import QueueHandler, QueueListener
 import multiprocessing
 from multiprocessing import Process, Queue
+from .converter_config_loader import ConverterConfigLoader
+import subprocess
 
+config = ConverterConfigLoader.load("car_crash_dataset/codes/converter_config.yaml")
 # Define Global paths and Create target Dir
-IMAGES_DIR = Path("car_crash_dataset/train_sample")
-ANNOTATIONS_DIR = Path("car_crash_dataset/label_sample")
-OUTPUT_LABELS_DIR = Path("car_crash_dataset/yolo_annotations")
+IMAGES_DIR = Path(config.images_dir)
+ANNOTATIONS_DIR = Path(config.annotations_dir)
+OUTPUT_LABELS_DIR = Path(config.images_dir)
 os.makedirs(OUTPUT_LABELS_DIR, exist_ok=True)
 
 #Mapping category to class index
@@ -87,6 +90,8 @@ def setup_listener(queue):
     listener = QueueListener(queue, handler)
     listener.start()
     return listener
+
+
 
 if __name__ == "__main__":
 

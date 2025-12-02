@@ -1,0 +1,18 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Logs
+*.log
+
+# Dataset folders
+car_crash_dataset/label_sample/
+car_crash_dataset/train_sample/
+car_crash_dataset/yolo_annotations/
+car_crash_dataset/train/
+
+#training runs
+runs/
+
+# Virtual environment
+venv/
