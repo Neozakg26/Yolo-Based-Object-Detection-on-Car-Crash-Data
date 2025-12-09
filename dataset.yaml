@@ -1,0 +1,13 @@
+# Must define train, val, and names fields. Example:
+train: car_crash_dataset/train_sample
+val: car_crash_dataset/train_sample
+
+# class_id and classes of all objects detected
+names:
+  0: car
+  1: bus
+  2: truck
+  3: person
+  4: bike
+  5: traffic sign
+

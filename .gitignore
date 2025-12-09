@@ -5,11 +5,10 @@ __pycache__/
 # Logs
 *.log
 
-# Dataset folders
-car_crash_dataset/label_sample/
-car_crash_dataset/train_sample/
-car_crash_dataset/yolo_annotations/
-car_crash_dataset/train/
+# Ignore all Dataset folders except codes and everything in codes
+car_crash_dataset/*
+!car_crash_dataset/codes/
+!car_crash_dataset/codes/** 
 
 #training runs
 runs/

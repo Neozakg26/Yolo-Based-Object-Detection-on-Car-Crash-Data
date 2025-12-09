@@ -7,7 +7,7 @@ from logging.handlers import QueueHandler, QueueListener
 import multiprocessing
 from multiprocessing import Process, Queue
 from .converter_config_loader import ConverterConfigLoader
-import subprocess
+
 
 config = ConverterConfigLoader.load("car_crash_dataset/codes/converter_config.yaml")
 # Define Global paths and Create target Dir
@@ -47,6 +47,7 @@ def convert_annotation(annotation_file: Path, queue: Queue):
         for frame in frames:
             for obj in frame["objects"]:
                 if "box2d" not in obj or obj["category"] not in CLASS_MAP:
+                    logger.info(f"Category Not Found: {obj}")
                     continue
                 x1, y1 = obj["box2d"]["x1"], obj["box2d"]["y1"]
                 x2, y2 = obj["box2d"]["x2"], obj["box2d"]["y2"]

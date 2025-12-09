@@ -1,5 +1,7 @@
-images_dir: "car_crash_dataset/train_sample"
-annotations_dir: "car_crash_dataset/label_sample"
+images_dir: "car_crash_dataset/test_images"
+#"car_crash_dataset/train_sample"
+annotations_dir: "car_crash_dataset/test_labels"
+ #"car_crash_dataset/label_sample"
 labels_dir : "car_crash_dataset/yolo_annotations"
 
 copier: "car_crash_dataset/codes/copier.sh"
