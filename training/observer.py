@@ -17,7 +17,7 @@ class LoggerObserver(TrainingObserver):
             "epoch_end": f" Epoch {data.get('epoch', '?')} completed.",
             "end": "Training completed successfully!",
         }
-        msg = messages.get(event, f"ℹ Event {event} received.")
+        msg = messages.get(event, f"Event {event} received.")
         self.logger.log(msg)
 
 # class GPUObserver(TrainingObserver):

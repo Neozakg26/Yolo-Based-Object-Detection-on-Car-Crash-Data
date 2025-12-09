@@ -4,6 +4,7 @@ model:
 dataset:
   yaml: "dataset.yaml"
 
+#Training Parameters
 train:
   epochs: 50
   imgsz: 640
@@ -12,5 +13,16 @@ train:
   experiment_name: "custom_yolo_model"
   save_model: true
 
+#Validation Parameters
+val:
+  epochs: 50
+  split: "val"
+  imgsz: 640
+  batch: 16
+  conf: 0.25
+  iou: 0.6
+  save_model: true
+
 compute:
-  strategy: "auto"   # single GPU | multi GPU | auto
+  training_strategy: "auto"   # single GPU | multi GPU | auto
+  validation_strategy: "simple"
