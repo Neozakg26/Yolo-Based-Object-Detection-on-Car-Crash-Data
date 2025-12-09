@@ -18,7 +18,6 @@ class ConverterConfigLoader:
     def load(path: str) -> Config:
         with open(path, "r") as f:
             data = yaml.safe_load(f)
-            logger.log(f"Loaded converter config from {path}: {data}" )
         if data is None:
             logger.error_log(f"Invalid  converter config file loaded: {path}")
             raise ValueError(f"Converter Config file is empty or invalid: {path}")    

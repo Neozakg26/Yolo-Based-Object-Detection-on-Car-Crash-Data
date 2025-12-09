@@ -1,0 +1,16 @@
+model:
+  name: "yolo11n.pt"
+
+dataset:
+  yaml: "dataset.yaml"
+
+train:
+  epochs: 50
+  imgsz: 640
+  batch: 16
+  project: "runs/train"
+  experiment_name: "custom_yolo_model"
+  save_model: true
+
+compute:
+  strategy: "auto"   # single GPU | multi GPU | auto
