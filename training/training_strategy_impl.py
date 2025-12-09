@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-from core.mylogger import MyLogger
+from training.mylogger import MyLogger
 # import torch
 # import pynvml
 from typing import Any

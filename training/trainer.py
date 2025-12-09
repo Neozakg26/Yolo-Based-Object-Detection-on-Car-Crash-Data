@@ -1,5 +1,5 @@
 from typing import Any
-from core.config_loader import Config
+from training.config_loader import Config
 
 class Trainer:
     def __init__(self, model_factory, config, trainer_service):
