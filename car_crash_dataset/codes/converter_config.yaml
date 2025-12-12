@@ -2,6 +2,6 @@ images_dir: "/datasets/nmaja/images/100k/train"
 #"car_crash_dataset/train_sample"
 annotations_dir: "/datasets/nmaja/100k/train"
  #"car_crash_dataset/label_sample"
-labels_dir : "car_crash_dataset/yolo_annotations"
+labels_dir : "/datasets/nmaja/images/100k/train_txt"
 
 copier: "car_crash_dataset/codes/copier.sh"
