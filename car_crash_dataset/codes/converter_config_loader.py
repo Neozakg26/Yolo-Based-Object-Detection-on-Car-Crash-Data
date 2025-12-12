@@ -1,6 +1,6 @@
 import yaml
 from dataclasses import dataclass 
-from core.mylogger import MyLogger
+from training.mylogger import MyLogger
 
 # Instantiate logger globally
 logger = MyLogger("converter_config.log")

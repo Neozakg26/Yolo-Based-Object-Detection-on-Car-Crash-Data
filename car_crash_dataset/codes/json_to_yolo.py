@@ -47,7 +47,7 @@ def convert_annotation(annotation_file: Path, queue: Queue):
         for frame in frames:
             for obj in frame["objects"]:
                 if "box2d" not in obj or obj["category"] not in CLASS_MAP:
-                    logger.info(f"Category Not Found: {obj}")
+                    logger.info(f"Category Not Found: {obj['category']}")
                     continue
                 x1, y1 = obj["box2d"]["x1"], obj["box2d"]["y1"]
                 x2, y2 = obj["box2d"]["x2"], obj["box2d"]["y2"]
@@ -84,7 +84,7 @@ def worker_task(queue, worker_id):
         # time.sleep(0.5)
 
 def setup_listener(queue):
-    handler = logging.FileHandler("parallel_logs.log",encoding="utf-8")
+    handler = logging.FileHandler("json_converter_logs.log",encoding="utf-8")
     formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     handler.setFormatter(formatter)
 
