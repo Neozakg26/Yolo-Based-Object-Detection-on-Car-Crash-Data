@@ -21,7 +21,7 @@ import os
 import torch.distributed as dist
 
 def maybe_init_distributed():
-    if "WORLD_SIZE" in os.environ and int(os.environ["WORLD_SIZE"]) > 1:
+    if "WORLD_SIZE" in os.environ and int(os.environ["WORLD_SIZE"]) > 0:
         if not dist.is_initialized():
             dist.init_process_group(backend="nccl")
 
