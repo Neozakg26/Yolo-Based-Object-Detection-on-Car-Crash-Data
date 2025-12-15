@@ -1,11 +1,15 @@
-from training.config_loader import ConfigLoader
-from training.model_factory import ModelFactory
-from training.trainer import Trainer
-from training.observer import LoggerObserver #, GPUObserver
-from training.mylogger import MyLogger
-from training.trainer_service import TrainerService
-from training.training_strat_selector import StrategySelector
-from training.trainer_conf_builder import TrainConfigBuilder
+from training.api import (
+    DistributedContext,
+    ConfigLoader,
+    ModelFactory,
+    Trainer,
+    LoggerObserver,
+    MyLogger,
+    TrainerService,
+    StrategySelector,
+    TrainConfigBuilder,
+)
+
 
 from validation.validator import Validator
 from validation.validation_service import ValidationService
@@ -16,7 +20,9 @@ from validation.metric_calculator import MetricCalculator
 
 if __name__ == "__main__":
 
-    global_logger = MyLogger(log_file="training.log")
+    dist = DistributedContext()
+
+    global_logger = MyLogger(log_file="training.log") if dist.is_master else None
     config = ConfigLoader.load("config.yaml")
     service  = TrainerService(
         selected_strategy= StrategySelector().select(config.compute["training_strategy"]),                      
@@ -26,46 +32,30 @@ if __name__ == "__main__":
     trainer = Trainer(
         model = ModelFactory().load(config.model["name"]),
         config = config,
-        trainer_service = service
+        trainer_service = service,
+        distributed_context= dist
     )
 
-#   Inject logger instance into observer 
-    logger_observer = LoggerObserver(logger=global_logger)
-#   gpu_observer = GPUObserver(interval_sec=30)
-    observers = [logger_observer]
+    # only add Logger Observsers to Master 
+    observers =[]
+    if dist.is_master: 
+        observers.append(LoggerObserver(logger=global_logger))
 
-    # GPU Observer thread
-    # gpu_thread = threading.Thread(target=gpu_observer.start)
-    # gpu_thread.start()
+    results  = trainer.run(observers)
 
-    try:
-        results  = trainer.run(observers)
-
+    if dist.is_master: 
         best_path  = f"{results.save_dir}/weights/best.pt"
         print(f"Neo best model: {best_path}")
+        # validate_service = ValidationService(
+        #     selected_strategy= ValidationStrategySelector().select(config.compute["validation_strategy"]),
+        #     config= ValidationConfigBuilder().build(config),
+        #     metric_calculator= MetricCalculator()
+        # )
 
-        if config.train["save_model"]:
-            print(f"Saving model post training")
-        
-        print(f"Type Object returned {type(results)}")
+        # validator  = Validator(
+        #     model= ModelFactory().load(best_path),
+        #     validation_service= validate_service
+        # )
+        # validate_results = validator.run(observers=observers)
 
-        print(f"metrics {results.names}")
-        print(f"save dir {results.nt_per_class}")
-
-        #Initialise validator and load saved model to validate 
-        validate_service = ValidationService(
-            selected_strategy= ValidationStrategySelector().select(config.compute["validation_strategy"]),
-            config= ValidationConfigBuilder().build(config),
-            metric_calculator= MetricCalculator()
-        )
-
-        validator  = Validator(
-            model= ModelFactory().load(best_path),
-            validation_service= validate_service
-        )
-        validate_results = validator.run(observers=observers)
-    finally:
-        # gpu_observer.stop()
-        # gpu_thread.join()
-        global_logger.log("GPU observer stopped.")
 
