@@ -23,7 +23,7 @@ import torch.distributed as dist
 def maybe_init_distributed():
     if "WORLD_SIZE" in os.environ and int(os.environ["WORLD_SIZE"]) > 1:
         if not dist.is_initialized():
-            dist.init_process_group(backend="gloo")
+            dist.init_process_group(backend="nccl")
 
 if __name__ == "__main__":
     maybe_init_distributed()
