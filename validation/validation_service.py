@@ -7,4 +7,4 @@ class ValidationService:
     def validate(self, model, observers):
         results = self.selected_strategy.validate(model, self.config, observers)
 
-        return self.metric_calculator.compute(results) #predictions, targets)
+        return self.metric_calculator.compute(results)

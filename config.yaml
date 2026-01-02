@@ -1,5 +1,6 @@
 model:
   name: "yolo11n.pt"
+  best: "yolo11n.pt"
 
 dataset:
   yaml: "dataset.yaml"
@@ -26,3 +27,4 @@ val:
 compute:
   training_strategy: "multi"   # single | multi
   validation_strategy: "simple"
+

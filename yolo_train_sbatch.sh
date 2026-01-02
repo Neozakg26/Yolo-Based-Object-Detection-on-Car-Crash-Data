@@ -7,4 +7,4 @@
 #SBATCH --partition=bigbatch
 sleep 30
 
-torchrun --nproc_per_node=1 execute_training.py
+torchrun --nproc_per_node=1 execute.py --job train

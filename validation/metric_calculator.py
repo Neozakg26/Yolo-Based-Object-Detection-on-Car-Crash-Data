@@ -1,17 +1,21 @@
 #from sklearn.metrics import roc_auc_score
 
+
+## NOT USED FOR NOW. CREATED incase Results from YOLO val aren't enough 
+## TO BE DELETED IF final decision  is yolo.val is enough. 
 class MetricCalculator:
-    def compute(self, results):# predictions, targets):
+    @staticmethod
+    def compute(results): # predictions, targets):
         # Convert YOLO predictions → probability scores per class
         #y_true, y_score = self._prepare_auc_inputs(predictions, targets)
         auc = 0.5
        # auc = roc_auc_score(y_true, y_score)
-
+        results = results
         return {
             "auc": auc
         }
-
-    def _prepare_auc_inputs(self, predictions, targets):
+    @staticmethod
+    def _prepare_auc_inputs( predictions, targets):
         """
         Convert YOLO output into AUC-compatible vectors.
         Returns:

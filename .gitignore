@@ -18,3 +18,11 @@ venv/
 *.txt
 .nfs000000003224f1730000005a
 yolo_dataset/
+
+downloaded_model/
+# Ignore Tracking for now 
+tracking/
+
+yt_download.py
+ytb_list.txt
+*.pt
