@@ -15,3 +15,6 @@ runs/
 
 # Virtual environment
 venv/
+*.txt
+.nfs000000003224f1730000005a
+yolo_dataset/
