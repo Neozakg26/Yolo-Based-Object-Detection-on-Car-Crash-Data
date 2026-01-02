@@ -10,9 +10,6 @@ car_crash_dataset/*
 !car_crash_dataset/codes/
 !car_crash_dataset/codes/** 
 car_crash_dataset/codes/__pycache__/
-#training runs
-runs/
-
 # Virtual environment
 venv/
 *.txt
