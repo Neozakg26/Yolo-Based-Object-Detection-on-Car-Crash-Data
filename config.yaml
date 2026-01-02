@@ -1,6 +1,6 @@
 model:
   name: "yolo11n.pt"
-  best: "yolo11n.pt"
+  best: "/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/runs/train/custom_yolo_model18/weights/best.pt"
 
 dataset:
   yaml: "dataset.yaml"

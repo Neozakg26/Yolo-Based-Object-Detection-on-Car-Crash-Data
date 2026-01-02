@@ -27,6 +27,11 @@ def maybe_init_distributed():
         if not dist.is_initialized():
             dist.init_process_group(backend="nccl")
 
+
+def cleanup_distributed():
+    if dist.is_available() and dist.is_initialized():
+        dist.destroy_process_group()
+
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
@@ -36,8 +41,12 @@ if __name__ == "__main__":
     #Load Config 
     config = ConfigLoader.load("config.yaml")
 
+    #Initialise default process group 
+    maybe_init_distributed()
+    dist = DistributedContext()
+
     if args.job == "val":
-        global_logger = MyLogger(log_file="validation.log") #if dist.is_master else None
+        global_logger = MyLogger(log_file="validation.log") if dist.is_master else None
         service = ValidationService(
             selected_strategy=ValidationStrategySelector.select(config.compute["validation_strategy"]),
             config=ValidationConfigBuilder.build(config=config),
@@ -54,16 +63,15 @@ if __name__ == "__main__":
         observers =[]
         #if dist.is_master: 
         observers.append(global_logger)
-            
-        validator.run(observers=observers)
+
+        try:  
+            validator.run(observers=observers)
+        finally:
+            cleanup_distributed()
 
     
     elif args.job == "train": 
 
-        print("Executing Training")
-        maybe_init_distributed()
-
-        dist = DistributedContext()
 
         global_logger = MyLogger(log_file="training.log") if dist.is_master else None
         
@@ -84,12 +92,16 @@ if __name__ == "__main__":
         if dist.is_master: 
             observers.append(LoggerObserver(logger=global_logger))
 
-        results  = trainer.run(observers)
+        try:
+            results  = trainer.run(observers)
 
-        if dist.is_master: 
-            best_path  = f"{results.save_dir}/weights/best.pt"
-            print(f"Neo best model: {best_path}")
+            if dist.is_master: 
+                best_path  = f"{results.save_dir}/weights/best.pt"
+                print(f"Neo best model: {best_path}")
+        finally:
+            cleanup_distributed()
     else:
         print("No valid Job Specified!!")
-
-
+        cleanup_distributed()
+    
+    
