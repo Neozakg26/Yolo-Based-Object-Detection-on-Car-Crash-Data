@@ -25,6 +25,7 @@ CLASS_MAP = {
     "person": 3,
     "bike": 4,
     "traffic sign":5,
+    "traffic light":5
 }
 
 

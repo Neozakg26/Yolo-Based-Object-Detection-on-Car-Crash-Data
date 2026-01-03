@@ -29,7 +29,7 @@ def maybe_init_distributed():
 
 
 def cleanup_distributed():
-    if dist.is_available() and dist.is_initialized():
+    if dist.is_initialized():
         dist.destroy_process_group()
 
 if __name__ == "__main__":
