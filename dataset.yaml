@@ -1,6 +1,7 @@
 # Must define train, val, and names fields. Example:
-train: yolo_dataset/train/images
-val: yolo_dataset/train/images
+path: /home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/yolo_dataset
+train: images/train
+val: images/val
 
 # class_id and classes of all objects detected
 names:
