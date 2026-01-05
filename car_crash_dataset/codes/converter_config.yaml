@@ -2,6 +2,7 @@ images_dir: "/datasets/nmaja/100k/val"
 #"car_crash_dataset/train_sample"
 annotations_dir: "/datasets/nmaja/100k/val"
  #"car_crash_dataset/label_sample"
-labels_dir : "/datasets/nmaja/100k/val_txt"
+labels_dir : "/datasets/nmaja/labels/100k/val" 
+#old labels_dir: /datasets/nmaja/100k/val_txt"
 
 copier: "car_crash_dataset/codes/copier.sh"
