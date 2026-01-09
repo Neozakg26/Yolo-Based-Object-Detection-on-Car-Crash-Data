@@ -1,15 +1,17 @@
 #!/bin/bash
 #SBATCH --job-name=tracker
-#SBATCH --output=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/sbatch_tracker_results.txt
-#SBATCH --error=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/sbatch_tracker_errors.txt
-N=$(wc -l < scenes.txt)
-#SBATCH --array=0-$(($N-1))%6 run_tracker.sbatch
+#SBATCH --output=logs/tracker_%A_%a.out
+#SBATCH --error=logs/tracker_%A_%a.err
+#SBATCH --gres=gpu:1
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --partition=bigbatch
 
-SCENE=$(sed -n "$((SLURM_ARRAY_TASK_ID+1))p" scenes.txt)
+BATCH_FILE=$(ls scene_batch_* | sed -n "$((SLURM_ARRAY_TASK_ID+1))p")
 
-echo "Processing scene: $SCENE"
+echo "Processing batch: $BATCH_FILE"
 
-python -m execute_tracker --path "$SCENE"
+while read SCENE; do
+    echo "Running scene $SCENE"
+    python3 -m execute_tracker --path "$SCENE"
+done < "$BATCH_FILE"
