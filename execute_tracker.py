@@ -15,7 +15,7 @@ config = ConfigLoader.load("config.yaml")
 #Load Detector 
 
 detector = YOLO(config.model["best"])  
-print(f"Loaded Model: {config.model["best"]}")
+print(f"Loaded Model: {config.model['best']}")
 #Initialise Tracker 
 tracker = DeepSortTracker()
 runner = TrackingRunner(detector, tracker)
