@@ -13,8 +13,9 @@ args = parser.parse_args()
 config = ConfigLoader.load("config.yaml")
 
 #Load Detector 
-detector = YOLO(config.model["best"])  
 
+detector = YOLO(config.model["best"])  
+print(f"Loaded Model: {config.model["best"]}")
 #Initialise Tracker 
 tracker = DeepSortTracker()
 runner = TrackingRunner(detector, tracker)
@@ -23,7 +24,7 @@ runner = TrackingRunner(detector, tracker)
 base_path = "\\datasets\\nmaja\\bdd100k\\images\\seg_track_20\\train"
 
 all_tracks = runner.run(f"{base_path}\\{args.path}")
-
+print(f"Tracking Completed: {args.path}")
 #save Tracker results as Parquet File 
 df = pd.DataFrame(all_tracks)
 df.to_parquet(f"{base_path}\\results\\{args.path}.parquet", engine="pyarrow", index=False)
