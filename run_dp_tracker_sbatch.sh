@@ -8,6 +8,9 @@ N=$(wc -l < scenes.txt)
 #SBATCH --gres=gpu:1
 #SBATCH --cpus-per-task=2
 #SBATCH --mem=8G
+#SBATCH --nodes=1
+#SBATCH --ntasks=1
+#SBATCH --partition=bigbatch
 
 SCENE=$(sed -n "$((SLURM_ARRAY_TASK_ID+1))p" scenes.txt)
 
