@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=tracker
-#SBATCH --output=logs/tracker_%A_%a.out
-#SBATCH --error=logs/tracker_%A_%a.err
+#SBATCH --output=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/sbatch_tracker_results.txt
+#SBATCH --error=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/sbatch_tracker_errors.txt
 #SBATCH --gres=gpu:1
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
