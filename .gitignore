@@ -17,8 +17,6 @@ venv/
 yolo_dataset/
 
 downloaded_model/
-# Ignore Tracking for now 
-tracking/
 
 yt_download.py
 ytb_list.txt
