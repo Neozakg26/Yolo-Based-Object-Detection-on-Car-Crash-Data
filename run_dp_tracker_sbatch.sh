@@ -7,12 +7,26 @@
 #SBATCH --ntasks=1
 #SBATCH --partition=bigbatch
 
-echo "SLURM TASK ID: $SLURM_ARRAY_TASK_ID"
+MAX_JOBS=4   # how many scenes to run at once
 
-# Convert number → 6-digit zero padded
-SCENE_NUM=$(printf "%06d" $SLURM_ARRAY_TASK_ID)
-SCENE="C_${SCENE_NUM}_"
+run_scene () {
+    SCENE_NUM=$(printf "%06d" $1)
+    SCENE="C_${SCENE_NUM}_"
+    echo "Starting $SCENE"
+    python3 -m execute_tracker --path "$SCENE"
+    echo "Finished $SCENE"
+}
 
-echo "Processing scene: $SCENE"
+export -f run_scene
 
-python3 -m execute_tracker --path "$SCENE"
+for i in $(seq 1 1500); do
+    run_scene $i &
+
+    # limit to 4 concurrent jobs
+    if (( $(jobs -r | wc -l) >= MAX_JOBS )); then
+        wait -n
+    fi
+done
+
+wait  # wait for remaining jobs
+echo "All scenes complete."
