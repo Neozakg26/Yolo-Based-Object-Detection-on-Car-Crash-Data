@@ -19,7 +19,7 @@ class MetaData:
         # print(f"df_meta: {df_meta}")
         # print(f"df_meta: {df_meta}")
         frame_cols = [c for c in df_meta.columns if c.startswith("frame_")]
-        print(f"frame_cols: {frame_cols}")
+        #print(f"frame_cols: {frame_cols}")
 
         df_long = df_meta.melt(
             id_vars=["vidname", "egoinvolve","timing","weather"],
@@ -49,7 +49,7 @@ class MetaData:
             .sort_index()
         )
 
-        print(f"df_long3: {df_long}")
+        #print(f"df_long3: {df_long}")
         df_scene_meta = (
             df_long
             .reset_index()

@@ -28,21 +28,21 @@ args = parser.parse_args()
 
 #initialise Global Variables
 config = ConfigLoader.load("config.yaml")
-BASE_PATH = "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images"
+BASE_PATH = "/datasets/nmaja/CrashBest"
 detector = YOLO(config.model["best"])  
 tracker = DeepSortTracker() 
 runner = TrackingRunner(detector, tracker)
 
 #START TRACKING 
 #LOAD ACCIDENT METADATA
-metdata_path  = "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images/Crash_Table.csv"
+metdata_path  = "/datasets/nmaja/Crash_Table.csv"
 scene_id = re.search(r'\d+',args.path).group()
 mt_df = MetaData(metdata_path,scene_id= scene_id)
 limit = int(mt_df.metadata.get('accident_start_frame'))
 
 
 all_tracks = runner.run(f"{BASE_PATH}/{args.path}",limit=limit)
-pq_path= f"C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/tracked_images/results/{args.path}.parquet"
+pq_path= f"/datasets/nmaja/CrashBest/results/{args.path}.parquet"
 
 
 save_results(all_tracks= all_tracks,
