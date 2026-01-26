@@ -38,10 +38,8 @@ runner = TrackingRunner(detector, tracker)
 metdata_path  = "/datasets/nmaja/Crash_Table.csv"
 scene_id = re.search(r'\d+',args.path).group()
 mt_df = MetaData(metdata_path,scene_id= scene_id)
-limit = int(mt_df.metadata.get('accident_start_frame'))
 
-
-all_tracks = runner.run(f"{BASE_PATH}/{args.path}",limit=limit)
+all_tracks = runner.run(f"{BASE_PATH}/{args.path}",metadata=mt_df.metadata)
 pq_path= f"/datasets/nmaja/CrashBest/results/{args.path}.parquet"
 
 

@@ -17,12 +17,15 @@ class DeepSortTracker:
                                 bgr=bgr
                                 )
 
-    def update(self, detections, frame, frame_idx, ego_motion:tuple, all_tracks):
+    def update(self, detections, frame, frame_idx, ego_motion:tuple, metadata,all_tracks):
+        
     
+        # Ego Information 
         ego_dx = float(ego_motion[0])
         ego_dy = float(ego_motion[1])
         ego_speed = float(ego_motion[2])
         ego_accel = float(ego_motion[3])
+        ego_involve = "Yes" == metadata.get('egoinvolve')  
 
         formatted_dets =[]
 
@@ -67,7 +70,6 @@ class DeepSortTracker:
                     "ego_dy":ego_dy,
                     "ego_speed":ego_speed,
                     "ego_accel":ego_accel,
-                    "crash_occurrence": crash_occurrence,
                     "ego_involve":ego_involve
                 })
             
