@@ -7,11 +7,12 @@
 #SBATCH --ntasks=1
 #SBATCH --partition=bigbatch
 
-BATCH_FILE=$(ls scene_batch_* | sed -n "$((SLURM_ARRAY_TASK_ID+1))p")
+echo "SLURM TASK ID: $SLURM_ARRAY_TASK_ID"
 
-echo "Processing batch: $BATCH_FILE"
+# Convert number → 6-digit zero padded
+SCENE_NUM=$(printf "%06d" $SLURM_ARRAY_TASK_ID)
+SCENE="C_${SCENE_NUM}_"
 
-while read SCENE; do
-    echo "Running scene $SCENE"
-    python3 -m execute_tracker --path "$SCENE"
-done < "$BATCH_FILE"
+echo "Processing scene: $SCENE"
+
+python3 -m execute_tracker --path "$SCENE"
