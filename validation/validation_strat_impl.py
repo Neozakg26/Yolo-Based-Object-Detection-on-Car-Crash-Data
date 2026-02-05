@@ -12,7 +12,7 @@ class SimpleValidationStrategy:
         # predictions = results.pred
         # targets = results.targets
 
-        # for obs in observers:
-        #     obs.on_validation_complete(results)
+        for obs in observers:
+            obs.log(f"Finished Validation: {results}")
 
         return results

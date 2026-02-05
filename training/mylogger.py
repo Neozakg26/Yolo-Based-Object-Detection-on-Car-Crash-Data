@@ -8,6 +8,7 @@ class MyLogger:
         self.logger.setLevel(logging.INFO)
 
         # Avoid adding duplicate handlers
+
         if not self.logger.handlers:
             # Add separate file handler
             
