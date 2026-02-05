@@ -17,7 +17,7 @@ import matplotlib.pyplot as plt
 from matplotlib.patches import Patch
 from matplotlib.lines import Line2D
 
-from .feature_extractor import FeatureExtractor, FORBIDDEN_EDGES, EXPECTED_DIRECTIONS
+from feature_extractor import FeatureExtractor, FORBIDDEN_EDGES, EXPECTED_DIRECTIONS
 
 
 class CausalGraphAggregator:

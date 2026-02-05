@@ -9,6 +9,24 @@ import scipy.stats as stats
 import matplotlib.pyplot as plt
 
 
+# Domain knowledge constraints for causal graph filtering
+FORBIDDEN_EDGES = {
+    ("x", "ttc_proxy"),
+    ("y", "ttc_proxy"),
+    ("min_distance_t", "proximity"),
+    ("mean_rel_speed_t", "risk_speed"),
+    ("min_ttc_t", "ttc_proxy"),
+}
+
+# Expected causal directions for validation
+EXPECTED_DIRECTIONS = {
+    ("vx", "x"): "positive",
+    ("vy", "y"): "positive",
+    ("proximity", "ttc_proxy"): "negative",
+    ("risk_speed", "ttc_proxy"): "negative",
+}
+
+
 class FeatureExtractor:
     def __init__(self, path):
         self.df = self.__load_parquet__(path)
