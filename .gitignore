@@ -23,7 +23,7 @@ yt_download.py
 ytb_list.txt
 *.pt
 
-downloaded_model/
+runs/
 
 
 

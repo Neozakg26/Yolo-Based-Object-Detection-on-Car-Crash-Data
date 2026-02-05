@@ -12,7 +12,7 @@ run_scene () {
     SCENE_NUM=$(printf "%06d" $1)
     SCENE="C_${SCENE_NUM}_"
     echo "Starting $SCENE"
-    python3 -m execute_tracker --path "$SCENE"
+    python3 -m execute.execute_tracker --path "$SCENE"
     echo "Finished $SCENE"
 }
 
