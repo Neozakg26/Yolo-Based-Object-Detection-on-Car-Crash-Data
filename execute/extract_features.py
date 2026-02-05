@@ -1,6 +1,7 @@
 from explainability.feature_extractor import FeatureExtractor
 from explainability.hierarchical_dbn import AccidentRiskAssessor
 from explainability.metadata import MetaData
+from training.config_loader import ConfigLoader
 import pandas as pd
 from pathlib import Path
 import argparse
@@ -21,7 +22,11 @@ parser.add_argument("--inference_method", type=str, default="supervised",
                     help="Inference method: supervised (recommended), belief_propagation, or variable_elimination")
 args = parser.parse_args()
 
-BASE_PATH = "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images"
+# ---------- CONFIG ----------
+config = ConfigLoader.load("config.yaml")
+
+BASE_PATH = config.paths["cluster_base"]
+
 META_PATH = f"{BASE_PATH}/Crash_Table.csv"
 
 df_tracks = Path(args.track_path)

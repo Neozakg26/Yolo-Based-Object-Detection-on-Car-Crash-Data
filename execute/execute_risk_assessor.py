@@ -1,6 +1,7 @@
 from explainability.feature_extractor import FeatureExtractor
 from explainability.hierarchical_dbn import AccidentRiskAssessor
 from explainability.metadata import MetaData
+from training.config_loader import ConfigLoader
 import argparse
 import pickle
 import pandas as pd
@@ -19,7 +20,11 @@ parser.add_argument("--inference_method", type=str, default="supervised",
 parser.add_argument("--pretrained_classifier", type=str, default=None,
                     help="Path to pre-trained classifier pickle file. If provided, skips per-scene training.")
 args = parser.parse_args()
-BASE_PATH = "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images"
+
+# ---------- CONFIG ----------
+config = ConfigLoader.load("config.yaml")
+
+BASE_PATH = config.paths["cluster_base"]
 META_PATH = f"{BASE_PATH}/Crash_Table.csv"
 # ---------- LOAD METADATA ----------
 scene_id = re.search(r'\d+', args.track_path).group()
