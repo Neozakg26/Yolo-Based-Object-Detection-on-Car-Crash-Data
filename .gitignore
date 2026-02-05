@@ -4,6 +4,7 @@ __pycache__/
 
 # Logs
 *.log
+*.txt
 
 # Ignore all Dataset folders except codes and everything in codes
 car_crash_dataset/*
@@ -17,4 +18,6 @@ runs/
 venv/
 
 downloaded_model/
+
+
 
