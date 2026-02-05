@@ -22,7 +22,7 @@ import numpy as np
 import pandas as pd
 from sklearn.ensemble import GradientBoostingClassifier
 from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import StratifiedKFold, cross_val_score
+from sklearn.model_selection import StratifiedKFold, cross_val_score, train_test_split
 from sklearn.metrics import classification_report, confusion_matrix, ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
 import warnings
@@ -196,23 +196,29 @@ def visualize_results(
 def visualize_class_distributions(
     risk_metrics: Dict[str, Any],
     train_scenes: int,
+    val_scenes: int,
     test_scenes: int,
     output_path: Path = None,
     show_plots: bool = True,
 ) -> None:
     """
-    Visualize class distributions for train and test sets.
+    Visualize class distributions for train, validation, and test sets.
     """
-    fig, axes = plt.subplots(1, 2, figsize=(12, 5))
+    fig, axes = plt.subplots(1, 2, figsize=(14, 5))
     fig.suptitle("Data Distribution Analysis", fontsize=14, fontweight='bold')
 
-    # 1. Risk Label Distribution (Train vs Test)
+    # 1. Risk Label Distribution (Train vs Val vs Test)
     ax1 = axes[0]
     labels = ['Safe', 'Elevated', 'Critical']
     train_dist = [
         risk_metrics['train_label_dist']['safe'],
         risk_metrics['train_label_dist']['elevated'],
         risk_metrics['train_label_dist']['critical']
+    ]
+    val_dist = [
+        risk_metrics['val_label_dist']['safe'],
+        risk_metrics['val_label_dist']['elevated'],
+        risk_metrics['val_label_dist']['critical']
     ]
     test_dist = [
         risk_metrics['test_label_dist']['safe'],
@@ -221,39 +227,41 @@ def visualize_class_distributions(
     ]
 
     x = np.arange(len(labels))
-    width = 0.35
+    width = 0.25
 
-    bars1 = ax1.bar(x - width/2, train_dist, width, label='Train', color='steelblue', alpha=0.8)
-    bars2 = ax1.bar(x + width/2, test_dist, width, label='Test', color='darkorange', alpha=0.8)
+    bars1 = ax1.bar(x - width, train_dist, width, label='Train', color='steelblue', alpha=0.8)
+    bars2 = ax1.bar(x, val_dist, width, label='Validation', color='forestgreen', alpha=0.8)
+    bars3 = ax1.bar(x + width, test_dist, width, label='Test', color='darkorange', alpha=0.8)
 
     ax1.set_ylabel('Number of Frames')
-    ax1.set_title('Risk Label Distribution')
+    ax1.set_title('Risk Label Distribution (Train/Val/Test)')
     ax1.set_xticks(x)
     ax1.set_xticklabels(labels)
     ax1.legend()
 
     # Add value labels
-    for bar in bars1:
-        height = bar.get_height()
-        ax1.annotate(f'{int(height)}', xy=(bar.get_x() + bar.get_width()/2, height),
-                    xytext=(0, 3), textcoords="offset points", ha='center', fontsize=9)
-    for bar in bars2:
-        height = bar.get_height()
-        ax1.annotate(f'{int(height)}', xy=(bar.get_x() + bar.get_width()/2, height),
-                    xytext=(0, 3), textcoords="offset points", ha='center', fontsize=9)
+    for bars in [bars1, bars2, bars3]:
+        for bar in bars:
+            height = bar.get_height()
+            ax1.annotate(f'{int(height)}', xy=(bar.get_x() + bar.get_width()/2, height),
+                        xytext=(0, 3), textcoords="offset points", ha='center', fontsize=8)
 
-    # 2. Train/Test Split Summary (Pie chart)
+    # 2. Train/Val/Test Split Summary (Pie chart)
     ax2 = axes[1]
-    sizes = [train_scenes, test_scenes]
-    labels_pie = [f'Train\n({train_scenes} scenes)', f'Test\n({test_scenes} scenes)']
-    colors = ['steelblue', 'darkorange']
-    explode = (0.02, 0.02)
+    sizes = [train_scenes, val_scenes, test_scenes]
+    labels_pie = [
+        f'Train\n({train_scenes} scenes)',
+        f'Validation\n({val_scenes} scenes)',
+        f'Test\n({test_scenes} scenes)'
+    ]
+    colors = ['steelblue', 'forestgreen', 'darkorange']
+    explode = (0.02, 0.02, 0.02)
 
     wedges, texts, autotexts = ax2.pie(
         sizes, explode=explode, labels=labels_pie, colors=colors,
         autopct='%1.1f%%', startangle=90, textprops={'fontsize': 10}
     )
-    ax2.set_title('Train/Test Scene Split')
+    ax2.set_title('Train/Validation/Test Scene Split')
 
     plt.tight_layout()
 
@@ -271,44 +279,96 @@ def visualize_class_distributions(
 def split_scenes_by_stratification(
     scene_ids: List[str],
     scene_metadata: Dict[str, Dict[str, Any]],
-    test_size: float = 0.2,
+    val_size: float = 0.15,
+    test_size: float = 0.15,
     random_state: int = 42
-) -> Tuple[List[str], List[str]]:
+) -> Tuple[List[str], List[str], List[str]]:
     """
-    Split scenes into train/test sets, stratified by ego_involved.
+    Split scenes into train/validation/test sets, stratified by ego_involved.
 
     Splitting at scene level prevents temporal data leakage since
     frames within a scene are temporally correlated.
 
+    ML Standard Split:
+    - Train: Used for model fitting
+    - Validation: Used for hyperparameter tuning and early stopping
+    - Test: Held out for final unbiased evaluation
+
+    Args:
+        scene_ids: List of scene IDs to split
+        scene_metadata: Dict mapping scene_id -> {"accident_frame": int, "ego_involved": bool}
+        val_size: Fraction of data for validation (default: 0.15)
+        test_size: Fraction of data for testing (default: 0.15)
+        random_state: Random seed for reproducibility
+
     Returns:
-        Tuple of (train_scene_ids, test_scene_ids)
+        Tuple of (train_scene_ids, val_scene_ids, test_scene_ids)
     """
     # Filter to scenes that have metadata
-    valid_scenes = [s for s in scene_ids if s in scene_metadata]
+    valid_scenes = np.array([s for s in scene_ids if s in scene_metadata])
 
-    # Get stratification labels (ego_involved)
-    stratify_labels = [scene_metadata[s]["ego_involved"] for s in valid_scenes]
+    if len(valid_scenes) == 0:
+        return [], [], []
 
-    # Use sklearn's train_test_split logic via StratifiedKFold
-    # to ensure stratification even with small datasets
-    np.random.seed(random_state)
+    # Get stratification labels (ego_involved: positive=1, negative=0)
+    stratify_labels = np.array([scene_metadata[s]["ego_involved"] for s in valid_scenes])
 
-    # Group scenes by ego_involved
-    ego_yes_scenes = [s for s, label in zip(valid_scenes, stratify_labels) if label == 1]
-    ego_no_scenes = [s for s, label in zip(valid_scenes, stratify_labels) if label == 0]
+    # Print class distribution
+    n_positive = (stratify_labels == 1).sum()
+    n_negative = (stratify_labels == 0).sum()
+    print(f"  Scene distribution: Positive (ego_involved)={n_positive}, Negative={n_negative}")
 
-    # Shuffle each group
-    np.random.shuffle(ego_yes_scenes)
-    np.random.shuffle(ego_no_scenes)
+    # First split: separate test set
+    # Use sklearn's train_test_split for proper stratification
+    train_val_scenes, test_scenes, train_val_labels, _ = train_test_split(
+        valid_scenes,
+        stratify_labels,
+        test_size=test_size,
+        random_state=random_state,
+        stratify=stratify_labels
+    )
 
-    # Split each group
-    n_test_yes = max(1, int(len(ego_yes_scenes) * test_size))
-    n_test_no = max(1, int(len(ego_no_scenes) * test_size))
+    # Second split: separate validation from training
+    # Adjust val_size relative to remaining data
+    val_size_adjusted = val_size / (1 - test_size)
 
-    test_scenes = ego_yes_scenes[:n_test_yes] + ego_no_scenes[:n_test_no]
-    train_scenes = ego_yes_scenes[n_test_yes:] + ego_no_scenes[n_test_no:]
+    train_scenes, val_scenes, _, _ = train_test_split(
+        train_val_scenes,
+        train_val_labels,
+        test_size=val_size_adjusted,
+        random_state=random_state,
+        stratify=train_val_labels
+    )
 
-    return train_scenes, test_scenes
+    return list(train_scenes), list(val_scenes), list(test_scenes)
+
+
+def print_split_statistics(
+    train_scenes: List[str],
+    val_scenes: List[str],
+    test_scenes: List[str],
+    scene_metadata: Dict[str, Dict[str, Any]]
+) -> None:
+    """Print balanced split statistics."""
+    def get_stats(scenes):
+        if not scenes:
+            return 0, 0
+        pos = sum(1 for s in scenes if scene_metadata.get(s, {}).get("ego_involved", 0) == 1)
+        neg = len(scenes) - pos
+        return pos, neg
+
+    train_pos, train_neg = get_stats(train_scenes)
+    val_pos, val_neg = get_stats(val_scenes)
+    test_pos, test_neg = get_stats(test_scenes)
+
+    total = len(train_scenes) + len(val_scenes) + len(test_scenes)
+
+    print(f"\n  Split Statistics (Total: {total} scenes):")
+    print(f"  {'Set':<12} {'Scenes':>8} {'Positive':>10} {'Negative':>10} {'Pos %':>8}")
+    print(f"  {'-'*50}")
+    print(f"  {'Train':<12} {len(train_scenes):>8} {train_pos:>10} {train_neg:>10} {train_pos/len(train_scenes)*100 if train_scenes else 0:>7.1f}%")
+    print(f"  {'Validation':<12} {len(val_scenes):>8} {val_pos:>10} {val_neg:>10} {val_pos/len(val_scenes)*100 if val_scenes else 0:>7.1f}%")
+    print(f"  {'Test':<12} {len(test_scenes):>8} {test_pos:>10} {test_neg:>10} {test_pos/len(test_scenes)*100 if test_scenes else 0:>7.1f}%")
 
 
 def discover_scenes(results_dir: Path) -> List[str]:
@@ -406,6 +466,7 @@ def prepare_frame_features(
 
 def train_risk_classifier(
     train_data: pd.DataFrame,
+    val_data: pd.DataFrame,
     test_data: pd.DataFrame,
     feature_cols: List[str],
     n_estimators: int = 100,
@@ -416,10 +477,11 @@ def train_risk_classifier(
     """
     Train GradientBoostingClassifier for risk level prediction.
 
-    Uses proper train/test separation:
-    - Scaler is fit only on training data
-    - Cross-validation performed on training data
-    - Final evaluation on held-out test data
+    ML Standard approach:
+    - Scaler is fit ONLY on training data (prevents data leakage)
+    - Cross-validation performed on training data for model selection
+    - Validation set used for early stopping and hyperparameter monitoring
+    - Test set held out for final unbiased evaluation
 
     Returns:
         Tuple of (classifier, scaler, feature_cols, metrics_dict)
@@ -436,24 +498,28 @@ def train_risk_classifier(
     scaler = StandardScaler()
     X_train_scaled = scaler.fit_transform(X_train)
 
-    # Prepare test features using the same scaler (transform only, no fit)
+    # Prepare validation features (transform only, no fit)
+    val_features, _ = prepare_frame_features(val_data, feature_cols, "risk_label")
+    X_val = val_features[available_cols].fillna(0).values
+    y_val = val_features["risk_label"].values
+    X_val_scaled = scaler.transform(X_val)
+
+    # Prepare test features (transform only, no fit)
     test_features, _ = prepare_frame_features(test_data, feature_cols, "risk_label")
     X_test = test_features[available_cols].fillna(0).values
     y_test = test_features["risk_label"].values
     X_test_scaled = scaler.transform(X_test)
 
-    # Initialize classifier
+    # Initialize classifier (no internal validation_fraction since we have explicit val set)
     classifier = GradientBoostingClassifier(
         n_estimators=n_estimators,
         max_depth=max_depth,
         learning_rate=learning_rate,
         random_state=42,
-        n_iter_no_change=10,  # Early stopping to prevent overfitting
-        validation_fraction=0.1,
     )
 
-    # Cross-validation on training data
-    print("  Running cross-validation...")
+    # Cross-validation on training data for model selection
+    print("  Running cross-validation on training data...")
     cv = StratifiedKFold(n_splits=cv_folds, shuffle=True, random_state=42)
     cv_scores = cross_val_score(classifier, X_train_scaled, y_train, cv=cv, scoring='accuracy')
     print(f"  CV accuracy: {cv_scores.mean():.1%} (+/- {cv_scores.std() * 2:.1%})")
@@ -463,11 +529,13 @@ def train_risk_classifier(
         warnings.simplefilter("ignore")
         classifier.fit(X_train_scaled, y_train)
 
-    # Evaluate on test data
+    # Evaluate on all sets
     y_train_pred = classifier.predict(X_train_scaled)
+    y_val_pred = classifier.predict(X_val_scaled)
     y_test_pred = classifier.predict(X_test_scaled)
 
     train_acc = (y_train_pred == y_train).mean()
+    val_acc = (y_val_pred == y_val).mean()
     test_acc = (y_test_pred == y_test).mean()
 
     # Collect metrics
@@ -476,15 +544,24 @@ def train_risk_classifier(
         "cv_mean": cv_scores.mean(),
         "cv_std": cv_scores.std(),
         "train_accuracy": train_acc,
+        "val_accuracy": val_acc,
         "test_accuracy": test_acc,
+        "y_val": y_val,
+        "y_val_pred": y_val_pred,
         "y_test": y_test,
         "y_test_pred": y_test_pred,
         "train_samples": len(y_train),
+        "val_samples": len(y_val),
         "test_samples": len(y_test),
         "train_label_dist": {
             "safe": int((y_train == 0).sum()),
             "elevated": int((y_train == 1).sum()),
             "critical": int((y_train == 2).sum()),
+        },
+        "val_label_dist": {
+            "safe": int((y_val == 0).sum()),
+            "elevated": int((y_val == 1).sum()),
+            "critical": int((y_val == 2).sum()),
         },
         "test_label_dist": {
             "safe": int((y_test == 0).sum()),
@@ -498,6 +575,7 @@ def train_risk_classifier(
 
 def train_ego_classifier(
     train_data: pd.DataFrame,
+    val_data: pd.DataFrame,
     test_data: pd.DataFrame,
     feature_cols: List[str],
     scaler: StandardScaler,
@@ -525,6 +603,12 @@ def train_ego_classifier(
     y_train = train_features["ego_involved"].values
     X_train_scaled = scaler.transform(X_train)
 
+    # Prepare validation features
+    val_features, _ = prepare_frame_features(val_data, feature_cols, "ego_involved")
+    X_val = val_features[available_cols].fillna(0).values
+    y_val = val_features["ego_involved"].values
+    X_val_scaled = scaler.transform(X_val)
+
     # Prepare test features
     test_features, _ = prepare_frame_features(test_data, feature_cols, "ego_involved")
     X_test = test_features[available_cols].fillna(0).values
@@ -537,12 +621,10 @@ def train_ego_classifier(
         max_depth=max_depth,
         learning_rate=learning_rate,
         random_state=42,
-        n_iter_no_change=10,
-        validation_fraction=0.1,
     )
 
     # Cross-validation on training data
-    print("  Running cross-validation...")
+    print("  Running cross-validation on training data...")
     cv = StratifiedKFold(n_splits=cv_folds, shuffle=True, random_state=42)
     cv_scores = cross_val_score(classifier, X_train_scaled, y_train, cv=cv, scoring='accuracy')
     print(f"  CV accuracy: {cv_scores.mean():.1%} (+/- {cv_scores.std() * 2:.1%})")
@@ -553,32 +635,42 @@ def train_ego_classifier(
         classifier.fit(X_train_scaled, y_train)
 
     # Evaluate at SCENE level (majority vote per scene) for proper evaluation
-    test_features["pred"] = classifier.predict(X_test_scaled)
+    def evaluate_scene_level(features_df, X_scaled, label=""):
+        features_df = features_df.copy()
+        features_df["pred"] = classifier.predict(X_scaled)
+        scene_preds = features_df.groupby("scene_id").agg({
+            "ego_involved": "first",
+            "pred": lambda x: int(x.mean() >= 0.5)
+        }).reset_index()
+        y_true = scene_preds["ego_involved"].values
+        y_pred = scene_preds["pred"].values
+        acc = (y_true == y_pred).mean()
+        return y_true, y_pred, acc, len(scene_preds)
 
-    # Aggregate predictions per scene (majority vote)
-    scene_preds = test_features.groupby("scene_id").agg({
-        "ego_involved": "first",  # Ground truth (same for all frames)
-        "pred": lambda x: int(x.mean() >= 0.5)  # Majority vote
-    }).reset_index()
-
-    y_scene_true = scene_preds["ego_involved"].values
-    y_scene_pred = scene_preds["pred"].values
-    scene_acc = (y_scene_true == y_scene_pred).mean()
+    _, _, val_scene_acc, val_scenes = evaluate_scene_level(val_features, X_val_scaled, "val")
+    y_scene_true, y_scene_pred, test_scene_acc, test_scenes = evaluate_scene_level(
+        test_features, X_test_scaled, "test"
+    )
 
     # Frame-level accuracy for comparison
-    frame_acc = (y_test == classifier.predict(X_test_scaled)).mean()
+    val_frame_acc = (y_val == classifier.predict(X_val_scaled)).mean()
+    test_frame_acc = (y_test == classifier.predict(X_test_scaled)).mean()
 
     # Collect metrics
     metrics = {
         "cv_scores": cv_scores,
         "cv_mean": cv_scores.mean(),
         "cv_std": cv_scores.std(),
-        "test_accuracy_scene_level": scene_acc,
-        "test_accuracy_frame_level": frame_acc,
-        "test_scenes": len(scene_preds),
+        "val_accuracy_scene_level": val_scene_acc,
+        "val_accuracy_frame_level": val_frame_acc,
+        "test_accuracy_scene_level": test_scene_acc,
+        "test_accuracy_frame_level": test_frame_acc,
+        "val_scenes": val_scenes,
+        "test_scenes": test_scenes,
         "y_scene_true": y_scene_true,
         "y_scene_pred": y_scene_pred,
         "train_samples": len(y_train),
+        "val_samples": len(y_val),
         "test_samples": len(y_test),
     }
 
@@ -632,10 +724,16 @@ def main():
         help="Learning rate (default: 0.1)"
     )
     parser.add_argument(
+        "--val_size",
+        type=float,
+        default=0.15,
+        help="Fraction of scenes for validation (default: 0.15)"
+    )
+    parser.add_argument(
         "--test_size",
         type=float,
-        default=0.2,
-        help="Fraction of scenes to use for testing (default: 0.2)"
+        default=0.15,
+        help="Fraction of scenes for testing (default: 0.15)"
     )
     parser.add_argument(
         "--cv_folds",
@@ -679,13 +777,16 @@ def main():
     scene_ids = discover_scenes(results_dir)
     print(f"Found {len(scene_ids)} scenes with track data")
 
-    # Step 3: Split scenes into train/test (scene-level split prevents temporal leakage)
-    print("\nSplitting scenes into train/test sets...")
-    train_scene_ids, test_scene_ids = split_scenes_by_stratification(
-        scene_ids, scene_metadata, test_size=args.test_size, random_state=42
+    # Step 3: Split scenes into train/val/test (scene-level split prevents temporal leakage)
+    print("\nSplitting scenes into train/validation/test sets...")
+    print(f"  Target split: Train={1-args.val_size-args.test_size:.0%}, Val={args.val_size:.0%}, Test={args.test_size:.0%}")
+    train_scene_ids, val_scene_ids, test_scene_ids = split_scenes_by_stratification(
+        scene_ids, scene_metadata,
+        val_size=args.val_size,
+        test_size=args.test_size,
+        random_state=42
     )
-    print(f"  Train scenes: {len(train_scene_ids)}")
-    print(f"  Test scenes: {len(test_scene_ids)}")
+    print_split_statistics(train_scene_ids, val_scene_ids, test_scene_ids, scene_metadata)
 
     # Step 4: Initialize discretizer
     print("\nInitializing discretizer...")
@@ -726,10 +827,14 @@ def main():
         return scene_data_list, loaded
 
     train_scene_data, train_count = load_scenes(train_scene_ids, "TRAIN")
+    val_scene_data, val_count = load_scenes(val_scene_ids, "VALIDATION")
     test_scene_data, test_count = load_scenes(test_scene_ids, "TEST")
 
     if not train_scene_data:
         print("ERROR: No training scenes loaded. Check your data paths.")
+        return
+    if not val_scene_data:
+        print("ERROR: No validation scenes loaded. Check your data paths.")
         return
     if not test_scene_data:
         print("ERROR: No test scenes loaded. Check your data paths.")
@@ -737,10 +842,12 @@ def main():
 
     # Concatenate data
     train_data = pd.concat(train_scene_data, ignore_index=True)
+    val_data = pd.concat(val_scene_data, ignore_index=True)
     test_data = pd.concat(test_scene_data, ignore_index=True)
     print(f"\nData summary:")
-    print(f"  Train: {len(train_data)} rows from {train_count} scenes")
-    print(f"  Test: {len(test_data)} rows from {test_count} scenes")
+    print(f"  Train:      {len(train_data):>6} rows from {train_count} scenes")
+    print(f"  Validation: {len(val_data):>6} rows from {val_count} scenes")
+    print(f"  Test:       {len(test_data):>6} rows from {test_count} scenes")
 
     # Step 6: Get feature columns (discretized columns ending in _d)
     feature_cols = [col for col in train_data.columns if col.endswith("_d")]
@@ -752,6 +859,7 @@ def main():
     print("-"*40)
     risk_classifier, scaler, used_feature_cols, risk_metrics = train_risk_classifier(
         train_data,
+        val_data,
         test_data,
         feature_cols,
         n_estimators=args.n_estimators,
@@ -762,13 +870,17 @@ def main():
 
     # Print risk classifier results
     print(f"\n  Results:")
-    print(f"    Train accuracy: {risk_metrics['train_accuracy']:.1%}")
-    print(f"    TEST accuracy:  {risk_metrics['test_accuracy']:.1%}")
-    print(f"    Train samples: {risk_metrics['train_samples']}, Test samples: {risk_metrics['test_samples']}")
-    print(f"    Train distribution: Safe={risk_metrics['train_label_dist']['safe']}, "
+    print(f"    Train accuracy:      {risk_metrics['train_accuracy']:.1%}")
+    print(f"    Validation accuracy: {risk_metrics['val_accuracy']:.1%}")
+    print(f"    TEST accuracy:       {risk_metrics['test_accuracy']:.1%}")
+    print(f"    Samples - Train: {risk_metrics['train_samples']}, Val: {risk_metrics['val_samples']}, Test: {risk_metrics['test_samples']}")
+    print(f"    Train dist: Safe={risk_metrics['train_label_dist']['safe']}, "
           f"Elevated={risk_metrics['train_label_dist']['elevated']}, "
           f"Critical={risk_metrics['train_label_dist']['critical']}")
-    print(f"    Test distribution:  Safe={risk_metrics['test_label_dist']['safe']}, "
+    print(f"    Val dist:   Safe={risk_metrics['val_label_dist']['safe']}, "
+          f"Elevated={risk_metrics['val_label_dist']['elevated']}, "
+          f"Critical={risk_metrics['val_label_dist']['critical']}")
+    print(f"    Test dist:  Safe={risk_metrics['test_label_dist']['safe']}, "
           f"Elevated={risk_metrics['test_label_dist']['elevated']}, "
           f"Critical={risk_metrics['test_label_dist']['critical']}")
 
@@ -785,6 +897,7 @@ def main():
     print("-"*40)
     ego_classifier, ego_metrics = train_ego_classifier(
         train_data,
+        val_data,
         test_data,
         used_feature_cols,
         scaler,
@@ -796,9 +909,11 @@ def main():
 
     # Print ego classifier results
     print(f"\n  Results:")
-    print(f"    TEST accuracy (scene-level): {ego_metrics['test_accuracy_scene_level']:.1%}")
-    print(f"    TEST accuracy (frame-level): {ego_metrics['test_accuracy_frame_level']:.1%}")
-    print(f"    Test scenes: {ego_metrics['test_scenes']}")
+    print(f"    Validation accuracy (scene-level): {ego_metrics['val_accuracy_scene_level']:.1%}")
+    print(f"    TEST accuracy (scene-level):       {ego_metrics['test_accuracy_scene_level']:.1%}")
+    print(f"    Validation accuracy (frame-level): {ego_metrics['val_accuracy_frame_level']:.1%}")
+    print(f"    TEST accuracy (frame-level):       {ego_metrics['test_accuracy_frame_level']:.1%}")
+    print(f"    Scenes - Val: {ego_metrics['val_scenes']}, Test: {ego_metrics['test_scenes']}")
 
     # Print classification report for test set (scene-level)
     print("\n  Test Set Classification Report (Scene-Level):")
