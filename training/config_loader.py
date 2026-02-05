@@ -18,7 +18,7 @@ class ConfigLoader:
     def load(path: str) -> Config:
         with open(path, "r") as f:
             data = yaml.safe_load(f)
-            logger.log(f"Loaded config from {path}: {data}" )
+           # logger.log(f"Loaded config from {path}: {data}" )
         if data is None:
             logger.error_log(f"Invalid config file loaded: {path}")
             raise ValueError(f"Config file is empty or invalid: {path}")    

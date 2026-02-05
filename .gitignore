@@ -10,12 +10,18 @@ __pycache__/
 car_crash_dataset/*
 !car_crash_dataset/codes/
 !car_crash_dataset/codes/** 
-
-#training runs
-runs/
-
+car_crash_dataset/codes/__pycache__/
 # Virtual environment
 venv/
+*.txt
+.nfs000000003224f1730000005a
+yolo_dataset/
+
+downloaded_model/
+
+yt_download.py
+ytb_list.txt
+*.pt
 
 downloaded_model/
 
