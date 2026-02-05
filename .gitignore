@@ -15,3 +15,6 @@ runs/
 
 # Virtual environment
 venv/
+
+downloaded_model/
+
