@@ -23,11 +23,11 @@ args = parser.parse_args()
 # ---------- CONFIG ----------
 config = ConfigLoader.load("config.yaml")
 
-BASE_PATH = "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images"
+BASE_PATH = "/datasets/nmaja/CrashBest"
 META_PATH = f"{BASE_PATH}/Crash_Table.csv"
 
 # ---------- INIT MODELS ----------
-detector = YOLO("downloaded_model/weights/best.pt")
+detector = YOLO(config.model["best"])
 tracker = DeepSortTracker()
 runner = TrackingRunner(detector, tracker)
 
