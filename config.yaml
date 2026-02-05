@@ -28,3 +28,6 @@ compute:
   training_strategy: "multi"   # single | multi
   validation_strategy: "simple"
 
+local:
+  base: "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images"
+  model: "C:/Users/neokg/Coding_Projects/yolo-detector/downloaded_model/weights/best.pt"

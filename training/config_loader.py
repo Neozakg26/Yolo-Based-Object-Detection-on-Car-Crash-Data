@@ -12,6 +12,7 @@ class Config:
     train: dict
     compute: dict
     val: dict
+    local: dict
 
 class ConfigLoader:
     @staticmethod
@@ -28,5 +29,6 @@ class ConfigLoader:
             dataset=data["dataset"],
             train=data["train"],
             compute=data["compute"],
-            val=data["val"]
+            val=data["val"],
+            local=data["local"]
         )
