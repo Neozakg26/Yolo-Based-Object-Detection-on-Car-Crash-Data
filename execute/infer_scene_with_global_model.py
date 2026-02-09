@@ -35,7 +35,7 @@ print("GLOBAL MODEL INFERENCE")
 print("="*60)
 
 risk_assessor = AccidentRiskAssessor.load(args.model_path)
-risk_assessor.inference_method = args.inference_method  # if you want to override
+risk_assessor.inference_method = args.inference_method  # To override the inference
 print("Loaded global model.")
 
 # ---------- RUN INFERENCE ----------

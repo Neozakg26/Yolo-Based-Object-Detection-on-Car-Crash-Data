@@ -10,7 +10,7 @@ from tigramite import data_processing as pp
 from tigramite.pcmci import PCMCI
 from tigramite.independence_tests.parcorr import ParCorr
 from training.config_loader import ConfigLoader
-from execute.global_graph import GlobalGraphArtifact,draw_global_graph,draw_global_graph_time_lag
+from execute.global_graph import draw_global_graph_time_lag
 
 from explainability.feature_extractor import FeatureExtractor
 
@@ -166,10 +166,6 @@ def main():
     print(f"Scenes pooled: {len(used_scenes)}")
     print(f"Edges kept after FDR+effect: {len(edge_df)}")
 
-    # draw_global_graph(
-    #     global_graph_pkl=args.out_path,
-    #     save_path=f"{BASE_PATH}/global_causal_.png"
-    # )
     draw_global_graph_time_lag(G=G,var_names=var_names,save_path=f"{BASE_PATH}/global_causal_.png")
 
 if __name__ == "__main__":
