@@ -23,11 +23,11 @@ args = parser.parse_args()
 # ---------- CONFIG ----------
 config = ConfigLoader.load("config.yaml")
 
-BASE_PATH = config.paths["local_base"]
+BASE_PATH = config.paths["cluster_base"]
 META_PATH = f"{BASE_PATH}/Crash_Table.csv"
 
 # ---------- INIT MODELS ----------
-detector = YOLO(config.paths["local_model"])
+detector = YOLO(config.paths["cluster_model"])
 tracker = DeepSortTracker()
 runner = TrackingRunner(detector, tracker)
 
