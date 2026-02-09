@@ -382,9 +382,11 @@ class FeatureExtractor:
             ego_speed=("ego_speed", "mean"),
             ego_accel=("ego_accel", "mean"),
         ).reset_index()
+        
+        ttc_valid = vehicles.groupby("frame")["ttc_proxy"].apply(lambda s: np.mean(np.isfinite(s.to_numpy()))).rename("ttc_valid_frac")
+        
+        ttc_conf_ok = vehicles.groupby("frame")["ttc_ok"].mean().rename("ttc_conf_ok_frac")
 
-        ttc_valid = vehicle_agg.apply(lambda x: np.mean(np.isfinite(x["ttc_proxy"].to_numpy()))).rename("ttc_valid_frac")
-        ttc_conf_ok = vehicle_agg.apply(lambda x: np.mean(x["ttc_ok"].to_numpy())).rename("ttc_conf_ok_frac")
         frame_obs = frame_obs.merge(ttc_valid.reset_index(), on="frame", how="left")
         frame_obs = frame_obs.merge(ttc_conf_ok.reset_index(), on="frame", how="left")
 
