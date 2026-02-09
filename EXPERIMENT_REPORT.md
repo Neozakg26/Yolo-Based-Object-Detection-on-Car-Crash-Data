@@ -95,7 +95,7 @@ This is a known limitation of using the CCD dataset for detection/tracking resea
 
 **Note**: The proposal specified DYNOTEARS, but PCMCI was implemented instead. Both are valid causal discovery methods for time-series data.
 
-```python
+```
 # feature_extractor.py:206-212
 pcmci = PCMCI(
     dataframe=tig_df,

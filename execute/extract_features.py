@@ -8,7 +8,7 @@ import argparse
 import re
 import pickle
 from networkx import DiGraph
-
+# ---------- PHASE2  ----------
 
 # ---------- ARGUMENTS ----------
 parser = argparse.ArgumentParser()
@@ -33,41 +33,12 @@ df_tracks = Path(args.track_path)
 env_df = Path(args.env_path)
 
 
-def reconstruct_graph_from_df(graph_df: pd.DataFrame) -> DiGraph:
-    """
-    Reconstruct self.graph from a DataFrame (e.g., from get_edge_summary output).
-
-    Args:
-        graph_df: DataFrame with columns: source_node, target_node, tau, weight,
-                    p_value, count, stability, direction, direction_consistency
-    """
-    graph = DiGraph()
-
-    for _, row in graph_df.iterrows():
-        source_node = row.get("source_node", f"{row['source']}(t-{row['tau']})")
-        target_node = row.get("target_node", f"{row['target']}(t)")
-
-        graph.add_edge(
-            source_node,
-            target_node,
-            p=row.get("p_value", row.get("p", 1.0)),
-            weight=row.get("weight", 0),
-            tau=row.get("tau", 1),
-            count=row.get("count", 0),
-            stability=row.get("stability", 1.0),
-            direction=row.get("direction", "unknown"),
-            direction_consistency=row.get("direction_consistency", 1.0)
-        )
-
-    print(f"Reconstructed graph with {len(graph.nodes())} nodes and {len(graph.edges())} edges")
-    return graph
-
 # ---------- LOAD METADATA ----------
 scene_id = re.search(r'\d+', args.track_path ).group()
 meta = MetaData(META_PATH, scene_id)
 
 # ---------- FEATURE EXTRACTION FOR CAUSAL ----------
-features = FeatureExtractor(path=args.track_path, env_path=args.env_path, tau_max=args.tau_max)
+features = FeatureExtractor(track_path=args.track_path, env_path=args.env_path, tau_max=args.tau_max)
 
 edge_stats =features.extract_edges()
 #print(f"EDGE STATS: {edge_stats.items()}")
@@ -92,10 +63,9 @@ with open(f"{graph_path}","wb") as f:
 
 print(f"Graph .pkl file  saved: {graph_path}")
 # Print summary
-features.print_graph_summary()
+#features.print_graph_summary()
 
 # Visualize (optional)
 if not args.skip_viz:
     fig_path = f"{BASE_PATH}/results/{scene_id}_causal_graph.png"
     features.draw_graph(var_names=var_names, save_path=fig_path)
-

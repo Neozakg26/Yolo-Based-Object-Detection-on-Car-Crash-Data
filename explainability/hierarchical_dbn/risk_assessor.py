@@ -6,7 +6,7 @@ into a unified Class for end-to-end risk assessment.
 """
 
 from dataclasses import dataclass, field
-from typing import Dict, List, Optional, Tuple, Union
+from typing import Dict, List, Optional, Tuple, Union, Iterable
 from pathlib import Path
 import numpy as np
 import pandas as pd
@@ -934,3 +934,233 @@ class AccidentRiskAssessor:
     def from_pretrained(cls, path: Union[str, Path]) -> 'AccidentRiskAssessor':
         """Alias for load() for convenience."""
         return cls.load(path)
+    
+    def fit_global(
+        self,
+        scene_items: Iterable[Tuple[str, pd.DataFrame, Optional[pd.DataFrame], Dict]],
+        pcmci_graph=None,
+        train_classifiers: bool = True,
+        random_state: int = 42,
+        frame_gap: int = 10_000,
+    ) -> "AccidentRiskAssessor":
+        """
+        Global training across many scenes.
+
+        Each item: (scene_id, tracks_df, env_df, metadata_dict)
+        - tracks_df: object-level tracking rows with 'frame'
+        - env_df: optional frame-level env rows with 'frame'
+        - metadata_dict: contains 'accident_start_frame' (clip-based) and 'egoinvolve'
+
+        Produces:
+          - global discretizer
+          - global DBN structure (optionally constrained by pcmci_graph)
+          - global CPTs
+          - optional global supervised classifiers (risk + ego)
+        """
+        # ---- 1) Merge env per scene + add scene_id + create frame_global to prevent cross-scene transitions ----
+        merged_parts = []
+        supervision_rows = []
+
+        # We will keep both local and global frames.
+        # local: original frame in scene (0..)
+        # global: offset per scene with big gaps
+        global_offset = 0
+
+        for scene_id, tracks_df, env_df, meta in scene_items:
+            df = tracks_df.copy()
+
+            if env_df is not None:
+                df = df.merge(env_df, on="frame", how="left")
+
+            df["scene_id"] = scene_id
+            df["frame_local"] = df["frame"].astype(int)
+
+            # make a monotone global frame index with large gaps between scenes
+            df["frame"] = df["frame_local"] + global_offset
+
+            # choose next offset safely
+            max_local = int(df["frame_local"].max()) if len(df) else 0
+            global_offset += max(max_local + 1, 0) + int(frame_gap)
+
+            merged_parts.append(df)
+
+            # supervision row (per scene)
+            acc = meta.get("accident_start_frame", None)
+            # acc in meta is clip-based from CSV (1..50). we trained using preacc only, but store anyway:
+            if acc is not None and pd.notna(acc):
+                # convert to local 0-based for label computations if needed later
+                acc_local = int(acc) - 1
+            else:
+                acc_local = None
+
+            supervision_rows.append({
+                "scene_id": scene_id,
+                "accident_start_frame": acc_local,
+                "egoinvolve": meta.get("egoinvolve", "Unknown"),
+            })
+
+        if not merged_parts:
+            raise RuntimeError("fit_global(): no scenes provided.")
+
+        merged_all = pd.concat(merged_parts, ignore_index=True)
+        supervision_df = pd.DataFrame(supervision_rows)
+
+        # ---- 2) Fit discretizer globally and encode ----
+        self.discretizer = ObservableDiscretizer.default()
+        discrete_df = self.discretizer.fit_transform(merged_all)
+
+        available_obs = [col for col in discrete_df.columns if col.endswith("_d")]
+        print(f"[GLOBAL] Available discretized features: {len(available_obs)}")
+
+        discrete_df = self.discretizer.encode_as_indices(discrete_df)
+
+        # Ensure essential columns exist
+        discrete_df["frame"] = merged_all["frame"].values
+        discrete_df["frame_local"] = merged_all["frame_local"].values
+        discrete_df["scene_id"] = merged_all["scene_id"].values
+
+        # ---- 3) Train global supervised classifiers (risk + ego) ----
+        if train_classifiers:
+            self._train_supervised_classifiers_global(
+                discrete_df=discrete_df,
+                supervision_df=supervision_df,
+                available_obs=available_obs,
+                random_state=random_state,
+            )
+
+        # ---- 4) Build DBN structure constrained by global PCMCI edges ----
+        structure_builder = HierarchicalDBNStructure(
+            observable_names=available_obs,
+            pcmci_edges=pcmci_graph,
+            include_pcmci_edges=(pcmci_graph is not None),
+        )
+        self.dbn = structure_builder.build()
+        print(f"[GLOBAL] DBN structure: {len(self.dbn.nodes())} nodes, {len(self.dbn.edges())} edges")
+
+        # ---- 5) Estimate CPTs globally ----
+        cpt_estimator = SemiSupervisedCPTEstimator(
+            self.dbn,
+            prior_strength=self.prior_strength,
+        )
+
+        # Pass supervision if estimator uses it; keep only necessary columns
+        # (scene_id may be ignored safely if estimator doesn't handle it)
+        supervision_for_cpt = supervision_df[["accident_start_frame"]].copy()
+        cpt_estimator.fit(discrete_df, supervision_labels=supervision_for_cpt)
+
+        # ---- 6) Init inference engine if needed (for non-supervised inference) ----
+        if self.inference_method == "belief_propagation":
+            self.inference_engine = BeliefPropagationInference(self.dbn)
+        elif self.inference_method == "variable_elimination":
+            self.inference_engine = VariableEliminationInference(self.dbn)
+
+        self._fitted = True
+        self._available_obs = available_obs
+        return self
+
+
+    def _train_supervised_classifiers_global(
+        self,
+        discrete_df: pd.DataFrame,
+        supervision_df: pd.DataFrame,
+        available_obs: List[str],
+        random_state: int = 42,
+    ) -> None:
+        """
+        Train global classifiers:
+          - risk classifier (Safe/Elevated/Critical) using TTA labels per scene
+          - ego-involved classifier (Yes/No) using scene-level label replicated to frames
+
+        IMPORTANT: uses scene-level grouping; no leakage across scenes.
+        """
+        # Feature columns available
+        self.feature_cols = [col for col in available_obs if col in discrete_df.columns]
+        if not self.feature_cols:
+            print("[GLOBAL] No feature columns available for classifier training.")
+            return
+
+        # Build frame-level features per (scene_id, frame_local)
+        # Use riskiest values per frame: max over tracks for each discretized feature.
+        agg_dict = {col: "max" for col in self.feature_cols}
+        frame_features = (
+            discrete_df
+            .groupby(["scene_id", "frame_local"], as_index=False)
+            .agg(agg_dict)
+        )
+
+        # Attach supervision info
+        frame_features = frame_features.merge(supervision_df, on="scene_id", how="left")
+
+        # ---- Risk labels via Time-To-Accident ----
+        # Only label scenes that have accident_start_frame
+        labeled = frame_features[pd.notna(frame_features["accident_start_frame"])].copy()
+        if labeled.empty:
+            print("[GLOBAL] No scenes with accident_start_frame; skipping risk classifier training.")
+        else:
+            # Compute TTA in frames and seconds (local frames)
+            labeled["tta_frames"] = labeled["accident_start_frame"].astype(int) - labeled["frame_local"].astype(int)
+            labeled["tta_seconds"] = labeled["tta_frames"] / float(self.video_fps)
+
+            def get_risk_label(tta_s: float) -> int:
+                if tta_s >= 2.5:
+                    return 0  # SAFE
+                elif tta_s >= 1.5:
+                    return 1  # ELEVATED
+                else:
+                    return 2  # CRITICAL
+
+            labeled["risk_label"] = labeled["tta_seconds"].apply(get_risk_label)
+
+            X = labeled[self.feature_cols].fillna(0).values
+            y = labeled["risk_label"].values.astype(int)
+
+            self.scaler = StandardScaler()
+            X_scaled = self.scaler.fit_transform(X)
+
+            self.classifier = GradientBoostingClassifier(
+                n_estimators=200,
+                max_depth=4,
+                learning_rate=0.05,
+                random_state=random_state
+            )
+
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore")
+                self.classifier.fit(X_scaled, y)
+
+            train_acc = self.classifier.score(X_scaled, y)
+            print(f"[GLOBAL] Risk classifier trained on {len(y)} frames across {labeled['scene_id'].nunique()} scenes")
+            print(f"[GLOBAL] Risk training accuracy (in-sample): {train_acc:.1%}")
+            print(f"[GLOBAL] Risk label distribution: Safe={sum(y==0)}, Elevated={sum(y==1)}, Critical={sum(y==2)}")
+
+        # ---- Ego involvement classifier (scene-level label replicated) ----
+        # Filter known labels
+        ego_labeled = frame_features[frame_features["egoinvolve"].isin(["Yes", "No"])].copy()
+        if ego_labeled.empty:
+            print("[GLOBAL] No scenes with egoinvolve labels; skipping ego classifier training.")
+            return
+
+        y_ego = (ego_labeled["egoinvolve"] == "Yes").astype(int).values
+        X_ego = ego_labeled[self.feature_cols].fillna(0).values
+
+        if self.scaler is None:
+            self.scaler = StandardScaler()
+            X_ego_scaled = self.scaler.fit_transform(X_ego)
+        else:
+            X_ego_scaled = self.scaler.transform(X_ego)
+
+        self.ego_classifier = GradientBoostingClassifier(
+            n_estimators=200,
+            max_depth=3,
+            learning_rate=0.05,
+            random_state=random_state
+        )
+
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore")
+            self.ego_classifier.fit(X_ego_scaled, y_ego)
+
+        ego_acc = self.ego_classifier.score(X_ego_scaled, y_ego)
+        print(f"[GLOBAL] Ego classifier trained on {len(y_ego)} frame-samples across {ego_labeled['scene_id'].nunique()} scenes")
+        print(f"[GLOBAL] Ego training accuracy (in-sample): {ego_acc:.1%}")
+        print(f"[GLOBAL] Ego label distribution: No={sum(y_ego==0)}, Yes={sum(y_ego==1)}")

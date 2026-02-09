@@ -7,7 +7,7 @@ from explainability.environment_builder import EnvironmentBuilder
 import pandas as pd
 import argparse
 import re
-
+# ---------- Phase 1 ----------
 # ---------- ARGUMENTS ----------
 parser = argparse.ArgumentParser()
 parser.add_argument("--path", type=str, required=True)
@@ -23,11 +23,11 @@ args = parser.parse_args()
 # ---------- CONFIG ----------
 config = ConfigLoader.load("config.yaml")
 
-BASE_PATH = config.paths["cluster_base"]
+BASE_PATH = config.paths["local_base"]
 META_PATH = f"{BASE_PATH}/Crash_Table.csv"
 
 # ---------- INIT MODELS ----------
-detector = YOLO(config.paths["cluster_model"])
+detector = YOLO(config.paths["local_model"])
 tracker = DeepSortTracker()
 runner = TrackingRunner(detector, tracker)
 
@@ -38,9 +38,10 @@ meta = MetaData(META_PATH, scene_id)
 
 # ---------- TRACK ----------
 all_tracks = runner.run(f"{BASE_PATH}/{args.path}", metadata=meta.metadata)
-
+#print(f"all tracks \n {all_tracks}")
 df_tracks = pd.DataFrame(all_tracks).sort_values(["track_id", "frame"])
 
+# print(f"DF tracks \n {df_tracks}") 
 # print("DF TRACKS") #DEBUG 
 # print(f"{df_tracks.head}") #DEBUG 
 tracks_path = f"{BASE_PATH}/results/{scene_id}_tracks.parquet"

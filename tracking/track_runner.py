@@ -25,6 +25,7 @@ class TrackingRunner:
             frame = cv2.imread(img_path)
             if frame is None:
                 print(f"Frame is None: {frame}")
+                frame_idx +=1
                 continue
             
             #Extract Ego Motion    
@@ -50,7 +51,7 @@ class TrackingRunner:
             
             prev_frame = frame
             frame_idx +=1
-
+        print(f" Frame ID: {frame_idx}")
         return all_tracks
     
     def draw_tracks(self, frame, tracks,frame_idx):
