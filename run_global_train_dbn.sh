@@ -8,6 +8,6 @@
 
 echo "Starting global Train DBN"
 
-python3 -m execute.train_global_dbn --results_dir /datasets/nmaja/CrashBest/results --meta_csv /datasets/nmaja/CrashBest/Crash_Table.csv --features_path /datasets/nmaja/CrashBest/results/global_features_graph.pkl --out_model /datasets/nmaja/CrashBest/results/global_risk_model.parquet --train_classifiers
+python3 -m execute.train_global_dbn --results_dir /datasets/nmaja/CrashBest/results --meta_csv /datasets/nmaja/CrashBest/Crash_Table.csv --features_path /datasets/nmaja/CrashBest/results/global_features_graph.pkl --out_model /datasets/nmaja/CrashBest/results/global_risk_model.parquet --train_classifiers --preacc_only
 
 echo "Finished Global Train DBN"
