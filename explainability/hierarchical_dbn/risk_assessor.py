@@ -17,14 +17,13 @@ import warnings
 import pickle
 
 from .discretizer import ObservableDiscretizer
-from .latent_model import LatentFactors, RiskLevel, OBSERVABLE_TO_LATENT
 from .dbn_structure import HierarchicalDBNStructure
 from .cpt_estimator import SemiSupervisedCPTEstimator
 from .dbn_inference import (
     BeliefPropagationInference,
-    VariableEliminationInference,
-    SequentialDBNInference,
-)
+    VariableEliminationInference)
+
+from .discretizer import DiscretizationConfig
 
 
 @dataclass
@@ -834,7 +833,7 @@ class AccidentRiskAssessor:
         # Save classifier separately as pickle (sklearn objects)
         if self.classifier is not None:
             classifier_path = path.with_suffix('.classifier.pkl')
-            with open(classifier_path, 'wb') as f:
+            with open(classifier_path, 'wb') as f:                                                                                       
                 pickle.dump({
                     'classifier': self.classifier,
                     'scaler': self.scaler,
@@ -843,18 +842,18 @@ class AccidentRiskAssessor:
 
     @classmethod
     def load(cls, path: Union[str, Path]) -> 'AccidentRiskAssessor':
-        """Load a trained model from disk."""
-        import pickle
-        from .discretizer import DiscretizationConfig
 
         path = Path(path)
-        if path.suffix == '.pkl':
-            path = path.with_suffix('.parquet')
+        # if path.suffix == '.pkl':
+        #     path = path.with_suffix('.parquet')
 
         model_data = pd.read_parquet(path, engine="pyarrow")
+        print(f" Model \n {model_data}")
 
         # Extract parameters
         params = model_data[model_data["type"] == "param"]
+
+
         inference_method = params[params["name"] == "inference_method"]["value"].iloc[0]
         prior_strength = float(params[params["name"] == "prior_strength"]["value"].iloc[0])
 
@@ -899,12 +898,13 @@ class AccidentRiskAssessor:
         # Rebuild DBN structure from edges
         dbn_edges = model_data[model_data["type"] == "dbn_edge"]
         if len(dbn_edges) > 0:
-            from pgmpy.models import DynamicBayesianNetwork
 
             assessor.dbn = DynamicBayesianNetwork()
+            print(f"Inside loop: dbn_edges {dbn_edges}")
             for _, row in dbn_edges.iterrows():
                 # Parse edge format: "(var, time)|(var, time)"
                 edge_str = row["value"]
+                print (f"ROW: {edge_str}")
                 src_str, tgt_str = edge_str.split("|")
                 # Convert string tuples back to actual tuples
                 src = eval(src_str)

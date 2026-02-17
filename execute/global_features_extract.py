@@ -48,7 +48,7 @@ def main():
     ap.add_argument("--out_path", type=str, required=True,
                     help="Where to save the global graph pickle (.pkl)")
 
-    # PCMCI params (start conservative for short clips)
+    # PCMCI params 
     ap.add_argument("--tau_max", type=int, default=1)
     ap.add_argument("--pc_alpha", type=float, default=0.01)
     ap.add_argument("--fdr_q", type=float, default=0.01)
@@ -71,8 +71,7 @@ def main():
         scene_id = infer_scene_id(track_path)
         env_path = os.path.join(args.results_dir, f"{scene_id}_env.parquet")
         if not os.path.exists(env_path):
-            # allow missing env; FeatureExtractor handles env_path=None
-            env_path = None
+            env_path = None # allow missing env;
 
         fe = FeatureExtractor(
             track_path=track_path,
@@ -85,12 +84,15 @@ def main():
 
         ft = fe.build_frame_table()
 
+        print (f"frame table  \n {ft}")
         # ensure required columns exist
         for c in var_names:
             if c not in ft.columns:
                 ft[c] = np.nan
 
         X = ft[var_names].to_numpy(dtype=float)
+        print (f"x  \n {X}")
+
 
         bad = ~np.isfinite(X)
         X = np.where(bad, MISSING, X)

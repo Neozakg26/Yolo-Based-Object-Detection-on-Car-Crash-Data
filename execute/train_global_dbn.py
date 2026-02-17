@@ -10,8 +10,13 @@ from typing import Dict, Optional, Tuple
 import numpy as np
 import pandas as pd
 from explainability.hierarchical_dbn import AccidentRiskAssessor
-import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix, classification_report, f1_score, accuracy_score
+
+# Matplotlib 
+import matplotlib.pyplot as plt
+import matplotlib.image as mpimg
+from matplotlib.gridspec import GridSpec
+
 
 RISK_LABELS = ["Safe", "Elevated", "Critical"]
 
@@ -140,7 +145,13 @@ def plot_confusion_matrix(cm: np.ndarray, labels: list, save_path: str, title: s
     fig.savefig(save_path, dpi=200)
     plt.close(fig)
 
-def plot_example_trajectory(df_pred: pd.DataFrame, df_gt: Optional[pd.DataFrame], save_path: str, title: str):
+def plot_example_trajectory(df_pred: pd.DataFrame, df_gt: Optional[pd.DataFrame],
+                            save_path: str, title: str,
+                            frames_dir: Optional[str] = None,
+                            frame_glob: str ="*.jpg",
+                            n_thumbs: int =5,
+                            onset_frame: Optional[int] = None,
+                            ):
     """
     df_pred: output from assessor.get_risk_trajectory -> frame, P_Safe, P_Elevated, P_Critical, risk_score, MAP_Risk
     df_gt: frame, gt_label (optional)
@@ -153,22 +164,138 @@ def plot_example_trajectory(df_pred: pd.DataFrame, df_gt: Optional[pd.DataFrame]
     ax.plot(df_pred["frame"], df_pred["P_Critical"], label="P(Critical)")
     ax.plot(df_pred["frame"], df_pred["risk_score"], label="risk_score")
 
-    if df_gt is not None:
-        # overlay accident frame marker (where label flips to critical-ish)
-        # mark first frame where gt == Critical
+    # ---------- determine GT onset frame ----------
+    gt_onset = None
+    if onset_frame is not None:
+        gt_onset = int(onset_frame)
+    elif df_gt is not None and "gt_label" in df_gt.columns:
         crit = df_gt[df_gt["gt_label"] == "Critical"]
         if len(crit) > 0:
-            f0 = int(crit["frame"].iloc[0])
-            ax.axvline(f0, linestyle="--", label="GT critical onset")
+            gt_onset = int(crit["frame"].iloc[0])
+
+    # ---------- choose thumbnail frames (aligned with x-axis) ----------
+    frames = df_pred["frame"].to_numpy()
+    fmin, fmax = int(frames.min()), int(frames.max())
+
+    # pick thumbnails: [start, midpoints..., end] and include onset neighborhood if available
+    thumbs = np.linspace(fmin, fmax, num=max(n_thumbs, 2), dtype=int).tolist()
+
+    if gt_onset is not None:
+        # ensure onset and a couple neighbors are included (clipped to range)
+        extra = [gt_onset - 3, gt_onset, gt_onset + 3]
+        extra = [int(np.clip(x, fmin, fmax)) for x in extra]
+        thumbs = list(dict.fromkeys(thumbs + extra))  # preserve order, unique
+
+    thumbs = sorted(set(thumbs))
+    # keep at most ~8 thumbnails to avoid clutter
+    if len(thumbs) > 8:
+        # keep extremes + onset + evenly-spaced
+        keep = {thumbs[0], thumbs[-1]}
+        if gt_onset is not None:
+            keep.add(gt_onset)
+        # fill remaining with evenly spaced
+        remaining = [t for t in thumbs if t not in keep]
+        k = max(0, 8 - len(keep))
+        if k > 0 and len(remaining) > 0:
+            idx = np.linspace(0, len(remaining) - 1, num=k, dtype=int)
+            for i in idx:
+                keep.add(remaining[i])
+        thumbs = sorted(keep)
+
+    # ---------- build figure layout ----------
+    has_frames = frames_dir is not None and Path(frames_dir).exists()
+    if has_frames:
+        fig = plt.figure(figsize=(12, 6))
+        gs = GridSpec(2, 1, height_ratios=[3.2, 1.4], hspace=0.15)
+        ax = fig.add_subplot(gs[0, 0])
+        ax_strip = fig.add_subplot(gs[1, 0])
+    else:
+        fig = plt.figure(figsize=(10, 4))
+        ax = fig.add_subplot(111)
+        ax_strip = None
+
+    # ---------- top plot: probabilities ----------
+    ax.plot(df_pred["frame"], df_pred["P_Safe"], label="P(Safe)")
+    ax.plot(df_pred["frame"], df_pred["P_Elevated"], label="P(Elevated)")
+    ax.plot(df_pred["frame"], df_pred["P_Critical"], label="P(Critical)")
+    ax.plot(df_pred["frame"], df_pred["risk_score"], label="risk_score")
+
+    if gt_onset is not None:
+        ax.axvline(gt_onset, linestyle="--", label="GT critical onset")
 
     ax.set_title(title)
     ax.set_xlabel("Frame")
     ax.set_ylabel("Probability / score")
     ax.legend(loc="best")
+
+    # ---------- bottom plot: filmstrip ----------
+    if ax_strip is not None:
+        ax_strip.set_xlim(fmin, fmax)
+        ax_strip.set_ylim(0, 1)
+        ax_strip.axis("off")
+
+        # Read images and place them as “data-aligned” thumbnails using extent
+        # Each thumbnail spans a small x-range so it visually aligns with the timeline.
+        span = max(1, int((fmax - fmin) / (len(thumbs) * 2)))  # width in "frame units"
+
+        # Find candidate image files once
+        # (Assumes frames are directly in frames_dir; if nested, pass the right frames_dir.)
+        img_files = sorted(Path(frames_dir).glob(frame_glob))
+
+        # Build a quick lookup from frame index -> filepath (handles common naming patterns)
+        # If your names are e.g. frame_00023.jpg, 000023.jpg, img_00023.jpg, it will still work.
+        def match_file_for_frame(k: int) -> Optional[Path]:
+            k_strs = {
+                str(k),
+                f"{k:05d}",
+                f"{k:06d}",
+                f"frame_{k}",
+                f"frame_{k:05d}",
+                f"frame_{k:06d}",
+                f"img_{k}",
+                f"img_{k:05d}",
+                f"img_{k:06d}",
+            }
+            for p in img_files:
+                name = p.stem
+                if any(s in name for s in k_strs):
+                    return p
+            # fallback: if files are strictly ordered and frame starts at 0 or 1
+            # (common in extracted video frames)
+            idx0 = k - fmin
+            if 0 <= idx0 < len(img_files):
+                return img_files[idx0]
+            return None
+
+        for k in thumbs:
+            p = match_file_for_frame(k)
+            if p is None or not p.exists():
+                # if missing, just draw a placeholder tick label
+                ax_strip.text(k, 0.5, f"{k}", ha="center", va="center", fontsize=8)
+                continue
+
+            try:
+                img = mpimg.imread(str(p))
+            except Exception:
+                ax_strip.text(k, 0.5, f"{k}", ha="center", va="center", fontsize=8)
+                continue
+
+            # place image
+            ax_strip.imshow(
+                img,
+                extent=(k - span, k + span, 0, 1),
+                aspect="auto"
+            )
+            # add a small frame index label
+            ax_strip.text(k, -0.05, f"{k}", ha="center", va="top", fontsize=8)
+
+        # mark onset on strip too
+        if gt_onset is not None:
+            ax_strip.axvline(gt_onset, linestyle="--")
+
     fig.tight_layout()
     fig.savefig(save_path, dpi=200)
     plt.close(fig)
-
 
 def main():
     argparrser = argparse.ArgumentParser()
@@ -302,13 +429,19 @@ def main():
         plots_dir = str(Path(args.out_model).parent / "eval_plots")
     Path(plots_dir).mkdir(parents=True, exist_ok=True)
 
+    # ------ Images directory  ( from results )
+    images_dir = str(Path(args.results_dir).parent)
+    
+
     y_true_all = []
     y_pred_all = []
+    ego_true_all = []
+    ego_pred_all = []
+
     plotted = 0
 
     for (scene_id, tracks_df, env_df, meta) in test_items:
         # IMPORTANT: for evaluation, use ORIGINAL local frame index, not the global offset used in fit_global.
-        # Here tracks_df in scene_items is still local (because you loaded it per scene).
         frames = np.asarray(sorted(tracks_df["frame"].unique()))
 
         acc_clip = meta.get("accident_start_frame", None)
@@ -321,6 +454,35 @@ def main():
 
         pred_df = assessor.get_risk_trajectory(tracks_df, env_df)
 
+        # ---------- EGO INVOLVE EVALUATION (scene-level) ----------
+        # Ground truth ego-involve is scene-level in your metadata (Yes/No/Unknown)
+        gt_ego = str(meta.get("egoinvolve", "Unknown")).strip()
+
+        # Only evaluate if we have a usable binary GT label
+        if gt_ego in {"Yes", "No"}:
+            # Only evaluate if the predictor actually produced ego columns
+            if "MAP_EgoInvolved" in pred_df.columns:
+                # Scene-level prediction: majority vote across frames (more stable than per-frame)
+                pred_scene_ego = (
+                    pred_df["MAP_EgoInvolved"]
+                    .astype(str)
+                    .str.strip()
+                    .replace({"YES": "Yes", "NO": "No", "yes": "Yes", "no": "No"})
+                    .value_counts()
+                    .idxmax()
+                )
+
+                ego_true_all.append(gt_ego)
+                ego_pred_all.append(pred_scene_ego)
+
+            # Optional fallback: if only probabilities exist but MAP is missing
+            elif "P_EgoInvolved_Yes" in pred_df.columns and "P_EgoInvolved_No" in pred_df.columns:
+                p_yes = float(pred_df["P_EgoInvolved_Yes"].mean())
+                pred_scene_ego = "Yes" if p_yes >= 0.5 else "No"
+                ego_true_all.append(gt_ego)
+                ego_pred_all.append(pred_scene_ego)
+
+
         # Align + accumulate labels
         if gt_df is not None:
             merged = pred_df.merge(gt_df, on="frame", how="inner")
@@ -332,7 +494,13 @@ def main():
         # Plot a few example trajectories
         if plotted < args.max_plot_scenes:
             plot_path = str(Path(plots_dir) / f"{scene_id}_risk_trajectory.png")
-            plot_example_trajectory(pred_df, gt_df, plot_path, f"Risk Trajectory - Scene {scene_id}")
+
+            plot_example_trajectory(pred_df,
+                                    gt_df,
+                                    plot_path, 
+                                    f"Risk Trajectory - Scene {scene_id}",
+                                    frames_dir=images_dir,
+                                    frame_glob=f"C_{scene_id}_*.jpg")
             plotted += 1
 
     # Metrics

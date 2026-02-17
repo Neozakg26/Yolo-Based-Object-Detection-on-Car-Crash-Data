@@ -19,7 +19,7 @@ args = parser.parse_args()
 
 # ---------- CONFIG ----------
 config = ConfigLoader.load("config.yaml")
-BASE_PATH = config.paths["cluster_base"]
+BASE_PATH = config.paths["local_base"]
 META_PATH = f"{BASE_PATH}/Crash_Table.csv"
 
 # ---------- LOAD METADATA ----------

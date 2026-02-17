@@ -326,10 +326,10 @@ class FeatureExtractor:
     
 
     def build_frame_table(self):
-        # df = self.track_df.copy()
+        df = self.track_df.copy()
 
-        vehicles = self.track_df[self.track_df["class_id"].isin([0,1,2,4])]
-        pedestrians = self.track_df[self.track_df["class_id"].isin([3])]
+        vehicles =df[df["class_id"].isin([0,1,2,4])]
+        pedestrians = df[df["class_id"].isin([3])]
 
         # print (f"Vehicles: {vehicles}")
         # print (f"Pedestrians : {pedestrians}")

@@ -466,16 +466,6 @@ def draw_global_graph_time_lag(
         connectionstyle=f"arc3,rad={curve_rad}",
     )
 
-    # Optional: label edges with tau/p
-    # If you want edge labels, uncomment:
-    # labels = {}
-    # for u, v, d in LG.edges(data=True):
-    #     tau = d.get("tau", None)
-    #     p_show = d.get("p_fdr") if (use_p_fdr and "p_fdr" in d) else d.get("p", None)
-    #     if tau is not None and p_show is not None:
-    #         labels[(u, v)] = f"τ={tau}, p={float(p_show):.2g}"
-    # nx.draw_networkx_edge_labels(LG, pos, ax=ax, edge_labels=labels, font_size=max(7, font_size-2), rotate=False)
-
     ax.set_title(title)
     ax.set_axis_off()
 
