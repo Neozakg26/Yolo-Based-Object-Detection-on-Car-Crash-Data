@@ -4,21 +4,27 @@ import argparse
 import glob
 import os
 import pickle
+import logging
+import math
 from pathlib import Path
 from typing import Dict, Optional, Tuple
 
 import numpy as np
 import pandas as pd
 from explainability.hierarchical_dbn import AccidentRiskAssessor
+# SkLearn 
 from sklearn.metrics import confusion_matrix, classification_report, f1_score, accuracy_score
+from sklearn.model_selection import StratifiedKFold
 
 # Matplotlib 
 import matplotlib.pyplot as plt
 import matplotlib.image as mpimg
-from matplotlib.gridspec import GridSpec
+from matplotlib.gridspec import GridSpec, GridSpecFromSubplotSpec
 
 
 RISK_LABELS = ["Safe", "Elevated", "Critical"]
+logger = logging.getLogger(__name__)
+logging.basicConfig(filename="train_global_dbn.log",level=logging.INFO)
 
 def parse_scene_id_from_track_path(track_path: str) -> str:
     # expects: .../000001_tracks.parquet
@@ -65,7 +71,6 @@ def get_scene_meta(meta_df: pd.DataFrame, scene_id: str) -> Dict:
         # still return something usable
         return {"vidname": scene_id, "accident_start_frame": None, "egoinvolve": "Unknown"}
     r = row.iloc[0].to_dict()
-    # only keep fields we need downstream, but safe to pass more
     return {
         "vidname": scene_id,
         "accident_start_frame": r.get("accident_start_frame", None),
@@ -86,6 +91,44 @@ def load_scene_pair(results_dir: str, scene_id: str) -> Tuple[pd.DataFrame, Opti
         env_df = pd.read_parquet(env_path)
 
     return tracks_df, env_df
+
+def compute_scene_items(track_files,meta_df,results_dir):
+    scene_items = []
+    skipped =0
+    for tp in track_files:
+        scene_id = parse_scene_id_from_track_path(tp)
+        meta = get_scene_meta(meta_df, scene_id)
+
+        tracks_df, env_df = load_scene_pair(results_dir, scene_id)
+
+        # Merge env onto tracks in the assessor; but we still need truncation by frame
+        # Determine accident frame in clip (1..50) — our tracks typically use 0-based frame indexes.
+        acc_frame_clip = meta.get("accident_start_frame", None)
+        if acc_frame_clip is not None and pd.notna(acc_frame_clip):
+            # Convert 1..50 -> 0..49 if your tracks are 0-based.
+            acc_frame_local = int(acc_frame_clip) - 1
+        else:
+            acc_frame_local = None
+
+        if args.preacc_only and acc_frame_local is not None:
+            # strictly pre-accident frames
+            tracks_df = tracks_df[tracks_df["frame"] < acc_frame_local].copy()
+            if env_df is not None:
+                env_df = env_df[env_df["frame"] < acc_frame_local].copy()
+
+        if len(tracks_df["frame"].unique()) < args.min_preacc_frames:
+            skipped += 1
+            continue
+
+        scene_items.append((scene_id, tracks_df, env_df, meta))
+    return scene_items, skipped
+
+def scene_strat_label(meta: Dict) -> int:
+    """
+    Returns 1 for accident scenes, 0 otherwise.
+    """
+    acc = meta.get("accident_start_frame", None)
+    return int(acc is not None and pd.notna(acc))
 
 
 def tta_to_label(tta_seconds: float) -> str:
@@ -145,26 +188,28 @@ def plot_confusion_matrix(cm: np.ndarray, labels: list, save_path: str, title: s
     fig.savefig(save_path, dpi=200)
     plt.close(fig)
 
-def plot_example_trajectory(df_pred: pd.DataFrame, df_gt: Optional[pd.DataFrame],
-                            save_path: str, title: str,
-                            frames_dir: Optional[str] = None,
-                            frame_glob: str ="*.jpg",
-                            n_thumbs: int =5,
-                            onset_frame: Optional[int] = None,
-                            ):
-    """
-    df_pred: output from assessor.get_risk_trajectory -> frame, P_Safe, P_Elevated, P_Critical, risk_score, MAP_Risk
-    df_gt: frame, gt_label (optional)
-    """
-    fig = plt.figure(figsize=(10, 4))
-    ax = fig.add_subplot(111)
+def plot_example_trajectory(
+    df_pred: pd.DataFrame,
+    df_gt: Optional[pd.DataFrame],
+    save_path: str,
+    title: str,
+    frames_dir: Optional[str] = None,
+    frame_glob: str = "*.jpg",
+    onset_frame: Optional[int] = None,
+    scene_id: str= "",
+    thumb_cols: int = 8,          # bigger thumbs -> fewer columns
+    thumb_scale: float = 1.35,    # increases overall thumbnail area
 
-    ax.plot(df_pred["frame"], df_pred["P_Safe"], label="P(Safe)")
-    ax.plot(df_pred["frame"], df_pred["P_Elevated"], label="P(Elevated)")
-    ax.plot(df_pred["frame"], df_pred["P_Critical"], label="P(Critical)")
-    ax.plot(df_pred["frame"], df_pred["risk_score"], label="risk_score")
+):
+    """
+    Plots risk trajectory + ALL thumbnails up to accident onset (or all frames if no onset).
 
-    # ---------- determine GT onset frame ----------
+    frames_dir: directory containing frames for this scene
+    frame_glob: pattern to match scene frames within frames_dir (e.g., f"C_{scene_id}_*.jpg")
+    thumb_cols: how many thumbnails per row (smaller => bigger thumbs)
+    thumb_scale: scales the figure height allocated to thumbnails
+    """
+   # ---------- determine GT onset frame ----------
     gt_onset = None
     if onset_frame is not None:
         gt_onset = int(onset_frame)
@@ -173,46 +218,44 @@ def plot_example_trajectory(df_pred: pd.DataFrame, df_gt: Optional[pd.DataFrame]
         if len(crit) > 0:
             gt_onset = int(crit["frame"].iloc[0])
 
-    # ---------- choose thumbnail frames (aligned with x-axis) ----------
     frames = df_pred["frame"].to_numpy()
     fmin, fmax = int(frames.min()), int(frames.max())
 
-    # pick thumbnails: [start, midpoints..., end] and include onset neighborhood if available
-    thumbs = np.linspace(fmin, fmax, num=max(n_thumbs, 2), dtype=int).tolist()
+    # thumbnails: every frame up to onset (inclusive). If no onset -> all frames.
+   
+    f_end = min(fmax+4,50) 
 
-    if gt_onset is not None:
-        # ensure onset and a couple neighbors are included (clipped to range)
-        extra = [gt_onset - 3, gt_onset, gt_onset + 3]
-        extra = [int(np.clip(x, fmin, fmax)) for x in extra]
-        thumbs = list(dict.fromkeys(thumbs + extra))  # preserve order, unique
+    thumbs = list(range(fmin, f_end + 1))
+    n_thumbs = len(thumbs)
 
-    thumbs = sorted(set(thumbs))
-    # keep at most ~8 thumbnails to avoid clutter
-    if len(thumbs) > 8:
-        # keep extremes + onset + evenly-spaced
-        keep = {thumbs[0], thumbs[-1]}
-        if gt_onset is not None:
-            keep.add(gt_onset)
-        # fill remaining with evenly spaced
-        remaining = [t for t in thumbs if t not in keep]
-        k = max(0, 8 - len(keep))
-        if k > 0 and len(remaining) > 0:
-            idx = np.linspace(0, len(remaining) - 1, num=k, dtype=int)
-            for i in idx:
-                keep.add(remaining[i])
-        thumbs = sorted(keep)
-
-    # ---------- build figure layout ----------
+    # ---------- collect image files ----------
     has_frames = frames_dir is not None and Path(frames_dir).exists()
+    logger.info(f"Has Frames boolean is {has_frames} IN {frames_dir}")
+    img_files = []
     if has_frames:
-        fig = plt.figure(figsize=(12, 6))
-        gs = GridSpec(2, 1, height_ratios=[3.2, 1.4], hspace=0.15)
+        img_files = sorted(Path(frames_dir).glob(frame_glob))
+        if len(img_files) == 0:
+            has_frames = False  # fallback: just plot curves
+
+    # ---------- figure layout ----------
+    # Make the figure taller as thumbnails increase (but keep it reasonable)
+    # For CCD (<=50 frames), this is fine.
+    ncols = max(1, int(thumb_cols))
+    nrows = int(math.ceil(n_thumbs / ncols)) if has_frames else 0
+
+    # height: top plot ~4, each thumb row adds ~1.2 (scaled)
+    fig_h = 4.0 + (nrows * 1.25 * thumb_scale if has_frames else 0.0)
+    fig_w = 12.0
+
+    if has_frames:
+        fig = plt.figure(figsize=(fig_w, fig_h))
+        gs = GridSpec(2, 1, height_ratios=[3.2, max(1.0, 1.2 * nrows * thumb_scale)], hspace=0.15)
         ax = fig.add_subplot(gs[0, 0])
-        ax_strip = fig.add_subplot(gs[1, 0])
+        gs_thumbs = GridSpecFromSubplotSpec(nrows, ncols, subplot_spec=gs[1, 0], wspace=0.02, hspace=0.05)
     else:
         fig = plt.figure(figsize=(10, 4))
         ax = fig.add_subplot(111)
-        ax_strip = None
+        gs_thumbs = None
 
     # ---------- top plot: probabilities ----------
     ax.plot(df_pred["frame"], df_pred["P_Safe"], label="P(Safe)")
@@ -228,76 +271,286 @@ def plot_example_trajectory(df_pred: pd.DataFrame, df_gt: Optional[pd.DataFrame]
     ax.set_ylabel("Probability / score")
     ax.legend(loc="best")
 
-    # ---------- bottom plot: filmstrip ----------
-    if ax_strip is not None:
-        ax_strip.set_xlim(fmin, fmax)
-        ax_strip.set_ylim(0, 1)
-        ax_strip.axis("off")
-
-        # Read images and place them as “data-aligned” thumbnails using extent
-        # Each thumbnail spans a small x-range so it visually aligns with the timeline.
-        span = max(1, int((fmax - fmin) / (len(thumbs) * 2)))  # width in "frame units"
-
-        # Find candidate image files once
-        # (Assumes frames are directly in frames_dir; if nested, pass the right frames_dir.)
-        img_files = sorted(Path(frames_dir).glob(frame_glob))
-
-        # Build a quick lookup from frame index -> filepath (handles common naming patterns)
-        # If your names are e.g. frame_00023.jpg, 000023.jpg, img_00023.jpg, it will still work.
-        def match_file_for_frame(k: int) -> Optional[Path]:
-            k_strs = {
-                str(k),
-                f"{k:05d}",
-                f"{k:06d}",
-                f"frame_{k}",
-                f"frame_{k:05d}",
-                f"frame_{k:06d}",
-                f"img_{k}",
-                f"img_{k:05d}",
-                f"img_{k:06d}",
-            }
-            for p in img_files:
-                name = p.stem
-                if any(s in name for s in k_strs):
-                    return p
-            # fallback: if files are strictly ordered and frame starts at 0 or 1
-            # (common in extracted video frames)
-            idx0 = k - fmin
-            if 0 <= idx0 < len(img_files):
-                return img_files[idx0]
+    # ---------- helper: robust frame->image mapping ----------
+    # We try matching by frame index in filename; otherwise map by position.
+    def match_file_for_frame(scene_id: str,k : int) -> Optional[Path]:
+        if not img_files:
             return None
 
-        for k in thumbs:
-            p = match_file_for_frame(k)
+        # try explicit name match
+        k_strs = {
+            str(k),
+            f"C_{scene_id}_{k:02d}",
+        }
+        for p in img_files:
+            name = p.stem
+            if any(s in name for s in k_strs):
+                logger.info(f"File Found in match_file_for_frame  C_{scene_id}_{k:02d}")
+                return p
+        logger.info(f"file not in match_file_for_frame  C_{scene_id}_{k:02d}")
+        # robust fallback: map frame position into file index
+        # handles missing/shifted numbering (0/1-based), truncation, gaps, etc.
+        if f_end > fmin:
+            idx0 = int(round((k - fmin) / (f_end - fmin) * (len(img_files) - 1)))
+        else:
+            idx0 = 0
+        idx0 = int(np.clip(idx0, 0, len(img_files) - 1))
+        return img_files[idx0]
+    # ---------- bottom: thumbnails grid ----------
+    if has_frames and gs_thumbs is not None:
+        for idx, k in enumerate(thumbs):
+            r = idx // ncols
+            c = idx % ncols
+            ax_img = fig.add_subplot(gs_thumbs[r, c])
+            ax_img.axis("off")
+            logger.info(f"CALLING match_file_for_frame")
+            p = match_file_for_frame(scene_id,k)
             if p is None or not p.exists():
-                # if missing, just draw a placeholder tick label
-                ax_strip.text(k, 0.5, f"{k}", ha="center", va="center", fontsize=8)
+                ax_img.text(0.5, 0.5, f"{k}", ha="center", va="center", fontsize=9)
                 continue
 
             try:
                 img = mpimg.imread(str(p))
+                ax_img.imshow(img)
+                # label frame number (small but readable)
+                ax_img.set_title(f"f={k}", fontsize=9, pad=2)
             except Exception:
-                ax_strip.text(k, 0.5, f"{k}", ha="center", va="center", fontsize=8)
-                continue
-
-            # place image
-            ax_strip.imshow(
-                img,
-                extent=(k - span, k + span, 0, 1),
-                aspect="auto"
-            )
-            # add a small frame index label
-            ax_strip.text(k, -0.05, f"{k}", ha="center", va="top", fontsize=8)
-
-        # mark onset on strip too
-        if gt_onset is not None:
-            ax_strip.axvline(gt_onset, linestyle="--")
-
+                ax_img.text(0.5, 0.5, f"{k}", ha="center", va="center", fontsize=9)
+    else:
+        logger.info(f"Failed on running match_file_for_frame: gs_thumbs: {gs_thumbs} and has_frames{has_frames}")
     fig.tight_layout()
     fig.savefig(save_path, dpi=200)
     plt.close(fig)
 
-def main():
+
+def main(args):
+
+    results_dir = args.results_dir
+    meta_df = load_metadata_table(args.meta_csv)
+
+    # load global PCMCI graph
+    with open(args.features_path, "rb") as f:
+        obj = pickle.load(f)
+    if isinstance(obj, dict) and "graph" in obj:
+        pcmci_graph = obj["graph"]
+    else:
+        pcmci_graph = obj
+
+    # enumerate scenes by track files
+    track_files = sorted(glob.glob(os.path.join(results_dir, "*_tracks.parquet")))
+    if not track_files:
+        raise FileNotFoundError(f"No *_tracks.parquet found in {results_dir}")
+
+
+    #Compute Scene Items 
+    scene_items, skipped  = compute_scene_items(track_files=track_files,
+                                                     meta_df=meta_df,
+                                                     results_dir=results_dir)
+    
+    if not scene_items:
+        raise RuntimeError("No scenes available after filtering/truncation.")
+ 
+    logger.info(f"Scenes loaded: {len(scene_items)} (skipped: {skipped})")
+
+    # ---------------- 5-FOLD CROSS VALIDATION (by scene) ----------------
+    n_splits = int(getattr(args, "n_splits", 5))
+    if n_splits < 2:
+        raise ValueError("--n_splits must be >= 2")
+
+    # Stratify by whether the scene is accident-labeled or not
+    y_scene = np.array([scene_strat_label(meta) for (_, _, _, meta) in scene_items], dtype=int)
+
+    skf = StratifiedKFold(n_splits=n_splits, shuffle=True, random_state=args.random_state)
+
+    # Base plots dir
+    plots_dir = args.plots_dir
+    if plots_dir is None:
+        plots_dir = str(Path(args.out_model).parent / "eval_plots_cv")
+    Path(plots_dir).mkdir(parents=True, exist_ok=True)
+
+    # Images directory (from results)
+    # images_dir = str(Path(args.results_dir).parent)
+
+    images_dir = "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images"
+    # Collect fold metrics
+    fold_rows = []
+    # Aggregate predictions across all folds
+    y_true_all_cv = []
+    y_pred_all_cv = []
+    ego_true_all_cv = []
+    ego_pred_all_cv = []
+
+    for fold_idx, (train_idx, test_idx) in enumerate(skf.split(np.zeros(len(scene_items)), y_scene), start=1):
+        fold_dir = Path(plots_dir) / f"fold_{fold_idx:02d}"
+        fold_dir.mkdir(parents=True, exist_ok=True)
+
+        train_items = [scene_items[i] for i in train_idx]
+        test_items  = [scene_items[i] for i in test_idx]
+
+        logger.info(f"[CV] Fold {fold_idx}/{n_splits} | Train scenes: {len(train_items)} | Test scenes: {len(test_items)}")
+
+        assessor = AccidentRiskAssessor(
+            inference_method=args.inference_method,
+            prior_strength=args.prior_strength,
+            video_fps=args.video_fps,
+        )
+
+        logger.info(f"[CV] Fold {fold_idx}: fitting GLOBAL DBN/CPT (and classifiers if enabled)...")
+        assessor.fit_global(
+            scene_items=train_items,
+            pcmci_graph=pcmci_graph,
+            train_classifiers=args.train_classifiers,
+            random_state=args.random_state,
+        )
+
+        # (Optional) save model per fold if you want
+        if getattr(args, "save_fold_models", False):
+            fold_model_path = fold_dir / f"global_model_fold_{fold_idx:02d}.parquet"
+            assessor.save(fold_model_path)
+            logger.info(f"[CV] Fold {fold_idx}: model saved to {fold_model_path}")
+
+        # --- Evaluate on this fold's test scenes ---
+        y_true_all = []
+        y_pred_all = []
+        ego_true_all = []
+        ego_pred_all = []
+
+        plotted = 0
+        max_plot = int(args.max_plot_scenes)
+
+        for (scene_id, tracks_df, env_df, meta) in test_items:
+            frames = np.asarray(sorted(tracks_df["frame"].unique()))
+
+            acc_clip = meta.get("accident_start_frame", None)
+            if acc_clip is not None and pd.notna(acc_clip):
+                acc_local = int(acc_clip) - 1
+            else:
+                acc_local = None
+
+            g_truth_df = make_frame_gt_labels(frames, acc_local, assessor.video_fps)
+            pred_df = assessor.get_risk_trajectory(tracks_df, env_df)
+
+            # ---------- EGO INVOLVE EVALUATION (scene-level) ----------
+            gt_ego = str(meta.get("egoinvolve", "Unknown")).strip()
+            if gt_ego in {"Yes", "No"}:
+                if "MAP_EgoInvolved" in pred_df.columns:
+                    pred_scene_ego = (
+                        pred_df["MAP_EgoInvolved"]
+                        .astype(str).str.strip()
+                        .replace({"YES": "Yes", "NO": "No", "yes": "Yes", "no": "No"})
+                        .value_counts().idxmax()
+                    )
+                    ego_true_all.append(gt_ego)
+                    ego_pred_all.append(pred_scene_ego)
+                elif "P_EgoInvolved_Yes" in pred_df.columns and "P_EgoInvolved_No" in pred_df.columns:
+                    p_yes = float(pred_df["P_EgoInvolved_Yes"].mean())
+                    ego_true_all.append(gt_ego)
+                    ego_pred_all.append("Yes" if p_yes >= 0.5 else "No")
+
+            # ---------- Risk label evaluation (frame-level, only if accident frame exists) ----------
+            if g_truth_df is not None:
+                merged = pred_df.merge(g_truth_df, on="frame", how="inner")
+                if len(merged) > 0:
+                    merged["pred_label"] = merged.apply(pred_probs_to_label, axis=1)
+                    y_true_all.extend(merged["gt_label"].tolist())
+                    y_pred_all.extend(merged["pred_label"].tolist())
+
+            # ---------- Plot a few example trajectories for this fold ----------
+            if plotted < max_plot:
+                plot_path = str(fold_dir / f"{scene_id}_risk_trajectory.png")
+                logger.info(f"Plotting for {scene_id}")
+                plot_example_trajectory(
+                    pred_df,
+                    g_truth_df,
+                    plot_path,
+                    f"Risk Trajectory - Scene {scene_id} (Fold {fold_idx})",
+                    frames_dir=images_dir,
+                    frame_glob=f"C_{scene_id}_*.jpg",
+                    scene_id=scene_id
+                )
+                plotted += 1
+
+        # ---- Fold metrics (risk) ----
+        if len(y_true_all) > 0:
+            acc = accuracy_score(y_true_all, y_pred_all)
+            f1m = f1_score(y_true_all, y_pred_all, labels=RISK_LABELS, average="macro")
+            cm = confusion_matrix(y_true_all, y_pred_all, labels=RISK_LABELS)
+
+            logger.info(f"[CV] Fold {fold_idx} risk accuracy: {acc:.3f}, macro-f1: {f1m:.3f}")
+            logger.info("\n" + classification_report(y_true_all, y_pred_all, labels=RISK_LABELS))
+
+            cm_path = str(fold_dir / "confusion_matrix.png")
+            plot_confusion_matrix(cm, RISK_LABELS, cm_path, f"Confusion Matrix (Fold {fold_idx})")
+        else:
+            acc, f1m = np.nan, np.nan
+            logger.info(f"[CV] Fold {fold_idx}: no GT risk labels available in this fold (no accident_start_frame overlap).")
+
+        # ---- Fold metrics (ego) ----
+        if len(ego_true_all) > 0:
+            ego_acc = accuracy_score(ego_true_all, ego_pred_all)
+            ego_f1 = f1_score(ego_true_all, ego_pred_all, labels=["No", "Yes"], average="macro")
+            logger.info(f"[CV] Fold {fold_idx} ego accuracy: {ego_acc:.3f}, macro-f1: {ego_f1:.3f}")
+        else:
+            ego_acc, ego_f1 = np.nan, np.nan
+            logger.info(f"[CV] Fold {fold_idx}: no usable ego labels found (expected 'Yes'/'No') or ego columns missing.")
+
+        # Save fold metrics CSV
+        fold_metrics_path = fold_dir / "fold_metrics.csv"
+        pd.DataFrame([{
+            "fold": fold_idx,
+            "risk_accuracy": acc,
+            "risk_macro_f1": f1m,
+            "ego_accuracy": ego_acc,
+            "ego_macro_f1": ego_f1,
+            "n_frames_eval": len(y_true_all),
+            "n_scenes_test": len(test_items),
+            "random_state": int(args.random_state),
+            "preacc_only": bool(args.preacc_only),
+        }]).to_csv(fold_metrics_path, index=False)
+
+        # accumulate across folds
+        fold_rows.append({
+            "fold": fold_idx,
+            "risk_accuracy": acc,
+            "risk_macro_f1": f1m,
+            "ego_accuracy": ego_acc,
+            "ego_macro_f1": ego_f1,
+            "n_frames_eval": len(y_true_all),
+            "n_scenes_test": len(test_items),
+        })
+
+        y_true_all_cv.extend(y_true_all)
+        y_pred_all_cv.extend(y_pred_all)
+        ego_true_all_cv.extend(ego_true_all)
+        ego_pred_all_cv.extend(ego_pred_all)
+
+    # ---------------- CV SUMMARY ----------------
+    summary_df = pd.DataFrame(fold_rows)
+    summary_path = Path(plots_dir) / "cv_summary.csv"
+    summary_df.to_csv(summary_path, index=False)
+
+    def mean_std(series: pd.Series) -> str:
+        s = series.dropna()
+        if len(s) == 0:
+            return "n/a"
+        return f"{s.mean():.3f} ± {s.std(ddof=1):.3f}"
+
+    logger.info("\n=== 5-Fold CV Summary ===")
+    logger.info(f"Risk Accuracy: {mean_std(summary_df['risk_accuracy'])}")
+    logger.info(f"Risk Macro-F1:  {mean_std(summary_df['risk_macro_f1'])}")
+    logger.info(f"Ego Accuracy:  {mean_std(summary_df['ego_accuracy'])}")
+    logger.info(f"Ego Macro-F1:   {mean_std(summary_df['ego_macro_f1'])}")
+    logger.info(f"Saved CV summary to: {summary_path}")
+
+    # Optional: overall confusion matrix across all folds (risk)
+    if len(y_true_all_cv) > 0:
+        cm_all = confusion_matrix(y_true_all_cv, y_pred_all_cv, labels=RISK_LABELS)
+        cm_all_path = str(Path(plots_dir) / "confusion_matrix_all_folds.png")
+        plot_confusion_matrix(cm_all, RISK_LABELS, cm_all_path, "Confusion Matrix (All Folds)")
+
+
+if __name__ == "__main__":
+    #Accept Arguments  
     argparrser = argparse.ArgumentParser()
     argparrser.add_argument("--results_dir", type=str, required=True,
                     help="Folder containing *_tracks.parquet and *_env.parquet")
@@ -331,207 +584,12 @@ def main():
                     help="Where to save evaluation plots. Default: <out_model_dir>/eval_plots")
     argparrser.add_argument("--max_plot_scenes", type=int, default=5,
                     help="How many test scenes to plot trajectories for.")
+    argparrser.add_argument("--n_splits", type=int, default=5,
+                    help="Number of CV folds (default 5).")
+    argparrser.add_argument("--save_fold_models", action="store_true", default=False,
+                    help="If set, save a model parquet for each fold inside the fold folder.")
 
 
     args = argparrser.parse_args()
-
-    results_dir = args.results_dir
-    meta_df = load_metadata_table(args.meta_csv)
-
-    # load global PCMCI graph
-    with open(args.features_path, "rb") as f:
-        obj = pickle.load(f)
-    if isinstance(obj, dict) and "graph" in obj:
-        pcmci_graph = obj["graph"]
-    else:
-        pcmci_graph = obj
-
-    # enumerate scenes by track files
-    track_files = sorted(glob.glob(os.path.join(results_dir, "*_tracks.parquet")))
-    if not track_files:
-        raise FileNotFoundError(f"No *_tracks.parquet found in {results_dir}")
-
-    scene_items = []
-    skipped = 0
-    #Compute Scene Items 
-    for tp in track_files:
-        scene_id = parse_scene_id_from_track_path(tp)
-        meta = get_scene_meta(meta_df, scene_id)
-
-        tracks_df, env_df = load_scene_pair(results_dir, scene_id)
-
-        # Merge env onto tracks in the assessor; but we still need truncation by frame
-        # Determine accident frame in clip (1..50) — our tracks typically use 0-based frame indexes.
-        acc_frame_clip = meta.get("accident_start_frame", None)
-        if acc_frame_clip is not None and pd.notna(acc_frame_clip):
-            # Convert 1..50 -> 0..49 if your tracks are 0-based.
-            # If your tracks are already 1-based, remove the -1.
-            acc_frame_local = int(acc_frame_clip) - 1
-        else:
-            acc_frame_local = None
-
-        if args.preacc_only and acc_frame_local is not None:
-            # strictly pre-accident frames
-            tracks_df = tracks_df[tracks_df["frame"] < acc_frame_local].copy()
-            if env_df is not None:
-                env_df = env_df[env_df["frame"] < acc_frame_local].copy()
-
-        if len(tracks_df["frame"].unique()) < args.min_preacc_frames:
-            skipped += 1
-            continue
-
-        scene_items.append((scene_id, tracks_df, env_df, meta))
-
-    if not scene_items:
-        raise RuntimeError("No scenes available after filtering/truncation.")
- 
-    print(f"Scenes loaded: {len(scene_items)} (skipped: {skipped})")
-
-    # --- 80/20 split by scene FROM SCENE_ITEMS ---
-    rng = np.random.RandomState(args.random_state)
-    idx = np.arange(len(scene_items))
-    rng.shuffle(idx)
-
-    n_test = max(1, int(round(len(scene_items) * float(args.test_split))))
-    test_idx = set(idx[:n_test].tolist())
-
-    train_items = [scene_items[i] for i in range(len(scene_items)) if i not in test_idx]
-    test_items  = [scene_items[i] for i in range(len(scene_items)) if i in test_idx]
-
-    print(f"Train scenes: {len(train_items)} | Test scenes: {len(test_items)} (split={1-float(args.test_split):.0%}/{float(args.test_split):.0%})")
-
-    assessor = AccidentRiskAssessor(
-        inference_method=args.inference_method,
-        prior_strength=args.prior_strength,
-        video_fps=args.video_fps,
-    )
-
-    print("Fitting GLOBAL DBN/CPT (and classifiers if enabled)...")
-    assessor.fit_global(
-        scene_items=train_items,
-        pcmci_graph=pcmci_graph,
-        train_classifiers=args.train_classifiers,
-        random_state=args.random_state,
-    )
-
-    out_path = Path(args.out_model)
-    out_path.parent.mkdir(parents=True, exist_ok=True)
-    assessor.save(out_path)
-
-    print(f"\n Global model saved: {out_path}")
-    clf_path = out_path.with_suffix(".classifier.pkl")
-    if clf_path.exists():
-        print(f"Global classifiers saved: {clf_path}")
-
-    # --- Evaluate on test scenes ---
-    plots_dir = args.plots_dir
-    if plots_dir is None:
-        plots_dir = str(Path(args.out_model).parent / "eval_plots")
-    Path(plots_dir).mkdir(parents=True, exist_ok=True)
-
-    # ------ Images directory  ( from results )
-    images_dir = str(Path(args.results_dir).parent)
-    
-
-    y_true_all = []
-    y_pred_all = []
-    ego_true_all = []
-    ego_pred_all = []
-
-    plotted = 0
-
-    for (scene_id, tracks_df, env_df, meta) in test_items:
-        # IMPORTANT: for evaluation, use ORIGINAL local frame index, not the global offset used in fit_global.
-        frames = np.asarray(sorted(tracks_df["frame"].unique()))
-
-        acc_clip = meta.get("accident_start_frame", None)
-        if acc_clip is not None and pd.notna(acc_clip):
-            acc_local = int(acc_clip) - 1
-        else:
-            acc_local = None
-
-        gt_df = make_frame_gt_labels(frames, acc_local, assessor.video_fps)
-
-        pred_df = assessor.get_risk_trajectory(tracks_df, env_df)
-
-        # ---------- EGO INVOLVE EVALUATION (scene-level) ----------
-        # Ground truth ego-involve is scene-level in your metadata (Yes/No/Unknown)
-        gt_ego = str(meta.get("egoinvolve", "Unknown")).strip()
-
-        # Only evaluate if we have a usable binary GT label
-        if gt_ego in {"Yes", "No"}:
-            # Only evaluate if the predictor actually produced ego columns
-            if "MAP_EgoInvolved" in pred_df.columns:
-                # Scene-level prediction: majority vote across frames (more stable than per-frame)
-                pred_scene_ego = (
-                    pred_df["MAP_EgoInvolved"]
-                    .astype(str)
-                    .str.strip()
-                    .replace({"YES": "Yes", "NO": "No", "yes": "Yes", "no": "No"})
-                    .value_counts()
-                    .idxmax()
-                )
-
-                ego_true_all.append(gt_ego)
-                ego_pred_all.append(pred_scene_ego)
-
-            # Optional fallback: if only probabilities exist but MAP is missing
-            elif "P_EgoInvolved_Yes" in pred_df.columns and "P_EgoInvolved_No" in pred_df.columns:
-                p_yes = float(pred_df["P_EgoInvolved_Yes"].mean())
-                pred_scene_ego = "Yes" if p_yes >= 0.5 else "No"
-                ego_true_all.append(gt_ego)
-                ego_pred_all.append(pred_scene_ego)
-
-
-        # Align + accumulate labels
-        if gt_df is not None:
-            merged = pred_df.merge(gt_df, on="frame", how="inner")
-            if len(merged) > 0:
-                merged["pred_label"] = merged.apply(pred_probs_to_label, axis=1)
-                y_true_all.extend(merged["gt_label"].tolist())
-                y_pred_all.extend(merged["pred_label"].tolist())
-
-        # Plot a few example trajectories
-        if plotted < args.max_plot_scenes:
-            plot_path = str(Path(plots_dir) / f"{scene_id}_risk_trajectory.png")
-
-            plot_example_trajectory(pred_df,
-                                    gt_df,
-                                    plot_path, 
-                                    f"Risk Trajectory - Scene {scene_id}",
-                                    frames_dir=images_dir,
-                                    frame_glob=f"C_{scene_id}_*.jpg")
-            plotted += 1
-
-    # Metrics
-    if len(y_true_all) == 0:
-        print("No GT labels available for evaluation (missing accident_start_frame or no overlapping frames).")
-    else:
-        acc = accuracy_score(y_true_all, y_pred_all)
-        f1m = f1_score(y_true_all, y_pred_all, labels=RISK_LABELS, average="macro")
-        cm = confusion_matrix(y_true_all, y_pred_all, labels=RISK_LABELS)
-
-        print("\n=== Held-out Test Evaluation (scene-level 80/20 split) ===")
-        print(f"Accuracy: {acc:.3f}")
-        print(f"Macro-F1:  {f1m:.3f}")
-        print("\nClassification report:")
-        print(classification_report(y_true_all, y_pred_all, labels=RISK_LABELS))
-
-        cm_path = str(Path(plots_dir) / "confusion_matrix.png")
-        plot_confusion_matrix(cm, RISK_LABELS, cm_path, "Confusion Matrix (Test Scenes)")
-
-        metrics_path = str(Path(plots_dir) / "test_metrics.csv")
-        pd.DataFrame([{
-            "accuracy": acc,
-            "macro_f1": f1m,
-            "n_frames_eval": len(y_true_all),
-            "n_test_scenes": len(test_items),
-            "test_split": float(args.test_split),
-            "random_state": int(args.random_state),
-            "preacc_only": bool(args.preacc_only),
-        }]).to_csv(metrics_path, index=False)
-
-        print(f"\nSaved evaluation outputs to: {plots_dir}")
-
-if __name__ == "__main__":
-    main()
+  
+    main(args)
