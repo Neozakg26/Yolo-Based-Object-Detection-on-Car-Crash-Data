@@ -371,7 +371,7 @@ def main(args):
     # Images directory (from results)
     # images_dir = str(Path(args.results_dir).parent)
 
-    images_dir = "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images"
+    images_dir = "/datasets/nmaja/CrashBest"
     # Collect fold metrics
     fold_rows = []
     # Aggregate predictions across all folds
