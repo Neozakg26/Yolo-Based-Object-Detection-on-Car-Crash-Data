@@ -31,5 +31,7 @@ compute:
 paths:
   local_base: "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images"
   local_model: "C:/Users/neokg/Coding_Projects/yolo-detector/downloaded_model/weights/best.pt"
+  local_normal_images: "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images/normal_images"
   cluster_base: "/datasets/nmaja/CrashBest"
   cluster_model: "/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/runs/train/custom_yolo_model18/weights/best.pt"
+  cluster_normal_images: "/datasets/nmaja/CrashBest/normal_files"
