@@ -2,8 +2,8 @@ from ultralytics import YOLO
 from tracking.deepsort_tracker import DeepSortTracker
 from tracking.track_runner import TrackingRunner
 from training.config_loader import ConfigLoader
-from explainability.metadata import MetaData
-from explainability.environment_builder import EnvironmentBuilder
+#from explainability.metadata import MetaData
+#from explainability.environment_builder import EnvironmentBuilder
 import pandas as pd
 import argparse
 import re
@@ -35,11 +35,11 @@ runner = TrackingRunner(detector, tracker)
 # scene_id = re.search(r'\d+', args.path).group()
 scene_id = args.path.rsplit("_",1)[0]
 print(f"Scene Id: {scene_id}")
-meta = MetaData(META_PATH, scene_id)
+# meta = MetaData(META_PATH, scene_id)
 
 
 # ---------- TRACK ----------
-all_tracks = runner.run(f"{BASE_PATH}/{args.path}", metadata=meta.metadata)
+all_tracks = runner.run(f"{BASE_PATH}/{args.path}")  #, metadata=meta.metadata)
 #print(f"all tracks \n {all_tracks}")
 df_tracks = pd.DataFrame(all_tracks).sort_values(["track_id", "frame"])
 
@@ -52,9 +52,9 @@ df_tracks.to_parquet(tracks_path, index=False,engine="pyarrow")
 print(f"Tracks saved {tracks_path}")
 
 # ---------- BUILD ENVIRONMENT ----------
-env_df = EnvironmentBuilder.build(df_tracks)
-env_path = f"{BASE_PATH}/new_results/{scene_id}_env.parquet"
-env_df.to_parquet(env_path, index=False, engine="pyarrow")
+# env_df = EnvironmentBuilder.build(df_tracks)
+# env_path = f"{BASE_PATH}/new_results/{scene_id}_env.parquet"
+# env_df.to_parquet(env_path, index=False, engine="pyarrow")
 
-print(f"Environment features saved: {env_path}")
+#print(f"Environment features saved: {env_path}")
 
