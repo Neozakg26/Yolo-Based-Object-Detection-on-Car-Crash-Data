@@ -8,19 +8,19 @@ class TrackingRunner:
         self.detector = detector
         self.tracker = tracker
 
-    def run(self,image_dir):
-        limit = 50 #int(metadata.get('accident_start_frame'))
+    def run(self,image_dir,metadata):
+        # limit = 50 #int(metadata.get('accident_start_frame'))
 
-        if limit is not None:
-            image_paths  = sorted(glob.glob(f"{image_dir}*.jpg"))[:limit]
-        else:
-            image_paths  = sorted(glob.glob(f"{image_dir}*.jpg"))
+        # if limit is not None:
+        #     image_paths  = sorted(glob.glob(f"{image_dir}*.jpg"))[:limit]
+        # else:
+        image_paths  = sorted(glob.glob(f"{image_dir}*.jpg"))
 
         all_tracks= []
         frame_idx = 0
         prev_frame = None
         prev_speed = (0,0)
-
+        print(f"img Paths: {image_paths}")
         for img_path in image_paths:
             frame = cv2.imread(img_path)
             if frame is None:

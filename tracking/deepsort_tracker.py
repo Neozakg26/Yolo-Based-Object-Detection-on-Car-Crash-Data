@@ -49,6 +49,7 @@ class DeepSortTracker:
 
         for track in tracks:
             if not track.is_confirmed():
+                print("ERROR: Track  is NOt confirmed!")
                 continue
 
             track_id = track.track_id
