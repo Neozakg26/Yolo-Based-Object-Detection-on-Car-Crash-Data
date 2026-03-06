@@ -6,7 +6,7 @@ from training.config_loader import ConfigLoader
 #from explainability.environment_builder import EnvironmentBuilder
 import pandas as pd
 import argparse
-import re
+from pathlib import Path
 # ---------- Phase 1 ----------
 # ---------- ARGUMENTS ----------
 parser = argparse.ArgumentParser()
@@ -33,7 +33,8 @@ runner = TrackingRunner(detector, tracker)
 
 # ---------- LOAD METADATA ----------
 # scene_id = re.search(r'\d+', args.path).group()
-scene_id = args.path.rsplit("_",1)[0]
+scene_path = Path(args.path)
+scene_id = scene_path.name.rsplit("_",1)[0]
 print(f"Scene Id: {scene_id}")
 # meta = MetaData(META_PATH, scene_id)
 

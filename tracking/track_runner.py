@@ -20,7 +20,7 @@ class TrackingRunner:
         frame_idx = 0
         prev_frame = None
         prev_speed = (0,0)
-        print(f"img Paths: {image_paths}")
+        print(f"img Paths: {image_paths} in dir {image_dir}")
         for img_path in image_paths:
             frame = cv2.imread(img_path)
             if frame is None:
