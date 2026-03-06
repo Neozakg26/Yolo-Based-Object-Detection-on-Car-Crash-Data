@@ -40,14 +40,14 @@ print(f"Scene Id: {scene_id}")
 
 
 # ---------- TRACK ----------
-all_tracks = runner.run(f"{BASE_PATH}/{args.path}")  #, metadata=meta.metadata)
+all_tracks = runner.run(f"{args.path}")  #, metadata=meta.metadata)
 #print(f"all tracks \n {all_tracks}")
 df_tracks = pd.DataFrame(all_tracks).sort_values(["track_id", "frame"])
 
 # print(f"DF tracks \n {df_tracks}") 
 # print("DF TRACKS") #DEBUG 
 # print(f"{df_tracks.head}") #DEBUG 
-tracks_path = f"{BASE_PATH}/new_results/{scene_id}_tracks.parquet"
+tracks_path = f"{BASE_PATH}/new_results/{scene_id}tracks.parquet"
 df_tracks.to_parquet(tracks_path, index=False,engine="pyarrow")
 
 print(f"Tracks saved {tracks_path}")
