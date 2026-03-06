@@ -109,6 +109,8 @@ def main():
 
     # Load model
     assessor = AccidentRiskAssessor.load(args.model_path)
+    assessor.inference_method = "supervised"  # To override the inference
+    print("Loaded global model.")
 
     # Load labels
     lab = pd.read_csv(args.scene_labels_csv)
