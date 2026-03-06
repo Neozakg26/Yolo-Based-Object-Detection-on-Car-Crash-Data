@@ -23,7 +23,7 @@ def parse_scene_id_from_track_path(track_path: str) -> str:
 
 
 def load_scene_pair(results_dir: str, scene_id: str) -> Tuple[pd.DataFrame, Optional[pd.DataFrame]]:
-    track_path = os.path.join(results_dir, f"{scene_id}_tracks.parquet")
+    track_path = os.path.join(results_dir, f"{scene_id}tracks.parquet")
     env_path = os.path.join(results_dir, f"{scene_id}_env.parquet")
 
     tracks_df = pd.read_parquet(track_path)
@@ -116,7 +116,7 @@ def main():
     label_map: Dict[str, int] = dict(zip(lab["scene_id"], lab["label"].astype(int)))
 
     # enumerate scenes
-    track_files = sorted(glob.glob(os.path.join(args.results_dir, "*_tracks.parquet")))
+    track_files = sorted(glob.glob(os.path.join(args.results_dir, "*tracks.parquet")))
     if not track_files:
         raise FileNotFoundError(f"No *_tracks.parquet found in {args.results_dir}")
 

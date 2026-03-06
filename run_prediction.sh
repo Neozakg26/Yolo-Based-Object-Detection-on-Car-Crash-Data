@@ -8,6 +8,10 @@
 
 echo "Starting Accident Prediction"
 
-python -m execute.predict_accident --results_dir C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images/results --model_path  C:/Users/neokg/Coding_Projects/yolo-detector/cluster_results/results/global_risk_model.parquet --scene_labels C:/Users/neokg/Coding_Projects/yolo-detector/scene_index.csv
+DATASET="/datasets/nmaja/CrashBest/new_results"
+MODEL_PATH="/datasets/nmaja/CrashBest/results/global_risk_model.parquet"
+SCENE_CSV="scene_index.csv"
+
+python -m execute.predict_accident --results_dir $DATASET --model_path  $MODEL_PATH --scene_labels $SCENE_CSV
 
 echo "Fnishing Accident Prediction"
