@@ -9,7 +9,7 @@
 echo "Starting Accident Prediction"
 
 DATASET="/datasets/nmaja/CrashBest/new_results"
-MODEL_PATH="/datasets/nmaja/CrashBest/results/global_features_graph.pkl "
+MODEL_PATH="/datasets/nmaja/CrashBest/results/global_risk_model.parquet"
 SCENE_CSV="scene_index.csv"
 
 python3 -m execute.predict_accident --results_dir $DATASET --model_path  $MODEL_PATH --scene_labels $SCENE_CSV 
