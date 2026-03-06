@@ -32,7 +32,9 @@ tracker = DeepSortTracker()
 runner = TrackingRunner(detector, tracker)
 
 # ---------- LOAD METADATA ----------
-scene_id = re.search(r'\d+', args.path).group()
+# scene_id = re.search(r'\d+', args.path).group()
+scene_id = args.path.rsplit("_",1)[0]
+print(f"Scene Id: {scene_id}")
 meta = MetaData(META_PATH, scene_id)
 
 
@@ -44,14 +46,14 @@ df_tracks = pd.DataFrame(all_tracks).sort_values(["track_id", "frame"])
 # print(f"DF tracks \n {df_tracks}") 
 # print("DF TRACKS") #DEBUG 
 # print(f"{df_tracks.head}") #DEBUG 
-tracks_path = f"{BASE_PATH}/results/{scene_id}_tracks.parquet"
+tracks_path = f"{BASE_PATH}/new_results/{scene_id}_tracks.parquet"
 df_tracks.to_parquet(tracks_path, index=False,engine="pyarrow")
 
 print(f"Tracks saved {tracks_path}")
 
 # ---------- BUILD ENVIRONMENT ----------
 env_df = EnvironmentBuilder.build(df_tracks)
-env_path = f"{BASE_PATH}/results/{scene_id}_env.parquet"
+env_path = f"{BASE_PATH}/new_results/{scene_id}_env.parquet"
 env_df.to_parquet(env_path, index=False, engine="pyarrow")
 
 print(f"Environment features saved: {env_path}")
