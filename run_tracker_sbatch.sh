@@ -6,26 +6,47 @@
 #SBATCH --ntasks=1
 #SBATCH --partition=bigbatch
 
-MAX_JOBS=4   # how many scenes to run at once
+MAX_JOBS=4
+
+CRASH_ROOT="/datasets/nmaja/CrashBest"
+NORMAL_ROOT="/datasets/nmaja/CrashBest/normal_files"
+SCENE_CSV="scene_labels.csv"
+
+mkdir -p logs
 
 run_scene () {
-    SCENE_NUM=$(printf "%06d" $1)
-    SCENE="C_${SCENE_NUM}_"
-    echo "Starting $SCENE"
-    python3 -m execute.execute_tracker --path "$SCENE"
-    echo "Finished $SCENE"
+    SCENE_ID="$1"
+
+    if [[ "$SCENE_ID" == C_* ]]; then
+        SCENE_PATH="${CRASH_ROOT}/C_${SCENE_ID}_"
+    else
+        SCENE_PATH="${NORMAL_ROOT}/${SCENE_ID}_"
+    fi
+
+    MATCH_COUNT=$(ls ${SCENE_PATH}*.jpg 2>/dev/null | wc -l)
+
+    if [ "$MATCH_COUNT" -eq 0 ]; then
+        echo "[SKIP] No frames found for ${SCENE_ID} with prefix ${SCENE_PATH}"
+        return 0
+    fi
+
+    echo "Starting ${SCENE_ID} using prefix ${SCENE_PATH} (${MATCH_COUNT} frames)"
+    python3 -m execute.execute_tracker --path "$SCENE_PATH" \
+        > "logs/${SCENE_ID}.out" 2> "logs/${SCENE_ID}.err"
+    echo "Finished ${SCENE_ID}"
 }
 
 export -f run_scene
+export CRASH_ROOT
+export NORMAL_ROOT
 
-for i in $(seq 1 1500); do
-    run_scene $i &
+tail -n +2 "$SCENE_CSV" | cut -d',' -f1 | while read -r SCENE_ID; do
+    run_scene "$SCENE_ID" &
 
-    # limit to 4 concurrent jobs
     if (( $(jobs -r | wc -l) >= MAX_JOBS )); then
         wait -n
     fi
 done
 
-wait  # wait for remaining jobs
+wait
 echo "All scenes complete."
