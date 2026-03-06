@@ -21,7 +21,7 @@ class DeepSortTracker:
         # Track history for computing acceleration and ttc_rate
         self.track_history = {}
 
-    def update(self, detections, frame, frame_idx, ego_motion: tuple, metadata, all_tracks):
+    def update(self, detections, frame, frame_idx, ego_motion: tuple, all_tracks):
 
         frame_height = frame.shape[0]
 
@@ -30,7 +30,7 @@ class DeepSortTracker:
         ego_dy = float(ego_motion[1])
         ego_speed = float(ego_motion[2])
         ego_accel = float(ego_motion[3])
-        ego_involve = "Yes" == metadata.get('egoinvolve')
+        # ego_involve = "Yes" == metadata.get('egoinvolve')
 
         formatted_dets = []
 
@@ -170,7 +170,7 @@ class DeepSortTracker:
                 "ego_dx": ego_dx,
                 "ego_dy": ego_dy,
                 "ego_speed": ego_speed,
-                "ego_accel": ego_accel,
-                "ego_involve": ego_involve
+                "ego_accel": ego_accel
+                # ,"ego_involve": ego_involve
             })
             

@@ -8,8 +8,8 @@ class TrackingRunner:
         self.detector = detector
         self.tracker = tracker
 
-    def run(self,image_dir,metadata):
-        limit = int(metadata.get('accident_start_frame'))
+    def run(self,image_dir):
+        limit = 50 #int(metadata.get('accident_start_frame'))
 
         if limit is not None:
             image_paths  = sorted(glob.glob(f"{image_dir}*.jpg"))[:limit]
@@ -45,7 +45,7 @@ class TrackingRunner:
             self.tracker.update(detections= detections, frame= frame, 
                                          frame_idx= frame_idx,
                                          ego_motion=(ego_dx,ego_dy,ego_speed,ego_accel),
-                                         metadata=metadata,
+                                        #  metadata=metadata,
                                          all_tracks=all_tracks)
             
             
