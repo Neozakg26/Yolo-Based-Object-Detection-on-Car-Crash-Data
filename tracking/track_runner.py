@@ -8,7 +8,7 @@ class TrackingRunner:
         self.detector = detector
         self.tracker = tracker
 
-    def run(self,image_dir,metadata):
+    def run(self,image_dir):
         # limit = 50 #int(metadata.get('accident_start_frame'))
 
         # if limit is not None:
