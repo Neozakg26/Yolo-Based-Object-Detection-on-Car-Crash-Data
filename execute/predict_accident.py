@@ -19,7 +19,8 @@ from explainability.hierarchical_dbn import AccidentRiskAssessor
 
 def parse_scene_id_from_track_path(track_path: str) -> str:
     base = os.path.basename(track_path)
-    return base.split("_")[0]  #expects 000001_tracks.parquet
+   # base.replace("tracks.parquet", "")
+    return base.replace("tracks.parquet", "")  #expects 000001_tracks.parquet
 
 
 def load_scene_pair(results_dir: str, scene_id: str) -> Tuple[pd.DataFrame, Optional[pd.DataFrame]]:
@@ -125,11 +126,13 @@ def main():
     y_pred_k = []
     rows = []
 
+    print(f"Track files \n {track_files}")
     for tp in track_files:
         scene_id = parse_scene_id_from_track_path(tp)
         if scene_id not in label_map:
+            print(f"Skipping scene {scene_id}")
             continue  # skip if not labeled
-
+        print(f"Processing scene {scene_id}")
         gt = int(label_map[scene_id])
         tracks_df, env_df = load_scene_pair(args.results_dir, scene_id)
 
