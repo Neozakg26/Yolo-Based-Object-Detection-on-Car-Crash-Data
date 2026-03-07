@@ -114,7 +114,7 @@ def main():
     print("Loaded global model.")
 
     # Load labels
-    lab = pd.read_csv(args.scene_labels_csv)
+    lab = pd.read_csv(args.scene_labels)
     # normalize scene_id to zero-padded if needed
 
     label_map: Dict[str, int] = dict(zip(lab["scene_id"], lab["label"].astype(int)))
