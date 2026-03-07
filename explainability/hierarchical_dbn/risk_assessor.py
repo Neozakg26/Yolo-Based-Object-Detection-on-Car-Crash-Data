@@ -211,14 +211,25 @@ class AccidentRiskAssessor:
                             "proximity_d":"proximity_d",
                             "min_distance_t_d": "min_distance_t_d",
                             "closing_rate_d": "closing_rate_d",
-                             "rel_closing_rate_d":  "rel_closing_rate_d",
-                             "proximity_rate_d":"proximity_rate_d",
-                             "speed_d": "speed_d",
-                             "rel_speed_d": "rel_speed_d",
-                             "risk_speed_d": "risk_speed_d",
-                             "rel_risk_speed_d": "rel_risk_speed_d",
+                            "rel_closing_rate_d":  "rel_closing_rate_d",
+                            "proximity_rate_d":"proximity_rate_d",
+                            "speed_d": "speed_d",
+                            "rel_speed_d": "rel_speed_d",
+                            "risk_speed_d": "risk_speed_d",
+                            "rel_risk_speed_d": "rel_risk_speed_d",
+                            "speed_d":"speed_d",
+                            "vx_d":"vx_d",
                             "vy_d":"vy_d",
-                            "rel_vy_d": "rel_vy_d"}
+                            "rel_vx_d":"rel_vx_d",
+                            "rel_vy_d": "rel_vy_d",
+                            "ax_d": "ax_d",
+                            "ay_d": "ay_d",
+                            "ego_speed_d":"ego_speed_d",
+                            "ego_accel_d":"ego_accel_d",
+                            "num_objects_close_t_d": "num_objects_close_t_d",
+                            "mean_rel_speed_t_d":"mean_rel_speed_t_d",
+                            "min_ttc_t_d":"min_ttc_t_d"
+                             }
                
             # Restrict built-ins for safety
             safe_globals = {"__builtins__": None}
