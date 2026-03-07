@@ -911,9 +911,10 @@ class AccidentRiskAssessor:
                 print (f"ROW: {edge_str}")
                 src_str, tgt_str = edge_str.split("|")
                 # Convert string tuples back to actual tuples
-                src = eval(src_str)
-                tgt = eval(tgt_str)
-                assessor.dbn.add_edge(src, tgt)
+                if src_str !="(ttc_proxy_d, 0)":
+                    src = eval(src_str)
+                    tgt = eval(tgt_str)
+                    assessor.dbn.add_edge(src, tgt)
 
         # Load classifier if exists
         classifier_path = path.with_suffix('.classifier.pkl')
