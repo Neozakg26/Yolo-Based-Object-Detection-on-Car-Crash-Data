@@ -403,7 +403,8 @@ def main(args):
             random_state=args.random_state,
         )
 
-        # save model per fold 
+        # save model per fold
+        logger.info(f"[CV] Fold {fold_idx}: model saved to {fold_dir}") 
         if getattr(args, "save_fold_models", True):
             fold_model_path = fold_dir / f"global_model_fold_{fold_idx:02d}.parquet"
             assessor.save(fold_model_path)
@@ -588,7 +589,7 @@ if __name__ == "__main__":
                     help="How many test scenes to plot trajectories for.")
     argparrser.add_argument("--n_splits", type=int, default=5,
                     help="Number of CV folds (default 5).")
-    argparrser.add_argument("--save_fold_models", action="store_true", default=False,
+    argparrser.add_argument("--save_fold_models", action="store_true", default=True,
                     help="If set, save a model parquet for each fold inside the fold folder.")
 
 
