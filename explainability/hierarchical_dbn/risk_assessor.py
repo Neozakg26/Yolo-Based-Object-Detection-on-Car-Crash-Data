@@ -228,7 +228,8 @@ class AccidentRiskAssessor:
                         "ego_accel_d":"ego_accel_d",
                         "num_objects_close_t_d": "num_objects_close_t_d",
                         "mean_rel_speed_t_d":"mean_rel_speed_t_d",
-                        "min_ttc_t_d":"min_ttc_t_d"
+                        "min_ttc_t_d":"min_ttc_t_d",
+                        "collision_imminence":"collision_imminence"
                             }
             
         # Restrict built-ins for safety
