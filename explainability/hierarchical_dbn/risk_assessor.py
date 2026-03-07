@@ -246,7 +246,7 @@ class AccidentRiskAssessor:
             result = eval(expr, safe_globals, variables)
 
             # Return only the first element
-            return result[0]
+            return (result[0],result[1])
 
         except NameError as e:
             # If variable is missing, return None
@@ -969,9 +969,9 @@ class AccidentRiskAssessor:
                 print (f"ROW: {edge_str}")
                 src_str, tgt_str = edge_str.split("|")
                 # Convert string tuples back to actual tuples
-                # src = cls._safe_get_first(expr=src_str)
-                # tgt = cls._safe_get_first(expr= tgt_str)
-                assessor.dbn.add_edge(src_str, tgt_str)
+                src = cls._safe_get_first(expr=src_str)
+                tgt = cls._safe_get_first(expr= tgt_str)
+                assessor.dbn.add_edge(src, tgt)
 
         # Load classifier if exists
         classifier_path = path.with_suffix('.classifier.pkl')
