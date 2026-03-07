@@ -857,6 +857,10 @@ class AccidentRiskAssessor:
         inference_method = params[params["name"] == "inference_method"]["value"].iloc[0]
         prior_strength = float(params[params["name"] == "prior_strength"]["value"].iloc[0])
 
+        print(f"Extracted params: {params}")
+        print(f"inf Method: {inference_method}")
+        print(f"Prior Strength: {prior_strength}")
+
         # Get video_fps if available
         video_fps_row = params[params["name"] == "video_fps"]
         video_fps = float(video_fps_row["value"].iloc[0]) if len(video_fps_row) > 0 else 10.0
@@ -900,7 +904,7 @@ class AccidentRiskAssessor:
         if len(dbn_edges) > 0:
 
             assessor.dbn = DynamicBayesianNetwork()
-            print(f"Inside loop: dbn_edges {dbn_edges}")
+            print(f"Inside loop:{len(dbn_edges)} for dbn_edges {dbn_edges}")
             for _, row in dbn_edges.iterrows():
                 # Parse edge format: "(var, time)|(var, time)"
                 edge_str = row["value"]
@@ -913,6 +917,7 @@ class AccidentRiskAssessor:
 
         # Load classifier if exists
         classifier_path = path.with_suffix('.classifier.pkl')
+        print(f"Looking for Classifier with Path {classifier_path}")
         if classifier_path.exists():
             with open(classifier_path, 'rb') as f:
                 clf_data = pickle.load(f)
