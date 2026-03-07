@@ -231,7 +231,8 @@ class AccidentRiskAssessor:
                         "min_ttc_t_d":"min_ttc_t_d",
                         "collision_imminence":"collision_imminence",
                         "accident_risk":"accident_risk",
-                        "behavioural_risk": "behavioural_risk"
+                        "behavioural_risk": "behavioural_risk",
+                        "environmental_hazard":"environmental_hazard"
                             }
             
         # Restrict built-ins for safety
