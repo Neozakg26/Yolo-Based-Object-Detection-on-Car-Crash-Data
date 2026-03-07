@@ -971,7 +971,7 @@ class AccidentRiskAssessor:
                 # Convert string tuples back to actual tuples
                 # src = cls._safe_get_first(expr=src_str)
                 # tgt = cls._safe_get_first(expr= tgt_str)
-                assessor.dbn.add_edge(src, tgt)
+                assessor.dbn.add_edge(src_str, tgt_str)
 
         # Load classifier if exists
         classifier_path = path.with_suffix('.classifier.pkl')
