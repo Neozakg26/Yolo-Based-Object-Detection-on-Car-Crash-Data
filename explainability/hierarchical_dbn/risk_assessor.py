@@ -969,8 +969,8 @@ class AccidentRiskAssessor:
                 print (f"ROW: {edge_str}")
                 src_str, tgt_str = edge_str.split("|")
                 # Convert string tuples back to actual tuples
-                src = cls._safe_get_first(expr=src_str)
-                tgt = cls._safe_get_first(expr= tgt_str)
+                # src = cls._safe_get_first(expr=src_str)
+                # tgt = cls._safe_get_first(expr= tgt_str)
                 assessor.dbn.add_edge(src, tgt)
 
         # Load classifier if exists
