@@ -230,7 +230,8 @@ class AccidentRiskAssessor:
                         "mean_rel_speed_t_d":"mean_rel_speed_t_d",
                         "min_ttc_t_d":"min_ttc_t_d",
                         "collision_imminence":"collision_imminence",
-                        "accident_risk":"accident_risk"
+                        "accident_risk":"accident_risk",
+                        "behavioural_risk": "behavioural_risk"
                             }
             
         # Restrict built-ins for safety
