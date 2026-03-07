@@ -403,8 +403,8 @@ def main(args):
             random_state=args.random_state,
         )
 
-        # (Optional) save model per fold if you want
-        if getattr(args, "save_fold_models", False):
+        # save model per fold 
+        if getattr(args, "save_fold_models", True):
             fold_model_path = fold_dir / f"global_model_fold_{fold_idx:02d}.parquet"
             assessor.save(fold_model_path)
             logger.info(f"[CV] Fold {fold_idx}: model saved to {fold_model_path}")
@@ -493,6 +493,8 @@ def main(args):
         else:
             ego_acc, ego_f1 = np.nan, np.nan
             logger.info(f"[CV] Fold {fold_idx}: no usable ego labels found (expected 'Yes'/'No') or ego columns missing.")
+
+       
 
         # Save fold metrics CSV
         fold_metrics_path = fold_dir / "fold_metrics.csv"
