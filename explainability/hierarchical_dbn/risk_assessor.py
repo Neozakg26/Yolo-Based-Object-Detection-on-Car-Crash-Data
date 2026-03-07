@@ -197,64 +197,64 @@ class AccidentRiskAssessor:
         has_ego = "with ego-involved" if self.ego_classifier is not None else "without ego-involved"
         print(f"Loaded pre-trained classifier ({has_ego}, trained on {n_scenes} scenes, {n_frames} frames)")
 
-        def _safe_get_first(expr, variables=None):
-            """
-            Safely evaluates a tuple expression like "(ttc_proxy_d, 0)"
-            and returns only the first element.
-            """
-            if variables is None:
-                variables= {"ttc_proxy_d":"ttc_proxy_d",
-                            "ttc_relative_d": "ttc_relative_d",
-                            "ttc_smoothed_d":"ttc_smoothed_d",
-                            "min_ttc_t_d": "min_ttc_t_d",
-                            "ttc_rate_d": "ttc_rate_d",
-                            "proximity_d":"proximity_d",
-                            "min_distance_t_d": "min_distance_t_d",
-                            "closing_rate_d": "closing_rate_d",
-                            "rel_closing_rate_d":  "rel_closing_rate_d",
-                            "proximity_rate_d":"proximity_rate_d",
-                            "speed_d": "speed_d",
-                            "rel_speed_d": "rel_speed_d",
-                            "risk_speed_d": "risk_speed_d",
-                            "rel_risk_speed_d": "rel_risk_speed_d",
-                            "speed_d":"speed_d",
-                            "vx_d":"vx_d",
-                            "vy_d":"vy_d",
-                            "rel_vx_d":"rel_vx_d",
-                            "rel_vy_d": "rel_vy_d",
-                            "ax_d": "ax_d",
-                            "ay_d": "ay_d",
-                            "ego_speed_d":"ego_speed_d",
-                            "ego_accel_d":"ego_accel_d",
-                            "num_objects_close_t_d": "num_objects_close_t_d",
-                            "mean_rel_speed_t_d":"mean_rel_speed_t_d",
-                            "min_ttc_t_d":"min_ttc_t_d"
-                             }
-               
-            # Restrict built-ins for safety
-            safe_globals = {"__builtins__": None}
+    def _safe_get_first(expr, variables=None):
+        """
+        Safely evaluates a tuple expression like "(ttc_proxy_d, 0)"
+        and returns only the first element.
+        """
+        if variables is None:
+            variables= {"ttc_proxy_d":"ttc_proxy_d",
+                        "ttc_relative_d": "ttc_relative_d",
+                        "ttc_smoothed_d":"ttc_smoothed_d",
+                        "min_ttc_t_d": "min_ttc_t_d",
+                        "ttc_rate_d": "ttc_rate_d",
+                        "proximity_d":"proximity_d",
+                        "min_distance_t_d": "min_distance_t_d",
+                        "closing_rate_d": "closing_rate_d",
+                        "rel_closing_rate_d":  "rel_closing_rate_d",
+                        "proximity_rate_d":"proximity_rate_d",
+                        "speed_d": "speed_d",
+                        "rel_speed_d": "rel_speed_d",
+                        "risk_speed_d": "risk_speed_d",
+                        "rel_risk_speed_d": "rel_risk_speed_d",
+                        "speed_d":"speed_d",
+                        "vx_d":"vx_d",
+                        "vy_d":"vy_d",
+                        "rel_vx_d":"rel_vx_d",
+                        "rel_vy_d": "rel_vy_d",
+                        "ax_d": "ax_d",
+                        "ay_d": "ay_d",
+                        "ego_speed_d":"ego_speed_d",
+                        "ego_accel_d":"ego_accel_d",
+                        "num_objects_close_t_d": "num_objects_close_t_d",
+                        "mean_rel_speed_t_d":"mean_rel_speed_t_d",
+                        "min_ttc_t_d":"min_ttc_t_d"
+                            }
+            
+        # Restrict built-ins for safety
+        safe_globals = {"__builtins__": None}
 
-            try:
-                # Parse the expression to ensure it's valid Python syntax
-                parsed = ast.parse(expr, mode='eval')
+        try:
+            # Parse the expression to ensure it's valid Python syntax
+            parsed = ast.parse(expr, mode='eval')
 
-                # Ensure the expression is a tuple literal
-                if not isinstance(parsed.body, ast.Tuple):
-                    raise ValueError("Expression must be a tuple.")
+            # Ensure the expression is a tuple literal
+            if not isinstance(parsed.body, ast.Tuple):
+                raise ValueError("Expression must be a tuple.")
 
-                # Evaluate safely
-                result = eval(expr, safe_globals, variables)
+            # Evaluate safely
+            result = eval(expr, safe_globals, variables)
 
-                # Return only the first element
-                return result[0]
+            # Return only the first element
+            return result[0]
 
-            except NameError as e:
-                # If variable is missing, return None
-                missing_var = str(e).split("'")[1]
-                return variables.get(missing_var, None)
+        except NameError as e:
+            # If variable is missing, return None
+            missing_var = str(e).split("'")[1]
+            return variables.get(missing_var, None)
 
-            except Exception as e:
-                return f"Error: {e}"
+        except Exception as e:
+            return f"Error: {e}"
     @classmethod
     def with_pretrained_classifier(
         cls,
