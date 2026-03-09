@@ -10,7 +10,7 @@ MAX_JOBS=4
 
 CRASH_ROOT="/datasets/nmaja/CrashBest"
 NORMAL_ROOT="/datasets/nmaja/CrashBest/normal_files"
-SCENE_CSV="scene_labels.csv"
+SCENE_CSV="scene_index.csv"
 
 mkdir -p logs
 
@@ -18,7 +18,7 @@ run_scene () {
     SCENE_ID="$1"
 
     if [[ "$SCENE_ID" == C_* ]]; then
-        SCENE_PATH="${CRASH_ROOT}/C_${SCENE_ID}_"
+        SCENE_PATH="${CRASH_ROOT}/${SCENE_ID}_"
     else
         SCENE_PATH="${NORMAL_ROOT}/${SCENE_ID}_"
     fi

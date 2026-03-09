@@ -5,6 +5,7 @@ __pycache__/
 # Logs
 *.log
 *.txt
+logs/
 
 # Ignore all Dataset folders except codes and everything in codes
 car_crash_dataset/*
