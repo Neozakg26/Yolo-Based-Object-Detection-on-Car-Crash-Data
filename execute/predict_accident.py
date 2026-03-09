@@ -178,7 +178,7 @@ def main():
         print(classification_report(yt, yp, target_names=["Normal", "Accident"], zero_division=0))
         return acc, prec, rec, f1, cm
 
-    acc1, p1, r1, f11, cm1 = summarize("Rule: ANY frame risk_score >= thr", y_true, y_pred_any)
+    acc1, p1, r1, f11, cm1 = summarize(f"Rule: ANY frame risk_score >= {args.thr}", y_true, y_pred_any)
     acc2, p2, r2, f12, cm2 = summarize(f"Rule: {args.k} consecutive frames risk_score >= thr", y_true, y_pred_k)
 
     # Save outputs

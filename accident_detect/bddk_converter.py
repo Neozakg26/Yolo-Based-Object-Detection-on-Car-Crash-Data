@@ -22,7 +22,6 @@ def rename_files(path_str, output_str):
     output = Path(output_str)
 
     folder = path.name
-    prefix = folder.rsplit("-",1)
     if not path.exists():
         raise FileNotFoundError(f"Path does not exist: {path}")
     if not path.is_dir():
@@ -52,7 +51,28 @@ def rename_files(path_str, output_str):
     for file_id, filepath in jpg_files:
         scene = file_id // 50
         local_id = file_id % 50
-        new_name = f"{prefix[1]}_{scene}_{local_id:06d}.jpg"
+        new_name = f"{folder}_{scene}_{local_id:06d}.jpg"
+        new_path = output / new_name
+        results_set = (filepath,new_path)
+        tuple_list.append(results_set)
+        # print(local_id)
+        # print(f" equality : {local_id == 49}")
+        if local_id== 49:
+            for src, dest in tuple_list:
+                print(f"Now copying : {src.name} -> {dest}")
+                shutil.copy2(src, dest)
+            tuple_list.clear
+
+    print(f"Copied {len(jpg_files)} files across {(jpg_files[-1][0] // 50) + 1 if jpg_files else 0} scenes to {output}.")
+
+    # Sort by id so renaming is deterministic
+    jpg_files.sort(key=lambda x: x[0])
+    tuple_list = []
+
+    for file_id, filepath in jpg_files:
+        scene = file_id // 50
+        local_id = file_id % 50
+        new_name = f"{folder}_{scene}_{local_id:06d}.jpg"
         new_path = output / new_name
         results_set = (filepath,new_path)
         tuple_list.append(results_set)
