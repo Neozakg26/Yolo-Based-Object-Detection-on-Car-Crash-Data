@@ -1,0 +1,16 @@
+/home-mscluster/nmaja/.local/lib/python3.10/site-packages/pandas/core/arrays/categorical.py:1692: RuntimeWarning: invalid value encountered in cast
+  return np.asarray(ret, dtype=dtype)
+/home-mscluster/nmaja/.local/lib/python3.10/site-packages/pandas/core/arrays/categorical.py:1692: RuntimeWarning: invalid value encountered in cast
+  return np.asarray(ret, dtype=dtype)
+/home-mscluster/nmaja/.local/lib/python3.10/site-packages/pandas/core/arrays/categorical.py:1692: RuntimeWarning: invalid value encountered in cast
+  return np.asarray(ret, dtype=dtype)
+/home-mscluster/nmaja/.local/lib/python3.10/site-packages/pandas/core/arrays/categorical.py:1692: RuntimeWarning: invalid value encountered in cast
+  return np.asarray(ret, dtype=dtype)
+/home-mscluster/nmaja/.local/lib/python3.10/site-packages/pandas/core/arrays/categorical.py:1692: RuntimeWarning: invalid value encountered in cast
+  return np.asarray(ret, dtype=dtype)
+/home-mscluster/nmaja/.local/lib/python3.10/site-packages/pandas/core/arrays/categorical.py:1692: RuntimeWarning: invalid value encountered in cast
+  return np.asarray(ret, dtype=dtype)
+/home-mscluster/nmaja/.local/lib/python3.10/site-packages/pandas/core/arrays/categorical.py:1692: RuntimeWarning: invalid value encountered in cast
+  return np.asarray(ret, dtype=dtype)
+/home-mscluster/nmaja/.local/lib/python3.10/site-packages/pandas/core/arrays/categorical.py:1692: RuntimeWarning: invalid value encountered in cast
+  return np.asarray(ret, dtype=dtype)

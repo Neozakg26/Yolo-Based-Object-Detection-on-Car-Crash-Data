@@ -1,0 +1,1863 @@
+Starting Accident Prediction
+Loading global model.
+ Model 
+             type  ...      fitted_bins
+0          param  ...             None
+1          param  ...             None
+2          param  ...             None
+3          param  ...             None
+4    discretizer  ...  [1.5, 3.0, 5.0]
+..           ...  ...              ...
+97      dbn_edge  ...             None
+98      dbn_edge  ...             None
+99      dbn_edge  ...             None
+100     dbn_edge  ...             None
+101     dbn_edge  ...             None
+
+[102 rows x 7 columns]
+Extracted params:     type              name  ... use_percentiles fitted_bins
+0  param  inference_method  ...            None        None
+1  param    prior_strength  ...            None        None
+2  param         video_fps  ...            None        None
+3  param      feature_cols  ...            None        None
+
+[4 rows x 7 columns]
+inf Method: supervised
+Prior Strength: 10.0
+Inside loop:70 for dbn_edges          type  ... fitted_bins
+32   dbn_edge  ...        None
+33   dbn_edge  ...        None
+34   dbn_edge  ...        None
+35   dbn_edge  ...        None
+36   dbn_edge  ...        None
+..        ...  ...         ...
+97   dbn_edge  ...        None
+98   dbn_edge  ...        None
+99   dbn_edge  ...        None
+100  dbn_edge  ...        None
+101  dbn_edge  ...        None
+
+[70 rows x 7 columns]
+ROW: (ttc_proxy_d, 0)|(collision_imminence, 0)
+ Adding edge ('ttc_proxy_d', 0), ('collision_imminence', 0)
+ROW: (ttc_proxy_d, 0)|(ttc_proxy_d, 1)
+ Adding edge ('ttc_proxy_d', 0), ('ttc_proxy_d', 1)
+ROW: (collision_imminence, 0)|(accident_risk, 0)
+ Adding edge ('collision_imminence', 0), ('accident_risk', 0)
+ROW: (collision_imminence, 0)|(collision_imminence, 1)
+ Adding edge ('collision_imminence', 0), ('collision_imminence', 1)
+ROW: (ttc_proxy_d, 1)|(collision_imminence, 1)
+ Adding edge ('ttc_proxy_d', 1), ('collision_imminence', 1)
+ROW: (collision_imminence, 1)|(accident_risk, 1)
+ Adding edge ('collision_imminence', 1), ('accident_risk', 1)
+ROW: (ttc_relative_d, 0)|(collision_imminence, 0)
+ Adding edge ('ttc_relative_d', 0), ('collision_imminence', 0)
+ROW: (ttc_relative_d, 0)|(ttc_relative_d, 1)
+ Adding edge ('ttc_relative_d', 0), ('ttc_relative_d', 1)
+ROW: (ttc_relative_d, 1)|(collision_imminence, 1)
+ Adding edge ('ttc_relative_d', 1), ('collision_imminence', 1)
+ROW: (ttc_smoothed_d, 0)|(collision_imminence, 0)
+ Adding edge ('ttc_smoothed_d', 0), ('collision_imminence', 0)
+ROW: (ttc_smoothed_d, 0)|(ttc_smoothed_d, 1)
+ Adding edge ('ttc_smoothed_d', 0), ('ttc_smoothed_d', 1)
+ROW: (ttc_smoothed_d, 1)|(collision_imminence, 1)
+ Adding edge ('ttc_smoothed_d', 1), ('collision_imminence', 1)
+ROW: (ttc_rate_d, 0)|(collision_imminence, 0)
+ Adding edge ('ttc_rate_d', 0), ('collision_imminence', 0)
+ROW: (ttc_rate_d, 0)|(ttc_rate_d, 1)
+ Adding edge ('ttc_rate_d', 0), ('ttc_rate_d', 1)
+ROW: (ttc_rate_d, 1)|(collision_imminence, 1)
+ Adding edge ('ttc_rate_d', 1), ('collision_imminence', 1)
+ROW: (closing_rate_d, 0)|(collision_imminence, 0)
+ Adding edge ('closing_rate_d', 0), ('collision_imminence', 0)
+ROW: (closing_rate_d, 0)|(closing_rate_d, 1)
+ Adding edge ('closing_rate_d', 0), ('closing_rate_d', 1)
+ROW: (closing_rate_d, 1)|(collision_imminence, 1)
+ Adding edge ('closing_rate_d', 1), ('collision_imminence', 1)
+ROW: (proximity_d, 0)|(collision_imminence, 0)
+ Adding edge ('proximity_d', 0), ('collision_imminence', 0)
+ROW: (proximity_d, 0)|(proximity_d, 1)
+ Adding edge ('proximity_d', 0), ('proximity_d', 1)
+ROW: (proximity_d, 1)|(collision_imminence, 1)
+ Adding edge ('proximity_d', 1), ('collision_imminence', 1)
+ROW: (min_distance_t_d, 0)|(collision_imminence, 0)
+ Adding edge ('min_distance_t_d', 0), ('collision_imminence', 0)
+ROW: (min_distance_t_d, 0)|(min_distance_t_d, 1)
+ Adding edge ('min_distance_t_d', 0), ('min_distance_t_d', 1)
+ROW: (min_distance_t_d, 1)|(collision_imminence, 1)
+ Adding edge ('min_distance_t_d', 1), ('collision_imminence', 1)
+ROW: (vx_d, 0)|(behavioural_risk, 0)
+ Adding edge ('vx_d', 0), ('behavioural_risk', 0)
+ROW: (vx_d, 0)|(vx_d, 1)
+ Adding edge ('vx_d', 0), ('vx_d', 1)
+ROW: (behavioural_risk, 0)|(accident_risk, 0)
+ Adding edge ('behavioural_risk', 0), ('accident_risk', 0)
+ROW: (behavioural_risk, 0)|(behavioural_risk, 1)
+ Adding edge ('behavioural_risk', 0), ('behavioural_risk', 1)
+ROW: (vx_d, 1)|(behavioural_risk, 1)
+ Adding edge ('vx_d', 1), ('behavioural_risk', 1)
+ROW: (behavioural_risk, 1)|(accident_risk, 1)
+ Adding edge ('behavioural_risk', 1), ('accident_risk', 1)
+ROW: (vy_d, 0)|(behavioural_risk, 0)
+ Adding edge ('vy_d', 0), ('behavioural_risk', 0)
+ROW: (vy_d, 0)|(vy_d, 1)
+ Adding edge ('vy_d', 0), ('vy_d', 1)
+ROW: (vy_d, 1)|(behavioural_risk, 1)
+ Adding edge ('vy_d', 1), ('behavioural_risk', 1)
+ROW: (speed_d, 0)|(behavioural_risk, 0)
+ Adding edge ('speed_d', 0), ('behavioural_risk', 0)
+ROW: (speed_d, 0)|(speed_d, 1)
+ Adding edge ('speed_d', 0), ('speed_d', 1)
+ROW: (speed_d, 1)|(behavioural_risk, 1)
+ Adding edge ('speed_d', 1), ('behavioural_risk', 1)
+ROW: (rel_vx_d, 0)|(behavioural_risk, 0)
+ Adding edge ('rel_vx_d', 0), ('behavioural_risk', 0)
+ROW: (rel_vx_d, 0)|(rel_vx_d, 1)
+ Adding edge ('rel_vx_d', 0), ('rel_vx_d', 1)
+ROW: (rel_vx_d, 1)|(behavioural_risk, 1)
+ Adding edge ('rel_vx_d', 1), ('behavioural_risk', 1)
+ROW: (rel_vy_d, 0)|(behavioural_risk, 0)
+ Adding edge ('rel_vy_d', 0), ('behavioural_risk', 0)
+ROW: (rel_vy_d, 0)|(rel_vy_d, 1)
+ Adding edge ('rel_vy_d', 0), ('rel_vy_d', 1)
+ROW: (rel_vy_d, 1)|(behavioural_risk, 1)
+ Adding edge ('rel_vy_d', 1), ('behavioural_risk', 1)
+ROW: (ax_d, 0)|(behavioural_risk, 0)
+ Adding edge ('ax_d', 0), ('behavioural_risk', 0)
+ROW: (ax_d, 0)|(ax_d, 1)
+ Adding edge ('ax_d', 0), ('ax_d', 1)
+ROW: (ax_d, 1)|(behavioural_risk, 1)
+ Adding edge ('ax_d', 1), ('behavioural_risk', 1)
+ROW: (ay_d, 0)|(behavioural_risk, 0)
+ Adding edge ('ay_d', 0), ('behavioural_risk', 0)
+ROW: (ay_d, 0)|(ay_d, 1)
+ Adding edge ('ay_d', 0), ('ay_d', 1)
+ROW: (ay_d, 1)|(behavioural_risk, 1)
+ Adding edge ('ay_d', 1), ('behavioural_risk', 1)
+ROW: (ego_speed_d, 0)|(behavioural_risk, 0)
+ Adding edge ('ego_speed_d', 0), ('behavioural_risk', 0)
+ROW: (ego_speed_d, 0)|(ego_speed_d, 1)
+ Adding edge ('ego_speed_d', 0), ('ego_speed_d', 1)
+ROW: (ego_speed_d, 1)|(behavioural_risk, 1)
+ Adding edge ('ego_speed_d', 1), ('behavioural_risk', 1)
+ROW: (ego_accel_d, 0)|(behavioural_risk, 0)
+ Adding edge ('ego_accel_d', 0), ('behavioural_risk', 0)
+ROW: (ego_accel_d, 0)|(ego_accel_d, 1)
+ Adding edge ('ego_accel_d', 0), ('ego_accel_d', 1)
+ROW: (ego_accel_d, 1)|(behavioural_risk, 1)
+ Adding edge ('ego_accel_d', 1), ('behavioural_risk', 1)
+ROW: (risk_speed_d, 0)|(behavioural_risk, 0)
+ Adding edge ('risk_speed_d', 0), ('behavioural_risk', 0)
+ROW: (risk_speed_d, 0)|(risk_speed_d, 1)
+ Adding edge ('risk_speed_d', 0), ('risk_speed_d', 1)
+ROW: (risk_speed_d, 1)|(behavioural_risk, 1)
+ Adding edge ('risk_speed_d', 1), ('behavioural_risk', 1)
+ROW: (num_objects_close_t_d, 0)|(environmental_hazard, 0)
+ Adding edge ('num_objects_close_t_d', 0), ('environmental_hazard', 0)
+ROW: (num_objects_close_t_d, 0)|(num_objects_close_t_d, 1)
+ Adding edge ('num_objects_close_t_d', 0), ('num_objects_close_t_d', 1)
+ROW: (environmental_hazard, 0)|(accident_risk, 0)
+ Adding edge ('environmental_hazard', 0), ('accident_risk', 0)
+ROW: (environmental_hazard, 0)|(environmental_hazard, 1)
+ Adding edge ('environmental_hazard', 0), ('environmental_hazard', 1)
+ROW: (num_objects_close_t_d, 1)|(environmental_hazard, 1)
+ Adding edge ('num_objects_close_t_d', 1), ('environmental_hazard', 1)
+ROW: (environmental_hazard, 1)|(accident_risk, 1)
+ Adding edge ('environmental_hazard', 1), ('accident_risk', 1)
+ROW: (mean_rel_speed_t_d, 0)|(environmental_hazard, 0)
+ Adding edge ('mean_rel_speed_t_d', 0), ('environmental_hazard', 0)
+ROW: (mean_rel_speed_t_d, 0)|(mean_rel_speed_t_d, 1)
+ Adding edge ('mean_rel_speed_t_d', 0), ('mean_rel_speed_t_d', 1)
+ROW: (mean_rel_speed_t_d, 1)|(environmental_hazard, 1)
+ Adding edge ('mean_rel_speed_t_d', 1), ('environmental_hazard', 1)
+ROW: (min_ttc_t_d, 0)|(environmental_hazard, 0)
+ Adding edge ('min_ttc_t_d', 0), ('environmental_hazard', 0)
+ROW: (min_ttc_t_d, 0)|(min_ttc_t_d, 1)
+ Adding edge ('min_ttc_t_d', 0), ('min_ttc_t_d', 1)
+ROW: (min_ttc_t_d, 1)|(environmental_hazard, 1)
+ Adding edge ('min_ttc_t_d', 1), ('environmental_hazard', 1)
+ROW: (accident_risk, 0)|(accident_risk, 1)
+ Adding edge ('accident_risk', 0), ('accident_risk', 1)
+Looking for Classifier with Path /datasets/nmaja/CrashBest/results/eval_plots_cv/fold_01/global_model_fold_01.classifier.pkl
+Classifier loaded: /datasets/nmaja/CrashBest/results/eval_plots_cv/fold_01/global_model_fold_01.classifier.pkl
+Loaded global model.
+Track files 
+ ['/datasets/nmaja/CrashBest/new_results/0100ac18_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/01969e7d_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/02530231_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/046fa443_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/049b7b85_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/07d32feb_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/088840fc_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/08faca55_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/0a512e75_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/0a8cf1a0_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/0b1932a7_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/0b20ef00_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/0ef3c8dc_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/10697723_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/13a07470_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/180a776c_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/19eca24a_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/1fa7ff43_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/220bbc98_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/24f318c4_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/286a5664_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/286ab9b3_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/2c5344eb_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/2d787502_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/2fa8f3b6_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/30b30f5e_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/3295dbd6_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/34630e8d_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/37797ff9_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/38c0a33a_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/3bc5573e_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/3bcbe37a_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/3bf57337_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/3eb4a3a9_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/3f6603f2_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/41990aa4_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/4200bde2_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/434368a1_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/442e6bc1_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/47378fa3_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/4759e8c1_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/49d9a01e_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/4a442001_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/4cf2b9e0_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/4e8a363a_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/4f3bf6cf_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/52588960_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/526bb14e_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/5443fe39_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/54bb129b_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/572b2d4e_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/58847872_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/59817bb0_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/5adfaaa7_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/5be4cdfa_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/5ce3cf52_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/62156032_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/624162a7_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/624f538d_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/6257be58_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/62c2a288_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/65613f7e_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/66a334b5_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/67614580_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/67d25f19_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/6c729bde_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/70c87fc6_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/725ddf3a_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/725e21a0_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/752bd845_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/7a95b4e3_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/7ac91661_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/7c670be8_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/7cff8ea6_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/7d20b300_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/7f07efac_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/83709bd4_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/84635cf2_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/8523a4a9_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/856c17f7_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/8748e2fb_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/875c1f73_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/87c692aa_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/89d1aea8_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/89f4e5c0_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/8be5b76d_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/8eb40ca6_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/902288d1_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/90f2bab2_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/9123d227_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/92f30408_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/964a2695_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/974f6883_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/97de1f42_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/9a6cdd3e_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/9eaa8e42_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/9ee17cd9_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/9f6d5823_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000001tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000002tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000003tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000004tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000005tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000006tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000007tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000008tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000009tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000010tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000011tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000012tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000013tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000014tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000015tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000016tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000017tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000018tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000019tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000020tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000021tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000022tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000023tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000024tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000025tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000026tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000027tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000028tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000029tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000030tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000031tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000032tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000033tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000034tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000035tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000036tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000037tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000038tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000039tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000040tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000041tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000042tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000043tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000044tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000045tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000046tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000047tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000048tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000049tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000050tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000051tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000052tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000053tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000054tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000055tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000056tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000057tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000058tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000059tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000060tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000061tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000062tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000063tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000064tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000065tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000066tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000067tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000068tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000069tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000070tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000071tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000072tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000073tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000074tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000075tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000076tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000077tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000078tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000079tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000080tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000081tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000082tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000083tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000084tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000085tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000086tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000087tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000088tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000089tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000090tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000091tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000092tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000093tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000094tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000095tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000096tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000097tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000098tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000099tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000100tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000101tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000102tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000103tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000104tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000105tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000106tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000107tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000108tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000109tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000110tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000111tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000112tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000113tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000114tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000115tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000116tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000117tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000118tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000119tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000120tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000121tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000122tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000123tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000124tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000125tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000126tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000127tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000128tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000129tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000130tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000131tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000132tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000133tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000134tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000135tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000136tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000137tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000138tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000139tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000140tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000142tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000143tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000144tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000145tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000146tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000147tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000148tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000149tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000150tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000151tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000152tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000153tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000154tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000155tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000156tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000157tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000158tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000159tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000160tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000161tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000162tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000163tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000164tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000165tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000166tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000167tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000168tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000169tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000170tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000171tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000172tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000173tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000174tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000175tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000176tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000177tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000178tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000179tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000180tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000181tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000182tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000183tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000184tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000185tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000186tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000187tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000188tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000189tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000190tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000191tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000192tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000193tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000194tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000195tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000196tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000197tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000198tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000199tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000200tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000201tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000202tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000203tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000204tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000205tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000206tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000207tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000208tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000209tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000210tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000211tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000212tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000213tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000214tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000215tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000216tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000217tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000218tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000219tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000220tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000221tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000222tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000223tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000224tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000225tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000226tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000227tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000228tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000229tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000230tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000231tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000232tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000233tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000234tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000235tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000236tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000237tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000238tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000239tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000240tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000241tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000242tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000243tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000244tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000245tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000246tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000247tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000248tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000249tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000250tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000251tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000252tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000253tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000254tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000255tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000256tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000257tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000258tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000259tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000260tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000261tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000262tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000263tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000264tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000265tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000266tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000267tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000268tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000269tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000270tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000271tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000272tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000273tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000274tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000275tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000276tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000277tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000278tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000279tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000280tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000281tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000282tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000283tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000284tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000285tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000286tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000287tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000288tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000289tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000290tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000291tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000292tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000293tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000294tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000295tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000296tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000297tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000298tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000299tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000300tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000301tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000302tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000303tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000304tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000305tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000306tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000307tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000308tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000309tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000310tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000311tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000312tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000313tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000314tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000315tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000316tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000317tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000318tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000319tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000320tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000321tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000322tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000323tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000324tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000325tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000326tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000327tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000328tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000329tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000330tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000331tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000332tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000333tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000334tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000335tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000336tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000337tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000338tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000339tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000340tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000341tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000342tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000343tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000344tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000345tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000346tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000347tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000348tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000349tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000350tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000351tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000352tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000353tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000354tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000355tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000356tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000357tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000358tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000359tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000360tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000361tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000362tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000363tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000364tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000365tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000366tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000367tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000368tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000369tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000371tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000372tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000373tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000374tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000375tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000376tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000377tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000379tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000380tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000381tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000382tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000383tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000384tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000385tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000386tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000387tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000388tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000389tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000390tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000391tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000392tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000393tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000394tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000395tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000396tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000397tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000398tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000399tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000400tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000401tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000402tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000403tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000404tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000405tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000406tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000407tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000408tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000409tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000410tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000411tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000412tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000413tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000414tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000415tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000416tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000417tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000418tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000419tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000420tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000421tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000422tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000423tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000424tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000425tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000426tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000427tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000428tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000429tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000430tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000431tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000432tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000433tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000434tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000435tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000436tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000437tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000438tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000439tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000440tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000441tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000442tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000443tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000444tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000445tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000446tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000447tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000448tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000449tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000450tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000451tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000452tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000453tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000454tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000455tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000456tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000457tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000458tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000459tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000460tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000461tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000462tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000463tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000464tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000465tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000466tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000467tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000468tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000469tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000470tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000471tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000472tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000473tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000474tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000475tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000476tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000477tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000478tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000479tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000480tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000481tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000482tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000483tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000484tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000485tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000486tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000487tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000488tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000489tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000490tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000491tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000492tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000493tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000494tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000495tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000496tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000497tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000498tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000499tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000500tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000501tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000502tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000503tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000504tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000505tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000506tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000507tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000508tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000509tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000510tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000511tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000512tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000513tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000514tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000515tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000516tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000517tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000518tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000519tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000520tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000521tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000522tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000523tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000524tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000525tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000526tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000527tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000528tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000529tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000530tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000531tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000532tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000533tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000534tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000535tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000536tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000537tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000538tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000539tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000540tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000541tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000542tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000543tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000544tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000545tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000546tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000547tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000548tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000549tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000550tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000551tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000552tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000553tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000554tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000555tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000556tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000557tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000558tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000559tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000560tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000561tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000562tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000563tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000564tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000565tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000566tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000567tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000568tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000569tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000570tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000571tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000572tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000573tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000574tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000575tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000576tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000577tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000578tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000579tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000580tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000581tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000582tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000583tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000584tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000586tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000587tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000588tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000589tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000590tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000591tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000592tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000593tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000594tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000595tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000596tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000597tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000598tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000599tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000600tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000601tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000602tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000603tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000604tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000605tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000606tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000607tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000608tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000609tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000610tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000611tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000612tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000613tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000614tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000615tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000616tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000617tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000618tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000619tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000620tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000621tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000622tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000623tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000624tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000625tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000626tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000627tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000628tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000629tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000630tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000631tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000632tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000633tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000634tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000635tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000636tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000637tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000638tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000639tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000640tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000641tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000642tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000643tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000644tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000645tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000646tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000647tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000648tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000649tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000650tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000651tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000652tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000653tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000654tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000655tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000656tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000657tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000658tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000659tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000660tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000661tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000662tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000663tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000664tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000665tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000666tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000667tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000668tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000669tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000670tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000671tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000672tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000673tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000674tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000675tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000676tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000677tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000678tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000679tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000680tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000681tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000682tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000683tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000684tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000685tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000686tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000687tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000688tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000689tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000690tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000691tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000692tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000693tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000694tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000695tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000696tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000697tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000698tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000699tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000700tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000701tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000702tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000703tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000704tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000705tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000706tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000707tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000708tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000709tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000710tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000711tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000712tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000713tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000714tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000715tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000716tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000717tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000718tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000719tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000720tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000721tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000722tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000723tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000724tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000725tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000726tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000727tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000728tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000729tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000730tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000731tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000732tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000733tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000734tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000735tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000736tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000737tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000738tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000739tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000740tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000741tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000742tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000743tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000744tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000745tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000746tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000747tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000748tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000749tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000750tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000751tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000752tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000753tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000754tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000755tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000756tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000757tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000758tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000759tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000760tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000761tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000762tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000763tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000764tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000765tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000766tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000767tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000768tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000769tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000770tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000771tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000772tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000773tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000774tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000775tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000776tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000777tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000778tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000779tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000780tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000781tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000782tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000783tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000784tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000785tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000786tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000787tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000788tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000789tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000790tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000791tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000792tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000793tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000794tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000795tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000796tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000797tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000798tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000799tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000800tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000801tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000802tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000803tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000804tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000805tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000806tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000807tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000808tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000809tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000810tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000811tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000812tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000813tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000814tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000815tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000816tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000817tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000818tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000819tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000820tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000821tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000822tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000823tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000824tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000825tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000826tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000827tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000828tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000829tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000830tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000831tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000832tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000833tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000834tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000835tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000836tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000837tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000838tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000839tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000840tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000841tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000842tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000843tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000844tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000845tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000846tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000847tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000848tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000849tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000850tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000851tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000852tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000853tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000854tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000855tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000856tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000857tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000858tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000859tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000860tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000861tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000862tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000863tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000864tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000865tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000866tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000867tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000868tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000869tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000870tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000871tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000872tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000873tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000874tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000875tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000876tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000877tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000878tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000879tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000880tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000881tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000882tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000883tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000884tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000885tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000886tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000887tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000888tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000889tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000890tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000891tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000892tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000893tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000894tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000895tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000896tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000897tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000898tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000899tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000900tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000901tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000902tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000903tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000904tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000905tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000906tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000907tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000908tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000909tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000910tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000911tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000912tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000913tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000914tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000915tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000916tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000917tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000918tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000919tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000920tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000921tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000922tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000923tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000924tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000925tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000926tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000927tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000928tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000929tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000930tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000931tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000932tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000933tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000934tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000935tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000936tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000937tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000938tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000939tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000940tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000941tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000942tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000943tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000944tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000945tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000946tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000947tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000948tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000949tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000950tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000951tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000952tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000953tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000954tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000955tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000956tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000957tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000958tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000959tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000960tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000961tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000962tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000963tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000964tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000965tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000966tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000967tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000968tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000969tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000970tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000971tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000972tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000973tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000974tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000975tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000976tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000977tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000978tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000979tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000980tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000981tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000982tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000983tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000984tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000985tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000986tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000987tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000988tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000990tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000991tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000992tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000993tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000994tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000995tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000996tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000997tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000998tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_000999tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001000tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001001tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001002tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001003tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001004tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001005tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001006tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001007tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001008tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001009tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001010tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001011tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001012tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001013tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001014tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001015tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001016tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001017tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001018tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001019tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001020tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001021tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001022tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001023tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001024tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001025tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001026tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001027tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001028tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001029tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001030tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001031tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001032tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001033tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001034tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001035tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001036tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001037tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001039tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001040tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001041tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001042tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001043tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001044tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001045tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001046tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001047tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001048tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001049tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001050tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001051tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001052tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001053tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001054tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001055tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001056tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001057tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001058tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001059tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001060tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001061tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001062tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001063tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001064tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001065tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001066tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001067tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001068tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001069tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001070tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001071tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001072tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001073tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001074tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001075tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001076tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001077tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001078tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001079tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001080tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001081tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001082tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001083tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001084tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001085tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001086tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001087tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001088tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001089tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001090tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001091tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001092tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001093tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001094tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001095tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001096tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001097tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001098tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001099tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001100tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001101tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001102tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001103tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001104tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001105tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001106tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001107tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001108tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001109tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001110tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001111tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001112tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001113tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001114tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001115tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001116tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001117tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001118tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001119tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001120tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001121tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001122tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001123tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001124tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001125tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001126tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001127tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001128tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001129tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001130tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001131tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001132tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001133tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001134tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001135tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001136tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001137tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001138tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001139tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001140tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001141tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001142tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001143tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001144tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001145tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001146tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001147tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001148tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001149tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001150tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001151tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001152tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001153tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001154tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001155tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001156tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001157tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001158tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001159tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001160tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001161tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001162tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001163tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001164tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001165tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001166tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001168tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001169tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001170tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001171tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001172tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001173tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001174tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001175tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001176tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001177tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001178tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001179tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001180tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001181tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001182tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001183tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001184tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001185tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001186tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001187tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001188tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001189tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001190tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001191tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001192tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001193tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001194tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001195tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001196tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001197tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001198tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001199tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001200tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001201tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001202tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001203tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001204tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001205tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001206tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001207tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001208tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001209tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001210tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001211tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001212tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001213tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001214tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001215tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001216tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001217tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001218tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001219tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001220tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001221tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001222tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001223tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001224tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001225tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001226tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001227tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001228tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001229tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001230tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001231tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001232tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001233tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001234tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001235tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001236tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001237tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001238tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001239tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001240tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001241tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001242tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001243tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001244tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001245tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001246tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001247tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001248tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001249tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001250tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001251tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001252tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001253tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001254tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001256tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001257tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001258tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001259tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001260tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001261tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001262tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001263tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001264tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001265tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001266tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001267tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001268tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001269tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001270tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001271tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001272tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001273tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001274tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001275tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001276tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001277tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001278tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001279tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001280tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001281tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001282tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001283tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001284tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001285tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001286tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001287tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001288tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001289tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001290tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001291tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001292tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001293tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001294tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001295tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001296tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001297tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001298tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001299tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001300tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001301tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001302tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001303tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001304tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001305tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001306tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001308tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001309tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001310tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001311tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001312tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001313tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001314tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001315tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001316tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001317tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001318tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001321tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001322tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001323tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001324tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001325tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001326tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001327tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001328tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001329tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001330tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001331tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001332tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001333tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001334tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001335tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001336tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001337tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001338tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001339tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001340tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001341tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001342tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001343tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001344tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001345tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001346tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001347tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001348tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001349tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001350tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001351tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001352tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001353tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001354tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001355tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001356tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001357tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001358tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001359tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001360tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001361tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001362tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001363tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001364tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001365tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001366tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001367tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001368tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001369tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001370tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001372tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001373tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001374tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001375tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001376tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001377tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001378tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001379tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001380tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001381tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001382tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001383tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001384tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001385tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001386tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001387tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001388tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001389tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001390tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001391tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001392tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001393tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001394tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001395tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001396tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001397tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001398tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001399tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001400tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001401tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001402tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001403tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001404tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001405tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001406tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001407tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001408tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001409tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001410tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001411tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001412tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001413tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001414tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001415tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001416tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001417tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001418tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001419tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001420tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001421tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001422tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001423tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001424tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001426tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001427tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001428tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001429tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001430tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001431tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001432tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001433tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001434tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001435tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001436tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001437tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001438tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001439tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001440tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001441tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001442tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001443tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001444tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001445tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001446tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001447tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001448tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001449tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001450tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001451tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001452tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001453tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001454tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001455tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001456tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001457tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001458tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001459tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001460tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001461tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001462tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001463tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001464tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001465tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001466tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001467tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001468tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001469tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001470tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001471tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001472tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001473tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001474tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001475tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001476tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001477tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001478tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001479tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001480tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001481tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001482tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001483tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001484tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001485tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001486tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001487tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001488tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001489tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001490tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001491tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001492tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001493tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001494tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001495tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001496tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001497tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001498tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001499tracks.parquet', '/datasets/nmaja/CrashBest/new_results/C_001500tracks.parquet', '/datasets/nmaja/CrashBest/new_results/a457685b_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/a45d905f_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/a4b8e39d_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/a7f7e470_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/a96704f9_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/aab2e274_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/acbed4fb_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/ad3e206b_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/ad660439_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/afda7206_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/b53a2998_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/bcfab89f_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/bd191d6a_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/c1d32eea_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/c42f9f97_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/c48f4b3e_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/c5f802ac_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/c7defded_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/c80cf6c3_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/caba8a02_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/cb063914_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/cb4d6287_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/cb820c98_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/cbbec2cd_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/cedbfea7_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/d1301c7c_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/d1428e56_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/d32a618e_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/d4c09a0f_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/d6cd84e5_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/d8e0dc65_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/dab3a407_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/dbe34c9d_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/e0ac84fe_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/e4bbbd72_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/e535423e_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/e6abad2f_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/e9bfaf62_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/ea678692_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/eae6a189_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/eba4da41_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/ebe888e1_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/ec815219_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/ec8fe02c_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/ef4bf541_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/ef92ac05_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/f0882eef_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/f1b91e3c_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/f32de4d2_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/f4820206_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/f8cd3a65_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/f9108a13_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/fa2a8964_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/fd69d0ec_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/fe4bbaf6_0tracks.parquet', '/datasets/nmaja/CrashBest/new_results/ff3946ad_0tracks.parquet']
+Processing scene 0100ac18_0
+Processing scene 01969e7d_0
+Processing scene 02530231_0
+Processing scene 046fa443_0
+Processing scene 049b7b85_0
+Processing scene 07d32feb_0
+Processing scene 088840fc_0
+Processing scene 08faca55_0
+Processing scene 0a512e75_0
+Processing scene 0a8cf1a0_0
+Processing scene 0b1932a7_0
+Processing scene 0b20ef00_0
+Processing scene 0ef3c8dc_0
+Processing scene 10697723_0
+Processing scene 13a07470_0
+Processing scene 180a776c_0
+Processing scene 19eca24a_0
+Processing scene 1fa7ff43_0
+Processing scene 220bbc98_0
+Processing scene 24f318c4_0
+Processing scene 286a5664_0
+Processing scene 286ab9b3_0
+Processing scene 2c5344eb_0
+Processing scene 2d787502_0
+Processing scene 2fa8f3b6_0
+Processing scene 30b30f5e_0
+Processing scene 3295dbd6_0
+Processing scene 34630e8d_0
+Processing scene 37797ff9_0
+Processing scene 38c0a33a_0
+Processing scene 3bc5573e_0
+Processing scene 3bcbe37a_0
+Processing scene 3bf57337_0
+Processing scene 3eb4a3a9_0
+Processing scene 3f6603f2_0
+Processing scene 41990aa4_0
+Processing scene 4200bde2_0
+Processing scene 434368a1_0
+Processing scene 442e6bc1_0
+Processing scene 47378fa3_0
+Processing scene 4759e8c1_0
+Processing scene 49d9a01e_0
+Processing scene 4a442001_0
+Processing scene 4cf2b9e0_0
+Processing scene 4e8a363a_0
+Processing scene 4f3bf6cf_0
+Processing scene 52588960_0
+Processing scene 526bb14e_0
+Processing scene 5443fe39_0
+Processing scene 54bb129b_0
+Processing scene 572b2d4e_0
+Processing scene 58847872_0
+Processing scene 59817bb0_0
+Processing scene 5adfaaa7_0
+Processing scene 5be4cdfa_0
+Processing scene 5ce3cf52_0
+Processing scene 62156032_0
+Processing scene 624162a7_0
+Processing scene 624f538d_0
+Processing scene 6257be58_0
+Processing scene 62c2a288_0
+Processing scene 65613f7e_0
+Processing scene 66a334b5_0
+Processing scene 67614580_0
+Processing scene 67d25f19_0
+Processing scene 6c729bde_0
+Processing scene 70c87fc6_0
+Processing scene 725ddf3a_0
+Processing scene 725e21a0_0
+Processing scene 752bd845_0
+Processing scene 7a95b4e3_0
+Processing scene 7ac91661_0
+Processing scene 7c670be8_0
+Processing scene 7cff8ea6_0
+Processing scene 7d20b300_0
+Processing scene 7f07efac_0
+Processing scene 83709bd4_0
+Processing scene 84635cf2_0
+Processing scene 8523a4a9_0
+Processing scene 856c17f7_0
+Processing scene 8748e2fb_0
+Processing scene 875c1f73_0
+Processing scene 87c692aa_0
+Processing scene 89d1aea8_0
+Processing scene 89f4e5c0_0
+Processing scene 8be5b76d_0
+Processing scene 8eb40ca6_0
+Processing scene 902288d1_0
+Processing scene 90f2bab2_0
+Processing scene 9123d227_0
+Processing scene 92f30408_0
+Processing scene 964a2695_0
+Processing scene 974f6883_0
+Processing scene 97de1f42_0
+Processing scene 9a6cdd3e_0
+Processing scene 9eaa8e42_0
+Processing scene 9ee17cd9_0
+Processing scene 9f6d5823_0
+Processing scene C_000001
+Processing scene C_000002
+Processing scene C_000003
+Processing scene C_000004
+Processing scene C_000005
+Processing scene C_000006
+Processing scene C_000007
+Processing scene C_000008
+Processing scene C_000009
+Processing scene C_000010
+Processing scene C_000011
+Processing scene C_000012
+Processing scene C_000013
+Processing scene C_000014
+Processing scene C_000015
+Processing scene C_000016
+Processing scene C_000017
+Processing scene C_000018
+Processing scene C_000019
+Processing scene C_000020
+Processing scene C_000021
+Processing scene C_000022
+Processing scene C_000023
+Processing scene C_000024
+Processing scene C_000025
+Processing scene C_000026
+Processing scene C_000027
+Processing scene C_000028
+Processing scene C_000029
+Processing scene C_000030
+Processing scene C_000031
+Processing scene C_000032
+Processing scene C_000033
+Processing scene C_000034
+Processing scene C_000035
+Processing scene C_000036
+Processing scene C_000037
+Processing scene C_000038
+Processing scene C_000039
+Processing scene C_000040
+Processing scene C_000041
+Processing scene C_000042
+Processing scene C_000043
+Processing scene C_000044
+Processing scene C_000045
+Processing scene C_000046
+Processing scene C_000047
+Processing scene C_000048
+Processing scene C_000049
+Processing scene C_000050
+Processing scene C_000051
+Processing scene C_000052
+Processing scene C_000053
+Processing scene C_000054
+Processing scene C_000055
+Processing scene C_000056
+Processing scene C_000057
+Processing scene C_000058
+Processing scene C_000059
+Processing scene C_000060
+Processing scene C_000061
+Processing scene C_000062
+Processing scene C_000063
+Processing scene C_000064
+Processing scene C_000065
+Processing scene C_000066
+Processing scene C_000067
+Processing scene C_000068
+Processing scene C_000069
+Processing scene C_000070
+Processing scene C_000071
+Processing scene C_000072
+Processing scene C_000073
+Processing scene C_000074
+Processing scene C_000075
+Processing scene C_000076
+Processing scene C_000077
+Processing scene C_000078
+Processing scene C_000079
+Processing scene C_000080
+Processing scene C_000081
+Processing scene C_000082
+Processing scene C_000083
+Processing scene C_000084
+Processing scene C_000085
+Processing scene C_000086
+Processing scene C_000087
+Processing scene C_000088
+Processing scene C_000089
+Processing scene C_000090
+Processing scene C_000091
+Processing scene C_000092
+Processing scene C_000093
+Processing scene C_000094
+Processing scene C_000095
+Processing scene C_000096
+Processing scene C_000097
+Processing scene C_000098
+Processing scene C_000099
+Processing scene C_000100
+Processing scene C_000101
+Processing scene C_000102
+Processing scene C_000103
+Processing scene C_000104
+Processing scene C_000105
+Processing scene C_000106
+Processing scene C_000107
+Processing scene C_000108
+Processing scene C_000109
+Processing scene C_000110
+Processing scene C_000111
+Processing scene C_000112
+Processing scene C_000113
+Processing scene C_000114
+Processing scene C_000115
+Processing scene C_000116
+Processing scene C_000117
+Processing scene C_000118
+Processing scene C_000119
+Processing scene C_000120
+Processing scene C_000121
+Processing scene C_000122
+Processing scene C_000123
+Processing scene C_000124
+Processing scene C_000125
+Processing scene C_000126
+Processing scene C_000127
+Processing scene C_000128
+Processing scene C_000129
+Processing scene C_000130
+Processing scene C_000131
+Processing scene C_000132
+Processing scene C_000133
+Processing scene C_000134
+Processing scene C_000135
+Processing scene C_000136
+Processing scene C_000137
+Processing scene C_000138
+Processing scene C_000139
+Processing scene C_000140
+Processing scene C_000142
+Processing scene C_000143
+Processing scene C_000144
+Processing scene C_000145
+Processing scene C_000146
+Processing scene C_000147
+Processing scene C_000148
+Processing scene C_000149
+Processing scene C_000150
+Processing scene C_000151
+Processing scene C_000152
+Processing scene C_000153
+Processing scene C_000154
+Processing scene C_000155
+Processing scene C_000156
+Processing scene C_000157
+Processing scene C_000158
+Processing scene C_000159
+Processing scene C_000160
+Processing scene C_000161
+Processing scene C_000162
+Processing scene C_000163
+Processing scene C_000164
+Processing scene C_000165
+Processing scene C_000166
+Processing scene C_000167
+Processing scene C_000168
+Processing scene C_000169
+Processing scene C_000170
+Processing scene C_000171
+Processing scene C_000172
+Processing scene C_000173
+Processing scene C_000174
+Processing scene C_000175
+Processing scene C_000176
+Processing scene C_000177
+Processing scene C_000178
+Processing scene C_000179
+Processing scene C_000180
+Processing scene C_000181
+Processing scene C_000182
+Processing scene C_000183
+Processing scene C_000184
+Processing scene C_000185
+Processing scene C_000186
+Processing scene C_000187
+Processing scene C_000188
+Processing scene C_000189
+Processing scene C_000190
+Processing scene C_000191
+Processing scene C_000192
+Processing scene C_000193
+Processing scene C_000194
+Processing scene C_000195
+Processing scene C_000196
+Processing scene C_000197
+Processing scene C_000198
+Processing scene C_000199
+Processing scene C_000200
+Processing scene C_000201
+Processing scene C_000202
+Processing scene C_000203
+Processing scene C_000204
+Processing scene C_000205
+Processing scene C_000206
+Processing scene C_000207
+Processing scene C_000208
+Processing scene C_000209
+Processing scene C_000210
+Processing scene C_000211
+Processing scene C_000212
+Processing scene C_000213
+Processing scene C_000214
+Processing scene C_000215
+Processing scene C_000216
+Processing scene C_000217
+Processing scene C_000218
+Processing scene C_000219
+Processing scene C_000220
+Processing scene C_000221
+Processing scene C_000222
+Processing scene C_000223
+Processing scene C_000224
+Processing scene C_000225
+Processing scene C_000226
+Processing scene C_000227
+Processing scene C_000228
+Processing scene C_000229
+Processing scene C_000230
+Processing scene C_000231
+Processing scene C_000232
+Processing scene C_000233
+Processing scene C_000234
+Processing scene C_000235
+Processing scene C_000236
+Processing scene C_000237
+Processing scene C_000238
+Processing scene C_000239
+Processing scene C_000240
+Processing scene C_000241
+Processing scene C_000242
+Processing scene C_000243
+Processing scene C_000244
+Processing scene C_000245
+Processing scene C_000246
+Processing scene C_000247
+Processing scene C_000248
+Processing scene C_000249
+Processing scene C_000250
+Processing scene C_000251
+Processing scene C_000252
+Processing scene C_000253
+Processing scene C_000254
+Processing scene C_000255
+Processing scene C_000256
+Processing scene C_000257
+Processing scene C_000258
+Processing scene C_000259
+Processing scene C_000260
+Processing scene C_000261
+Processing scene C_000262
+Processing scene C_000263
+Processing scene C_000264
+Processing scene C_000265
+Processing scene C_000266
+Processing scene C_000267
+Processing scene C_000268
+Processing scene C_000269
+Processing scene C_000270
+Processing scene C_000271
+Processing scene C_000272
+Processing scene C_000273
+Processing scene C_000274
+Processing scene C_000275
+Processing scene C_000276
+Processing scene C_000277
+Processing scene C_000278
+Processing scene C_000279
+Processing scene C_000280
+Processing scene C_000281
+Processing scene C_000282
+Processing scene C_000283
+Processing scene C_000284
+Processing scene C_000285
+Processing scene C_000286
+Processing scene C_000287
+Processing scene C_000288
+Processing scene C_000289
+Processing scene C_000290
+Processing scene C_000291
+Processing scene C_000292
+Processing scene C_000293
+Processing scene C_000294
+Processing scene C_000295
+Processing scene C_000296
+Processing scene C_000297
+Processing scene C_000298
+Processing scene C_000299
+Processing scene C_000300
+Processing scene C_000301
+Processing scene C_000302
+Processing scene C_000303
+Processing scene C_000304
+Processing scene C_000305
+Processing scene C_000306
+Processing scene C_000307
+Processing scene C_000308
+Processing scene C_000309
+Processing scene C_000310
+Processing scene C_000311
+Processing scene C_000312
+Processing scene C_000313
+Processing scene C_000314
+Processing scene C_000315
+Processing scene C_000316
+Processing scene C_000317
+Processing scene C_000318
+Processing scene C_000319
+Processing scene C_000320
+Processing scene C_000321
+Processing scene C_000322
+Processing scene C_000323
+Processing scene C_000324
+Processing scene C_000325
+Processing scene C_000326
+Processing scene C_000327
+Processing scene C_000328
+Processing scene C_000329
+Processing scene C_000330
+Processing scene C_000331
+Processing scene C_000332
+Processing scene C_000333
+Processing scene C_000334
+Processing scene C_000335
+Processing scene C_000336
+Processing scene C_000337
+Processing scene C_000338
+Processing scene C_000339
+Processing scene C_000340
+Processing scene C_000341
+Processing scene C_000342
+Processing scene C_000343
+Processing scene C_000344
+Processing scene C_000345
+Processing scene C_000346
+Processing scene C_000347
+Processing scene C_000348
+Processing scene C_000349
+Processing scene C_000350
+Processing scene C_000351
+Processing scene C_000352
+Processing scene C_000353
+Processing scene C_000354
+Processing scene C_000355
+Processing scene C_000356
+Processing scene C_000357
+Processing scene C_000358
+Processing scene C_000359
+Processing scene C_000360
+Processing scene C_000361
+Processing scene C_000362
+Processing scene C_000363
+Processing scene C_000364
+Processing scene C_000365
+Processing scene C_000366
+Processing scene C_000367
+Processing scene C_000368
+Processing scene C_000369
+Processing scene C_000371
+Processing scene C_000372
+Processing scene C_000373
+Processing scene C_000374
+Processing scene C_000375
+Processing scene C_000376
+Processing scene C_000377
+Processing scene C_000379
+Processing scene C_000380
+Processing scene C_000381
+Processing scene C_000382
+Processing scene C_000383
+Processing scene C_000384
+Processing scene C_000385
+Processing scene C_000386
+Processing scene C_000387
+Processing scene C_000388
+Processing scene C_000389
+Processing scene C_000390
+Processing scene C_000391
+Processing scene C_000392
+Processing scene C_000393
+Processing scene C_000394
+Processing scene C_000395
+Processing scene C_000396
+Processing scene C_000397
+Processing scene C_000398
+Processing scene C_000399
+Processing scene C_000400
+Processing scene C_000401
+Processing scene C_000402
+Processing scene C_000403
+Processing scene C_000404
+Processing scene C_000405
+Processing scene C_000406
+Processing scene C_000407
+Processing scene C_000408
+Processing scene C_000409
+Processing scene C_000410
+Processing scene C_000411
+Processing scene C_000412
+Processing scene C_000413
+Processing scene C_000414
+Processing scene C_000415
+Processing scene C_000416
+Processing scene C_000417
+Processing scene C_000418
+Processing scene C_000419
+Processing scene C_000420
+Processing scene C_000421
+Processing scene C_000422
+Processing scene C_000423
+Processing scene C_000424
+Processing scene C_000425
+Processing scene C_000426
+Processing scene C_000427
+Processing scene C_000428
+Processing scene C_000429
+Processing scene C_000430
+Processing scene C_000431
+Processing scene C_000432
+Processing scene C_000433
+Processing scene C_000434
+Processing scene C_000435
+Processing scene C_000436
+Processing scene C_000437
+Processing scene C_000438
+Processing scene C_000439
+Processing scene C_000440
+Processing scene C_000441
+Processing scene C_000442
+Processing scene C_000443
+Processing scene C_000444
+Processing scene C_000445
+Processing scene C_000446
+Processing scene C_000447
+Processing scene C_000448
+Processing scene C_000449
+Processing scene C_000450
+Processing scene C_000451
+Processing scene C_000452
+Processing scene C_000453
+Processing scene C_000454
+Processing scene C_000455
+Processing scene C_000456
+Processing scene C_000457
+Processing scene C_000458
+Processing scene C_000459
+Processing scene C_000460
+Processing scene C_000461
+Processing scene C_000462
+Processing scene C_000463
+Processing scene C_000464
+Processing scene C_000465
+Processing scene C_000466
+Processing scene C_000467
+Processing scene C_000468
+Processing scene C_000469
+Processing scene C_000470
+Processing scene C_000471
+Processing scene C_000472
+Processing scene C_000473
+Processing scene C_000474
+Processing scene C_000475
+Processing scene C_000476
+Processing scene C_000477
+Processing scene C_000478
+Processing scene C_000479
+Processing scene C_000480
+Processing scene C_000481
+Processing scene C_000482
+Processing scene C_000483
+Processing scene C_000484
+Processing scene C_000485
+Processing scene C_000486
+Processing scene C_000487
+Processing scene C_000488
+Processing scene C_000489
+Processing scene C_000490
+Processing scene C_000491
+Processing scene C_000492
+Processing scene C_000493
+Processing scene C_000494
+Processing scene C_000495
+Processing scene C_000496
+Processing scene C_000497
+Processing scene C_000498
+Processing scene C_000499
+Processing scene C_000500
+Processing scene C_000501
+Processing scene C_000502
+Processing scene C_000503
+Processing scene C_000504
+Processing scene C_000505
+Processing scene C_000506
+Processing scene C_000507
+Processing scene C_000508
+Processing scene C_000509
+Processing scene C_000510
+Processing scene C_000511
+Processing scene C_000512
+Processing scene C_000513
+Processing scene C_000514
+Processing scene C_000515
+Processing scene C_000516
+Processing scene C_000517
+Processing scene C_000518
+Processing scene C_000519
+Processing scene C_000520
+Processing scene C_000521
+Processing scene C_000522
+Processing scene C_000523
+Processing scene C_000524
+Processing scene C_000525
+Processing scene C_000526
+Processing scene C_000527
+Processing scene C_000528
+Processing scene C_000529
+Processing scene C_000530
+Processing scene C_000531
+Processing scene C_000532
+Processing scene C_000533
+Processing scene C_000534
+Processing scene C_000535
+Processing scene C_000536
+Processing scene C_000537
+Processing scene C_000538
+Processing scene C_000539
+Processing scene C_000540
+Processing scene C_000541
+Processing scene C_000542
+Processing scene C_000543
+Processing scene C_000544
+Processing scene C_000545
+Processing scene C_000546
+Processing scene C_000547
+Processing scene C_000548
+Processing scene C_000549
+Processing scene C_000550
+Processing scene C_000551
+Processing scene C_000552
+Processing scene C_000553
+Processing scene C_000554
+Processing scene C_000555
+Processing scene C_000556
+Processing scene C_000557
+Processing scene C_000558
+Processing scene C_000559
+Processing scene C_000560
+Processing scene C_000561
+Processing scene C_000562
+Processing scene C_000563
+Processing scene C_000564
+Processing scene C_000565
+Processing scene C_000566
+Processing scene C_000567
+Processing scene C_000568
+Processing scene C_000569
+Processing scene C_000570
+Processing scene C_000571
+Processing scene C_000572
+Processing scene C_000573
+Processing scene C_000574
+Processing scene C_000575
+Processing scene C_000576
+Processing scene C_000577
+Processing scene C_000578
+Processing scene C_000579
+Processing scene C_000580
+Processing scene C_000581
+Processing scene C_000582
+Processing scene C_000583
+Processing scene C_000584
+Processing scene C_000586
+Processing scene C_000587
+Processing scene C_000588
+Processing scene C_000589
+Processing scene C_000590
+Processing scene C_000591
+Processing scene C_000592
+Processing scene C_000593
+Processing scene C_000594
+Processing scene C_000595
+Processing scene C_000596
+Processing scene C_000597
+Processing scene C_000598
+Processing scene C_000599
+Processing scene C_000600
+Processing scene C_000601
+Processing scene C_000602
+Processing scene C_000603
+Processing scene C_000604
+Processing scene C_000605
+Processing scene C_000606
+Processing scene C_000607
+Processing scene C_000608
+Processing scene C_000609
+Processing scene C_000610
+Processing scene C_000611
+Processing scene C_000612
+Processing scene C_000613
+Processing scene C_000614
+Processing scene C_000615
+Processing scene C_000616
+Processing scene C_000617
+Processing scene C_000618
+Processing scene C_000619
+Processing scene C_000620
+Processing scene C_000621
+Processing scene C_000622
+Processing scene C_000623
+Processing scene C_000624
+Processing scene C_000625
+Processing scene C_000626
+Processing scene C_000627
+Processing scene C_000628
+Processing scene C_000629
+Processing scene C_000630
+Processing scene C_000631
+Processing scene C_000632
+Processing scene C_000633
+Processing scene C_000634
+Processing scene C_000635
+Processing scene C_000636
+Processing scene C_000637
+Processing scene C_000638
+Processing scene C_000639
+Processing scene C_000640
+Processing scene C_000641
+Processing scene C_000642
+Processing scene C_000643
+Processing scene C_000644
+Processing scene C_000645
+Processing scene C_000646
+Processing scene C_000647
+Processing scene C_000648
+Processing scene C_000649
+Processing scene C_000650
+Processing scene C_000651
+Processing scene C_000652
+Processing scene C_000653
+Processing scene C_000654
+Processing scene C_000655
+Processing scene C_000656
+Processing scene C_000657
+Processing scene C_000658
+Processing scene C_000659
+Processing scene C_000660
+Processing scene C_000661
+Processing scene C_000662
+Processing scene C_000663
+Processing scene C_000664
+Processing scene C_000665
+Processing scene C_000666
+Processing scene C_000667
+Processing scene C_000668
+Processing scene C_000669
+Processing scene C_000670
+Processing scene C_000671
+Processing scene C_000672
+Processing scene C_000673
+Processing scene C_000674
+Processing scene C_000675
+Processing scene C_000676
+Processing scene C_000677
+Processing scene C_000678
+Processing scene C_000679
+Processing scene C_000680
+Processing scene C_000681
+Processing scene C_000682
+Processing scene C_000683
+Processing scene C_000684
+Processing scene C_000685
+Processing scene C_000686
+Processing scene C_000687
+Processing scene C_000688
+Processing scene C_000689
+Processing scene C_000690
+Processing scene C_000691
+Processing scene C_000692
+Processing scene C_000693
+Processing scene C_000694
+Processing scene C_000695
+Processing scene C_000696
+Processing scene C_000697
+Processing scene C_000698
+Processing scene C_000699
+Processing scene C_000700
+Processing scene C_000701
+Processing scene C_000702
+Processing scene C_000703
+Processing scene C_000704
+Processing scene C_000705
+Processing scene C_000706
+Processing scene C_000707
+Processing scene C_000708
+Processing scene C_000709
+Processing scene C_000710
+Processing scene C_000711
+Processing scene C_000712
+Processing scene C_000713
+Processing scene C_000714
+Processing scene C_000715
+Processing scene C_000716
+Processing scene C_000717
+Processing scene C_000718
+Processing scene C_000719
+Processing scene C_000720
+Processing scene C_000721
+Processing scene C_000722
+Processing scene C_000723
+Processing scene C_000724
+Processing scene C_000725
+Processing scene C_000726
+Processing scene C_000727
+Processing scene C_000728
+Processing scene C_000729
+Processing scene C_000730
+Processing scene C_000731
+Processing scene C_000732
+Processing scene C_000733
+Processing scene C_000734
+Processing scene C_000735
+Processing scene C_000736
+Processing scene C_000737
+Processing scene C_000738
+Processing scene C_000739
+Processing scene C_000740
+Processing scene C_000741
+Processing scene C_000742
+Processing scene C_000743
+Processing scene C_000744
+Processing scene C_000745
+Processing scene C_000746
+Processing scene C_000747
+Processing scene C_000748
+Processing scene C_000749
+Processing scene C_000750
+Processing scene C_000751
+Processing scene C_000752
+Processing scene C_000753
+Processing scene C_000754
+Processing scene C_000755
+Processing scene C_000756
+Processing scene C_000757
+Processing scene C_000758
+Processing scene C_000759
+Processing scene C_000760
+Processing scene C_000761
+Processing scene C_000762
+Processing scene C_000763
+Processing scene C_000764
+Processing scene C_000765
+Processing scene C_000766
+Processing scene C_000767
+Processing scene C_000768
+Processing scene C_000769
+Processing scene C_000770
+Processing scene C_000771
+Processing scene C_000772
+Processing scene C_000773
+Processing scene C_000774
+Processing scene C_000775
+Processing scene C_000776
+Processing scene C_000777
+Processing scene C_000778
+Processing scene C_000779
+Processing scene C_000780
+Processing scene C_000781
+Processing scene C_000782
+Processing scene C_000783
+Processing scene C_000784
+Processing scene C_000785
+Processing scene C_000786
+Processing scene C_000787
+Processing scene C_000788
+Processing scene C_000789
+Processing scene C_000790
+Processing scene C_000791
+Processing scene C_000792
+Processing scene C_000793
+Processing scene C_000794
+Processing scene C_000795
+Processing scene C_000796
+Processing scene C_000797
+Processing scene C_000798
+Processing scene C_000799
+Processing scene C_000800
+Processing scene C_000801
+Processing scene C_000802
+Processing scene C_000803
+Processing scene C_000804
+Processing scene C_000805
+Processing scene C_000806
+Processing scene C_000807
+Processing scene C_000808
+Processing scene C_000809
+Processing scene C_000810
+Processing scene C_000811
+Processing scene C_000812
+Processing scene C_000813
+Processing scene C_000814
+Processing scene C_000815
+Processing scene C_000816
+Processing scene C_000817
+Processing scene C_000818
+Processing scene C_000819
+Processing scene C_000820
+Processing scene C_000821
+Processing scene C_000822
+Processing scene C_000823
+Processing scene C_000824
+Processing scene C_000825
+Processing scene C_000826
+Processing scene C_000827
+Processing scene C_000828
+Processing scene C_000829
+Processing scene C_000830
+Processing scene C_000831
+Processing scene C_000832
+Processing scene C_000833
+Processing scene C_000834
+Processing scene C_000835
+Processing scene C_000836
+Processing scene C_000837
+Processing scene C_000838
+Processing scene C_000839
+Processing scene C_000840
+Processing scene C_000841
+Processing scene C_000842
+Processing scene C_000843
+Processing scene C_000844
+Processing scene C_000845
+Processing scene C_000846
+Processing scene C_000847
+Processing scene C_000848
+Processing scene C_000849
+Processing scene C_000850
+Processing scene C_000851
+Processing scene C_000852
+Processing scene C_000853
+Processing scene C_000854
+Processing scene C_000855
+Processing scene C_000856
+Processing scene C_000857
+Processing scene C_000858
+Processing scene C_000859
+Processing scene C_000860
+Processing scene C_000861
+Processing scene C_000862
+Processing scene C_000863
+Processing scene C_000864
+Processing scene C_000865
+Processing scene C_000866
+Processing scene C_000867
+Processing scene C_000868
+Processing scene C_000869
+Processing scene C_000870
+Processing scene C_000871
+Processing scene C_000872
+Processing scene C_000873
+Processing scene C_000874
+Processing scene C_000875
+Processing scene C_000876
+Processing scene C_000877
+Processing scene C_000878
+Processing scene C_000879
+Processing scene C_000880
+Processing scene C_000881
+Processing scene C_000882
+Processing scene C_000883
+Processing scene C_000884
+Processing scene C_000885
+Processing scene C_000886
+Processing scene C_000887
+Processing scene C_000888
+Processing scene C_000889
+Processing scene C_000890
+Processing scene C_000891
+Processing scene C_000892
+Processing scene C_000893
+Processing scene C_000894
+Processing scene C_000895
+Processing scene C_000896
+Processing scene C_000897
+Processing scene C_000898
+Processing scene C_000899
+Processing scene C_000900
+Processing scene C_000901
+Processing scene C_000902
+Processing scene C_000903
+Processing scene C_000904
+Processing scene C_000905
+Processing scene C_000906
+Processing scene C_000907
+Processing scene C_000908
+Processing scene C_000909
+Processing scene C_000910
+Processing scene C_000911
+Processing scene C_000912
+Processing scene C_000913
+Processing scene C_000914
+Processing scene C_000915
+Processing scene C_000916
+Processing scene C_000917
+Processing scene C_000918
+Processing scene C_000919
+Processing scene C_000920
+Processing scene C_000921
+Processing scene C_000922
+Processing scene C_000923
+Processing scene C_000924
+Processing scene C_000925
+Processing scene C_000926
+Processing scene C_000927
+Processing scene C_000928
+Processing scene C_000929
+Processing scene C_000930
+Processing scene C_000931
+Processing scene C_000932
+Processing scene C_000933
+Processing scene C_000934
+Processing scene C_000935
+Processing scene C_000936
+Processing scene C_000937
+Processing scene C_000938
+Processing scene C_000939
+Processing scene C_000940
+Processing scene C_000941
+Processing scene C_000942
+Processing scene C_000943
+Processing scene C_000944
+Processing scene C_000945
+Processing scene C_000946
+Processing scene C_000947
+Processing scene C_000948
+Processing scene C_000949
+Processing scene C_000950
+Processing scene C_000951
+Processing scene C_000952
+Processing scene C_000953
+Processing scene C_000954
+Processing scene C_000955
+Processing scene C_000956
+Processing scene C_000957
+Processing scene C_000958
+Processing scene C_000959
+Processing scene C_000960
+Processing scene C_000961
+Processing scene C_000962
+Processing scene C_000963
+Processing scene C_000964
+Processing scene C_000965
+Processing scene C_000966
+Processing scene C_000967
+Processing scene C_000968
+Processing scene C_000969
+Processing scene C_000970
+Processing scene C_000971
+Processing scene C_000972
+Processing scene C_000973
+Processing scene C_000974
+Processing scene C_000975
+Processing scene C_000976
+Processing scene C_000977
+Processing scene C_000978
+Processing scene C_000979
+Processing scene C_000980
+Processing scene C_000981
+Processing scene C_000982
+Processing scene C_000983
+Processing scene C_000984
+Processing scene C_000985
+Processing scene C_000986
+Processing scene C_000987
+Processing scene C_000988
+Processing scene C_000990
+Processing scene C_000991
+Processing scene C_000992
+Processing scene C_000993
+Processing scene C_000994
+Processing scene C_000995
+Processing scene C_000996
+Processing scene C_000997
+Processing scene C_000998
+Processing scene C_000999
+Processing scene C_001000
+Processing scene C_001001
+Processing scene C_001002
+Processing scene C_001003
+Processing scene C_001004
+Processing scene C_001005
+Processing scene C_001006
+Processing scene C_001007
+Processing scene C_001008
+Processing scene C_001009
+Processing scene C_001010
+Processing scene C_001011
+Processing scene C_001012
+Processing scene C_001013
+Processing scene C_001014
+Processing scene C_001015
+Processing scene C_001016
+Processing scene C_001017
+Processing scene C_001018
+Processing scene C_001019
+Processing scene C_001020
+Processing scene C_001021
+Processing scene C_001022
+Processing scene C_001023
+Processing scene C_001024
+Processing scene C_001025
+Processing scene C_001026
+Processing scene C_001027
+Processing scene C_001028
+Processing scene C_001029
+Processing scene C_001030
+Processing scene C_001031
+Processing scene C_001032
+Processing scene C_001033
+Processing scene C_001034
+Processing scene C_001035
+Processing scene C_001036
+Processing scene C_001037
+Processing scene C_001039
+Processing scene C_001040
+Processing scene C_001041
+Processing scene C_001042
+Processing scene C_001043
+Processing scene C_001044
+Processing scene C_001045
+Processing scene C_001046
+Processing scene C_001047
+Processing scene C_001048
+Processing scene C_001049
+Processing scene C_001050
+Processing scene C_001051
+Processing scene C_001052
+Processing scene C_001053
+Processing scene C_001054
+Processing scene C_001055
+Processing scene C_001056
+Processing scene C_001057
+Processing scene C_001058
+Processing scene C_001059
+Processing scene C_001060
+Processing scene C_001061
+Processing scene C_001062
+Processing scene C_001063
+Processing scene C_001064
+Processing scene C_001065
+Processing scene C_001066
+Processing scene C_001067
+Processing scene C_001068
+Processing scene C_001069
+Processing scene C_001070
+Processing scene C_001071
+Processing scene C_001072
+Processing scene C_001073
+Processing scene C_001074
+Processing scene C_001075
+Processing scene C_001076
+Processing scene C_001077
+Processing scene C_001078
+Processing scene C_001079
+Processing scene C_001080
+Processing scene C_001081
+Processing scene C_001082
+Processing scene C_001083
+Processing scene C_001084
+Processing scene C_001085
+Processing scene C_001086
+Processing scene C_001087
+Processing scene C_001088
+Processing scene C_001089
+Processing scene C_001090
+Processing scene C_001091
+Processing scene C_001092
+Processing scene C_001093
+Processing scene C_001094
+Processing scene C_001095
+Processing scene C_001096
+Processing scene C_001097
+Processing scene C_001098
+Processing scene C_001099
+Processing scene C_001100
+Processing scene C_001101
+Processing scene C_001102
+Processing scene C_001103
+Processing scene C_001104
+Processing scene C_001105
+Processing scene C_001106
+Processing scene C_001107
+Processing scene C_001108
+Processing scene C_001109
+Processing scene C_001110
+Processing scene C_001111
+Processing scene C_001112
+Processing scene C_001113
+Processing scene C_001114
+Processing scene C_001115
+Processing scene C_001116
+Processing scene C_001117
+Processing scene C_001118
+Processing scene C_001119
+Processing scene C_001120
+Processing scene C_001121
+Processing scene C_001122
+Processing scene C_001123
+Processing scene C_001124
+Processing scene C_001125
+Processing scene C_001126
+Processing scene C_001127
+Processing scene C_001128
+Processing scene C_001129
+Processing scene C_001130
+Processing scene C_001131
+Processing scene C_001132
+Processing scene C_001133
+Processing scene C_001134
+Processing scene C_001135
+Processing scene C_001136
+Processing scene C_001137
+Processing scene C_001138
+Processing scene C_001139
+Processing scene C_001140
+Processing scene C_001141
+Processing scene C_001142
+Processing scene C_001143
+Processing scene C_001144
+Processing scene C_001145
+Processing scene C_001146
+Processing scene C_001147
+Processing scene C_001148
+Processing scene C_001149
+Processing scene C_001150
+Processing scene C_001151
+Processing scene C_001152
+Processing scene C_001153
+Processing scene C_001154
+Processing scene C_001155
+Processing scene C_001156
+Processing scene C_001157
+Processing scene C_001158
+Processing scene C_001159
+Processing scene C_001160
+Processing scene C_001161
+Processing scene C_001162
+Processing scene C_001163
+Processing scene C_001164
+Processing scene C_001165
+Processing scene C_001166
+Processing scene C_001168
+Processing scene C_001169
+Processing scene C_001170
+Processing scene C_001171
+Processing scene C_001172
+Processing scene C_001173
+Processing scene C_001174
+Processing scene C_001175
+Processing scene C_001176
+Processing scene C_001177
+Processing scene C_001178
+Processing scene C_001179
+Processing scene C_001180
+Processing scene C_001181
+Processing scene C_001182
+Processing scene C_001183
+Processing scene C_001184
+Processing scene C_001185
+Processing scene C_001186
+Processing scene C_001187
+Processing scene C_001188
+Processing scene C_001189
+Processing scene C_001190
+Processing scene C_001191
+Processing scene C_001192
+Processing scene C_001193
+Processing scene C_001194
+Processing scene C_001195
+Processing scene C_001196
+Processing scene C_001197
+Processing scene C_001198
+Processing scene C_001199
+Processing scene C_001200
+Processing scene C_001201
+Processing scene C_001202
+Processing scene C_001203
+Processing scene C_001204
+Processing scene C_001205
+Processing scene C_001206
+Processing scene C_001207
+Processing scene C_001208
+Processing scene C_001209
+Processing scene C_001210
+Processing scene C_001211
+Processing scene C_001212
+Processing scene C_001213
+Processing scene C_001214
+Processing scene C_001215
+Processing scene C_001216
+Processing scene C_001217
+Processing scene C_001218
+Processing scene C_001219
+Processing scene C_001220
+Processing scene C_001221
+Processing scene C_001222
+Processing scene C_001223
+Processing scene C_001224
+Processing scene C_001225
+Processing scene C_001226
+Processing scene C_001227
+Processing scene C_001228
+Processing scene C_001229
+Processing scene C_001230
+Processing scene C_001231
+Processing scene C_001232
+Processing scene C_001233
+Processing scene C_001234
+Processing scene C_001235
+Processing scene C_001236
+Processing scene C_001237
+Processing scene C_001238
+Processing scene C_001239
+Processing scene C_001240
+Processing scene C_001241
+Processing scene C_001242
+Processing scene C_001243
+Processing scene C_001244
+Processing scene C_001245
+Processing scene C_001246
+Processing scene C_001247
+Processing scene C_001248
+Processing scene C_001249
+Processing scene C_001250
+Processing scene C_001251
+Processing scene C_001252
+Processing scene C_001253
+Processing scene C_001254
+Processing scene C_001256
+Processing scene C_001257
+Processing scene C_001258
+Processing scene C_001259
+Processing scene C_001260
+Processing scene C_001261
+Processing scene C_001262
+Processing scene C_001263
+Processing scene C_001264
+Processing scene C_001265
+Processing scene C_001266
+Processing scene C_001267
+Processing scene C_001268
+Processing scene C_001269
+Processing scene C_001270
+Processing scene C_001271
+Processing scene C_001272
+Processing scene C_001273
+Processing scene C_001274
+Processing scene C_001275
+Processing scene C_001276
+Processing scene C_001277
+Processing scene C_001278
+Processing scene C_001279
+Processing scene C_001280
+Processing scene C_001281
+Processing scene C_001282
+Processing scene C_001283
+Processing scene C_001284
+Processing scene C_001285
+Processing scene C_001286
+Processing scene C_001287
+Processing scene C_001288
+Processing scene C_001289
+Processing scene C_001290
+Processing scene C_001291
+Processing scene C_001292
+Processing scene C_001293
+Processing scene C_001294
+Processing scene C_001295
+Processing scene C_001296
+Processing scene C_001297
+Processing scene C_001298
+Processing scene C_001299
+Processing scene C_001300
+Processing scene C_001301
+Processing scene C_001302
+Processing scene C_001303
+Processing scene C_001304
+Processing scene C_001305
+Processing scene C_001306
+Processing scene C_001308
+Processing scene C_001309
+Processing scene C_001310
+Processing scene C_001311
+Processing scene C_001312
+Processing scene C_001313
+Processing scene C_001314
+Processing scene C_001315
+Processing scene C_001316
+Processing scene C_001317
+Processing scene C_001318
+Processing scene C_001321
+Processing scene C_001322
+Processing scene C_001323
+Processing scene C_001324
+Processing scene C_001325
+Processing scene C_001326
+Processing scene C_001327
+Processing scene C_001328
+Processing scene C_001329
+Processing scene C_001330
+Processing scene C_001331
+Processing scene C_001332
+Processing scene C_001333
+Processing scene C_001334
+Processing scene C_001335
+Processing scene C_001336
+Processing scene C_001337
+Processing scene C_001338
+Processing scene C_001339
+Processing scene C_001340
+Processing scene C_001341
+Processing scene C_001342
+Processing scene C_001343
+Processing scene C_001344
+Processing scene C_001345
+Processing scene C_001346
+Processing scene C_001347
+Processing scene C_001348
+Processing scene C_001349
+Processing scene C_001350
+Processing scene C_001351
+Processing scene C_001352
+Processing scene C_001353
+Processing scene C_001354
+Processing scene C_001355
+Processing scene C_001356
+Processing scene C_001357
+Processing scene C_001358
+Processing scene C_001359
+Processing scene C_001360
+Processing scene C_001361
+Processing scene C_001362
+Processing scene C_001363
+Processing scene C_001364
+Processing scene C_001365
+Processing scene C_001366
+Processing scene C_001367
+Processing scene C_001368
+Processing scene C_001369
+Processing scene C_001370
+Processing scene C_001372
+Processing scene C_001373
+Processing scene C_001374
+Processing scene C_001375
+Processing scene C_001376
+Processing scene C_001377
+Processing scene C_001378
+Processing scene C_001379
+Processing scene C_001380
+Processing scene C_001381
+Processing scene C_001382
+Processing scene C_001383
+Processing scene C_001384
+Processing scene C_001385
+Processing scene C_001386
+Processing scene C_001387
+Processing scene C_001388
+Processing scene C_001389
+Processing scene C_001390
+Processing scene C_001391
+Processing scene C_001392
+Processing scene C_001393
+Processing scene C_001394
+Processing scene C_001395
+Processing scene C_001396
+Processing scene C_001397
+Processing scene C_001398
+Processing scene C_001399
+Processing scene C_001400
+Processing scene C_001401
+Processing scene C_001402
+Processing scene C_001403
+Processing scene C_001404
+Processing scene C_001405
+Processing scene C_001406
+Processing scene C_001407
+Processing scene C_001408
+Processing scene C_001409
+Processing scene C_001410
+Processing scene C_001411
+Processing scene C_001412
+Processing scene C_001413
+Processing scene C_001414
+Processing scene C_001415
+Processing scene C_001416
+Processing scene C_001417
+Processing scene C_001418
+Processing scene C_001419
+Processing scene C_001420
+Processing scene C_001421
+Processing scene C_001422
+Processing scene C_001423
+Processing scene C_001424
+Processing scene C_001426
+Processing scene C_001427
+Processing scene C_001428
+Processing scene C_001429
+Processing scene C_001430
+Processing scene C_001431
+Processing scene C_001432
+Processing scene C_001433
+Processing scene C_001434
+Processing scene C_001435
+Processing scene C_001436
+Processing scene C_001437
+Processing scene C_001438
+Processing scene C_001439
+Processing scene C_001440
+Processing scene C_001441
+Processing scene C_001442
+Processing scene C_001443
+Processing scene C_001444
+Processing scene C_001445
+Processing scene C_001446
+Processing scene C_001447
+Processing scene C_001448
+Processing scene C_001449
+Processing scene C_001450
+Processing scene C_001451
+Processing scene C_001452
+Processing scene C_001453
+Processing scene C_001454
+Processing scene C_001455
+Processing scene C_001456
+Processing scene C_001457
+Processing scene C_001458
+Processing scene C_001459
+Processing scene C_001460
+Processing scene C_001461
+Processing scene C_001462
+Processing scene C_001463
+Processing scene C_001464
+Processing scene C_001465
+Processing scene C_001466
+Processing scene C_001467
+Processing scene C_001468
+Processing scene C_001469
+Processing scene C_001470
+Processing scene C_001471
+Processing scene C_001472
+Processing scene C_001473
+Processing scene C_001474
+Processing scene C_001475
+Processing scene C_001476
+Processing scene C_001477
+Processing scene C_001478
+Processing scene C_001479
+Processing scene C_001480
+Processing scene C_001481
+Processing scene C_001482
+Processing scene C_001483
+Processing scene C_001484
+Processing scene C_001485
+Processing scene C_001486
+Processing scene C_001487
+Processing scene C_001488
+Processing scene C_001489
+Processing scene C_001490
+Processing scene C_001491
+Processing scene C_001492
+Processing scene C_001493
+Processing scene C_001494
+Processing scene C_001495
+Processing scene C_001496
+Processing scene C_001497
+Processing scene C_001498
+Processing scene C_001499
+Processing scene C_001500
+Processing scene a457685b_0
+Processing scene a45d905f_0
+Processing scene a4b8e39d_0
+Processing scene a7f7e470_0
+Processing scene a96704f9_0
+Processing scene aab2e274_0
+Processing scene acbed4fb_0
+Processing scene ad3e206b_0
+Processing scene ad660439_0
+Processing scene afda7206_0
+Processing scene b53a2998_0
+Processing scene bcfab89f_0
+Processing scene bd191d6a_0
+Processing scene c1d32eea_0
+Processing scene c42f9f97_0
+Processing scene c48f4b3e_0
+Processing scene c5f802ac_0
+Processing scene c7defded_0
+Processing scene c80cf6c3_0
+Processing scene caba8a02_0
+Processing scene cb063914_0
+Processing scene cb4d6287_0
+Processing scene cb820c98_0
+Processing scene cbbec2cd_0
+Processing scene cedbfea7_0
+Processing scene d1301c7c_0
+Processing scene d1428e56_0
+Processing scene d32a618e_0
+Processing scene d4c09a0f_0
+Processing scene d6cd84e5_0
+Processing scene d8e0dc65_0
+Processing scene dab3a407_0
+Processing scene dbe34c9d_0
+Processing scene e0ac84fe_0
+Processing scene e4bbbd72_0
+Processing scene e535423e_0
+Processing scene e6abad2f_0
+Processing scene e9bfaf62_0
+Processing scene ea678692_0
+Processing scene eae6a189_0
+Processing scene eba4da41_0
+Processing scene ebe888e1_0
+Processing scene ec815219_0
+Processing scene ec8fe02c_0
+Processing scene ef4bf541_0
+Processing scene ef92ac05_0
+Processing scene f0882eef_0
+Processing scene f1b91e3c_0
+Processing scene f32de4d2_0
+Processing scene f4820206_0
+Processing scene f8cd3a65_0
+Processing scene f9108a13_0
+Processing scene fa2a8964_0
+Processing scene fd69d0ec_0
+Processing scene fe4bbaf6_0
+Processing scene ff3946ad_0
+
+=== Rule: ANY frame risk_score >= thr ===
+Accuracy:  0.895
+Precision: 0.906
+Recall:    0.986
+F1:        0.944
+
+Report:
+              precision    recall  f1-score   support
+
+      Normal       0.09      0.01      0.02       154
+    Accident       0.91      0.99      0.94      1487
+
+    accuracy                           0.89      1641
+   macro avg       0.50      0.50      0.48      1641
+weighted avg       0.83      0.89      0.86      1641
+
+
+=== Rule: 5 consecutive frames risk_score >= thr ===
+Accuracy:  0.779
+Precision: 0.919
+Recall:    0.829
+F1:        0.872
+
+Report:
+              precision    recall  f1-score   support
+
+      Normal       0.15      0.30      0.20       154
+    Accident       0.92      0.83      0.87      1487
+
+    accuracy                           0.78      1641
+   macro avg       0.54      0.56      0.54      1641
+weighted avg       0.85      0.78      0.81      1641
+
+
+Saved to: scene_eval_out
+Fnishing Accident Prediction
