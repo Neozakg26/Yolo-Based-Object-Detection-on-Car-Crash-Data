@@ -18,8 +18,7 @@ run_scene () {
     SCENE_ID="$1"
 
     if [[ "$SCENE_ID" == C_* ]]; then
-        continue
-        #SCENE_PATH="${CRASH_ROOT}/${SCENE_ID}_"
+        SCENE_PATH="${CRASH_ROOT}/${SCENE_ID}_"
     else
         SCENE_PATH="${NORMAL_ROOT}/${SCENE_ID}_"
     fi
