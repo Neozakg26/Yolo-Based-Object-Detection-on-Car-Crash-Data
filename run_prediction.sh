@@ -9,8 +9,8 @@
 echo "Starting Accident Prediction"
 
 DATASET="/datasets/nmaja/CrashBest/new_results"
-MODEL_PATH="/datasets/nmaja/CrashBest/results/eval_plots_cv/fold_02/global_model_fold_02.parquet"
-CLASSIFIER="global_model_fold_02.classifier.pkl"
+MODEL_PATH="/datasets/nmaja/CrashBest/results/eval_plots_cv/fold_05/global_model_fold_05.parquet"
+CLASSIFIER="global_model_fold_05.classifier.pkl"
 SCENE_CSV="scene_index.csv"
 
 python3 -m execute.predict_accident --results_dir $DATASET --model_path  $MODEL_PATH --scene_labels $SCENE_CSV --k 2 --thr 65
