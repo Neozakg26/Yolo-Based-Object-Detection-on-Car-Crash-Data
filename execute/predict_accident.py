@@ -20,7 +20,7 @@ from explainability.hierarchical_dbn import AccidentRiskAssessor
 def parse_scene_id_from_track_path(track_path: str) -> str:
     base = os.path.basename(track_path)
    # base.replace("tracks.parquet", "")
-    return base.replace("tracks.parquet", "")  #expects 000001_tracks.parquet
+    return base.replace("_tracks.parquet", "")  #expects 000001_tracks.parquet
 
 
 def load_scene_pair(results_dir: str, scene_id: str) -> Tuple[pd.DataFrame, Optional[pd.DataFrame]]:
