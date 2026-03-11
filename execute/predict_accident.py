@@ -140,7 +140,7 @@ def main():
         tracks_df, env_df = load_scene_pair(args.results_dir, scene_id)
 
         pred_df = assessor.get_risk_trajectory(tracks_df, env_df)
-        print(f"Predictions DF : \n {pred_df}")
+        # print(f"Predictions DF : \n {pred_df}")
 
         pred_any = scene_pred_any_above(pred_df, thr=args.thr)
         pred_k = scene_pred_k_consecutive(pred_df, thr=args.thr, k=args.k)
@@ -160,7 +160,7 @@ def main():
             "k": args.k,
         })
 
-    print(f" Result Rows = \n {rows}")
+    # print(f" Result Rows = \n {rows}")
     if len(y_true) == 0:
         raise RuntimeError("No labeled scenes were evaluated. Check scene_labels_csv matches scene ids in results_dir.")
 
