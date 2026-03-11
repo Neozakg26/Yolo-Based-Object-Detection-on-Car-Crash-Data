@@ -13,6 +13,6 @@ MODEL_PATH="/datasets/nmaja/CrashBest/results/eval_plots_cv/fold_02/global_model
 CLASSIFIER="global_model_fold_02.classifier.pkl"
 SCENE_CSV="scene_index.csv"
 
-python3 -m execute.predict_accident --results_dir $DATASET --model_path  $MODEL_PATH --scene_labels $SCENE_CSV --k 3 --thr 75
+python3 -m execute.predict_accident --results_dir $DATASET --model_path  $MODEL_PATH --scene_labels $SCENE_CSV --k 3 --thr 70
 
 echo "Fnishing Accident Prediction"
