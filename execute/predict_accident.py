@@ -110,7 +110,7 @@ def main():
     # Load model
     print("Loading global model.")
     assessor = AccidentRiskAssessor.load(args.model_path)
-    assessor.inference_method = "non-supervised"  # To override the inference
+    # assessor.inference_method = "non-supervised"  # To override the inference
     print("Loaded global model.")
 
     # Load labels
@@ -133,14 +133,14 @@ def main():
     for tp in track_files:
         scene_id = parse_scene_id_from_track_path(tp)
         if scene_id not in label_map:
-            print(f"Skipping scene {scene_id}")
+            # print(f"Skipping scene {scene_id}")
             continue  # skip if not labeled
         print(f"Processing scene {scene_id}")
         gt = int(label_map[scene_id])
         tracks_df, env_df = load_scene_pair(args.results_dir, scene_id)
 
         pred_df = assessor.get_risk_trajectory(tracks_df, env_df)
-        print(f"Predictions DF : {pred_df}")
+        print(f"Predictions DF : \n {pred_df}")
 
         pred_any = scene_pred_any_above(pred_df, thr=args.thr)
         pred_k = scene_pred_k_consecutive(pred_df, thr=args.thr, k=args.k)
