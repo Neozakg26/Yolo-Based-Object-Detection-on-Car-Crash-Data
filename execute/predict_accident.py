@@ -160,6 +160,7 @@ def main():
             "k": args.k,
         })
 
+    print(f" Result Rows = \n {rows}")
     if len(y_true) == 0:
         raise RuntimeError("No labeled scenes were evaluated. Check scene_labels_csv matches scene ids in results_dir.")
 
