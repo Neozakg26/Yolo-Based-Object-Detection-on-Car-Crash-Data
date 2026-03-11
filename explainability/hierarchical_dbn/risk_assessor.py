@@ -549,6 +549,8 @@ class AccidentRiskAssessor:
         discrete_df["frame"] = merged_df["frame"].values
 
         # Use supervised classifier if available
+        print(f"self.classifier {self.classifier}")
+        print(f"self.inference_method {self.inference_method}")
         if self.classifier is not None and self.inference_method == "supervised":
             return self._predict_with_classifier(discrete_df)
         else:

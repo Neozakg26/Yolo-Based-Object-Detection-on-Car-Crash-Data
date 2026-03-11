@@ -140,6 +140,7 @@ def main():
         tracks_df, env_df = load_scene_pair(args.results_dir, scene_id)
 
         pred_df = assessor.get_risk_trajectory(tracks_df, env_df)
+        print(f"Predictions DF : {pred_df}")
 
         pred_any = scene_pred_any_above(pred_df, thr=args.thr)
         pred_k = scene_pred_k_consecutive(pred_df, thr=args.thr, k=args.k)
