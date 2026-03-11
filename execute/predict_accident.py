@@ -24,7 +24,7 @@ def parse_scene_id_from_track_path(track_path: str) -> str:
 
 
 def load_scene_pair(results_dir: str, scene_id: str) -> Tuple[pd.DataFrame, Optional[pd.DataFrame]]:
-    track_path = os.path.join(results_dir, f"{scene_id}tracks.parquet")
+    track_path = os.path.join(results_dir, f"{scene_id}_tracks.parquet")
     env_path = os.path.join(results_dir, f"{scene_id}_env.parquet")
 
     tracks_df = pd.read_parquet(track_path)
