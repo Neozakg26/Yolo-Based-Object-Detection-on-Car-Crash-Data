@@ -110,7 +110,7 @@ def main():
     # Load model
     print("Loading global model.")
     assessor = AccidentRiskAssessor.load(args.model_path)
-    assessor.inference_method = "supervised"  # To override the inference
+    #assessor.inference_method = "supervised"  # To override the inference
     print("Loaded global model.")
 
     # Load labels
