@@ -129,7 +129,7 @@ def main():
     y_pred_k = []
     rows = []
 
-    print(f"Track files \n {track_files}")
+    # print(f"Track files \n {track_files}")
     for tp in track_files:
         scene_id = parse_scene_id_from_track_path(tp)
         if scene_id not in label_map:

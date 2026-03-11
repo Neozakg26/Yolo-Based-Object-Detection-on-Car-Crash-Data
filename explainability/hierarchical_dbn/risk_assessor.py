@@ -530,9 +530,7 @@ class AccidentRiskAssessor:
     ) -> pd.DataFrame:
         """
         Get risk probability trajectory for a video.
-
         Uses supervised classifier if trained, otherwise falls back to direct scoring.
-
         Returns:
             DataFrame with frame index and risk probabilities
         """
