@@ -19,7 +19,7 @@ MISSING = -9999.0
 # ---------- CONFIG ----------
 config = ConfigLoader.load("config.yaml")
 
-BASE_PATH = config.paths["local_base"]
+BASE_PATH = config.paths["cluster_base"]
 
 def bh_fdr(pvals: np.ndarray) -> np.ndarray:
     """Benjamini–Hochberg FDR-adjusted p-values."""
