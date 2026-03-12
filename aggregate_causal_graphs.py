@@ -98,7 +98,7 @@ def main():
         min_direction_consistency=0.6,
         apply_domain_constraints=True
     )
-
+                            
     # Print summary
     aggregator.print_summary()
 
