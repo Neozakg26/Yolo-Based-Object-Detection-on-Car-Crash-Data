@@ -155,7 +155,7 @@ class CausalGraphAggregator:
 
         # Collect all edges across scenes
         all_edges: Dict[Tuple[str, str, int], Dict] = defaultdict(lambda: {
-            "p": [],
+            "p_fdr": [],
             "weight": [],
             "directions": [],
             "scenes": [],
@@ -170,13 +170,12 @@ class CausalGraphAggregator:
                 edge_key = (row["src"], row["tgt"], row["tau"])
 
                 # Handle both list and scalar p
-                p = row["p"] if isinstance(row["p"], list) else [row["p"]]
+                p = row["p_fdr"] if isinstance(row["p_fdr"], list) else [row["p_fdr"]]
                 weight = row["weight"] if isinstance(row["weight"], list) else [row["weight"]]
                 directions = row["directions"] if isinstance(row["directions"], list) else [row["directions"]]
 
-                all_edges[edge_key]["p"].extend(p)
+                all_edges[edge_key]["p_fdr"].extend(p)
                 all_edges[edge_key]["weight"].extend(weight)
-                all_edges[edge_key]["directions"].extend(directions)
                 all_edges[edge_key]["scenes"].append(scene_id)
                 all_edges[edge_key]["counts"].append(row.get("count", len(p)))
 
@@ -211,7 +210,7 @@ class CausalGraphAggregator:
                 continue
 
             # Combine p-values
-            p = np.array(data["p"], dtype=object)
+            p = np.array(data["p_fdr"], dtype=object)
             p_clipped = np.array(
                 [np.clip(np.array(row,dtype=float), 1e-10, 1.0) for row in p]
                 ,dtype=object )
