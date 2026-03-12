@@ -102,26 +102,28 @@ class CausalGraphAggregator:
 
             # Check if edge_stats already exists
             edge_stats_file = results_path / f"{scene_id}_edge_stats.parquet"
+            print(f"  loading Edge stats: {edge_stats_file}")
             if edge_stats_file.exists():
                 # Load pre-computed edge stats
                 edge_stats = pd.read_parquet(edge_stats_file)
                 self.add_scene(scene_id, edge_stats)
                 n_loaded += 1
             else:
-                # Run PCMCI to compute edge stats
-                print(f"  Computing PCMCI for {scene_id}...")
-                try:
-                    extractor = FeatureExtractor(
-                        track_path=str(track_file),
-                        env_path=str(env_file),
-                        tau_max=tau_max
-                    )
-                    edge_stats = extractor.extract_edges()
-                    self.add_scene(scene_id, edge_stats)
-                    n_loaded += 1
-                except Exception as e:
-                    print(f"  Error processing {scene_id}: {e}")
-                    continue
+                continue
+                # # Run PCMCI to compute edge stats
+                # print(f"  Computing PCMCI for {scene_id}...")
+                # try:
+                #     extractor = FeatureExtractor(
+                #         track_path=str(track_file),
+                #         env_path=str(env_file),
+                #         tau_max=tau_max
+                #     )
+                #     edge_stats = extractor.extract_edges()
+                #     self.add_scene(scene_id, edge_stats)
+                #     n_loaded += 1
+                # except Exception as e:
+                #     print(f"  Error processing {scene_id}: {e}")
+                #     continue
 
         print(f"Loaded {n_loaded} scenes")
         return n_loaded
