@@ -60,7 +60,7 @@ class CausalGraphAggregator:
 
         Args:
             scene_id: Unique identifier for the scene
-            edge_stats: DataFrame with columns: src, tgt, tau, count, pvals, weights, directions
+            edge_stats: DataFrame with columns: src, tgt, tau, count, p, weight, directions
             metadata: Optional scene metadata
         """
         self.scene_edges[scene_id] = edge_stats
@@ -155,27 +155,30 @@ class CausalGraphAggregator:
 
         # Collect all edges across scenes
         all_edges: Dict[Tuple[str, str, int], Dict] = defaultdict(lambda: {
-            "pvals": [],
-            "weights": [],
+            "p": [],
+            "weight": [],
             "directions": [],
             "scenes": [],
             "counts": []
         })
 
         for scene_id, edge_stats in self.scene_edges.items():
+            print (f"scene ID: {scene_id}")
+            print (f"edge stats : {edge_stats}")
+            
             for _, row in edge_stats.iterrows():
                 edge_key = (row["src"], row["tgt"], row["tau"])
 
-                # Handle both list and scalar pvals
-                pvals = row["pvals"] if isinstance(row["pvals"], list) else [row["pvals"]]
-                weights = row["weights"] if isinstance(row["weights"], list) else [row["weights"]]
+                # Handle both list and scalar p
+                p = row["p"] if isinstance(row["p"], list) else [row["p"]]
+                weight = row["weight"] if isinstance(row["weight"], list) else [row["weight"]]
                 directions = row["directions"] if isinstance(row["directions"], list) else [row["directions"]]
 
-                all_edges[edge_key]["pvals"].extend(pvals)
-                all_edges[edge_key]["weights"].extend(weights)
+                all_edges[edge_key]["p"].extend(p)
+                all_edges[edge_key]["weight"].extend(weight)
                 all_edges[edge_key]["directions"].extend(directions)
                 all_edges[edge_key]["scenes"].append(scene_id)
-                all_edges[edge_key]["counts"].append(row.get("count", len(pvals)))
+                all_edges[edge_key]["counts"].append(row.get("count", len(p)))
 
         print(f"  Total unique edges across scenes: {len(all_edges)}")
 
@@ -208,21 +211,21 @@ class CausalGraphAggregator:
                 continue
 
             # Combine p-values
-            pvals = np.array(data["pvals"], dtype=object)
-            pvals_clipped = np.array(
-                [np.clip(np.array(row,dtype=float), 1e-10, 1.0) for row in pvals]
+            p = np.array(data["p"], dtype=object)
+            p_clipped = np.array(
+                [np.clip(np.array(row,dtype=float), 1e-10, 1.0) for row in p]
                 ,dtype=object )
 
             if self.method == "fisher":
-                chi = -2 * sum(np.sum(np.log(np.array(row, dtype=float))) for row in pvals_clipped)
-                p_combined = 1 - stats.chi2.cdf(chi, 2 * len(pvals))
+                chi = -2 * sum(np.sum(np.log(np.array(row, dtype=float))) for row in p_clipped)
+                p_combined = 1 - stats.chi2.cdf(chi, 2 * len(p))
             elif self.method == "stouffer":
-                z_scores = stats.norm.ppf(1 - pvals_clipped)
+                z_scores = stats.norm.ppf(1 - p_clipped)
                 z_combined = np.sum(z_scores) / np.sqrt(len(z_scores))
                 p_combined = 1 - stats.norm.cdf(z_combined)
             elif self.method == "vote":
                 # Fraction of p-values below threshold
-                significant = np.sum(pvals < p_threshold) / len(pvals)
+                significant = np.sum(p < p_threshold) / len(p)
                 p_combined = 1 - significant if significant > 0.5 else 1.0
             else:
                 raise ValueError(f"Unknown method: {self.method}")
@@ -233,9 +236,9 @@ class CausalGraphAggregator:
                 continue
 
             # Filter 4: Effect size
-            weights = np.array(data["weights"], dtype=object)
-            all_weights = np.concatenate([np.array(row, dtype=float) for row in weights])
-            avg_weight = np.mean(all_weights)
+            weight = np.array(data["weight"], dtype=object)
+            all_weight = np.concatenate([np.array(row, dtype=float) for row in weight])
+            avg_weight = np.mean(all_weight)
             if avg_weight < min_weight:
                 filter_counts["insufficient_weight"] += 1
                 continue
@@ -264,7 +267,7 @@ class CausalGraphAggregator:
                 tau=tau,
                 p_combined=p_combined,
                 weight=avg_weight,
-                weight_std=np.std(all_weights),
+                weight_std=np.std(all_weight),
                 n_scenes=n_scenes,
                 scenes=data["scenes"],
                 direction=dominant_direction,
@@ -279,7 +282,7 @@ class CausalGraphAggregator:
                 "tau": tau,
                 "p_combined": p_combined,
                 "weight_mean": avg_weight,
-                "weight_std": np.std(all_weights),
+                "weight_std": np.std(all_weight),
                 "n_scenes": n_scenes,
                 "direction": dominant_direction,
                 "direction_consistency": direction_consistency,
