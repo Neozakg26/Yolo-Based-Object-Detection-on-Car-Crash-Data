@@ -112,7 +112,7 @@ class CausalGraphAggregator:
                 print(f"  Computing PCMCI for {scene_id}...")
                 try:
                     extractor = FeatureExtractor(
-                        path=str(track_file),
+                        track_path=str(track_file),
                         env_path=str(env_file),
                         tau_max=tau_max
                     )
