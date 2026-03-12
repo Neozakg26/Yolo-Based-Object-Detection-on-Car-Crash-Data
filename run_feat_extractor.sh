@@ -7,7 +7,7 @@
 #SBATCH --partition=bigbatch
 
 MAX_JOBS=4   # how many scenes to run at once
-TRACK_DIR = "/datasets/nmaja/CrashBest/results"
+TRACK_DIR= "/datasets/nmaja/CrashBest/results"
 
 run_scene () {
     SCENE_NUM=$(printf "%06d" $1)
