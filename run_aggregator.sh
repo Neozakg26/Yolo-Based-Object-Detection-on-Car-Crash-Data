@@ -8,7 +8,7 @@
 
 echo "Starting Aggregate Graphs"
 
-DATASET="/datasets/nmaja/CrashBest/new_results"
+DATASET="/datasets/nmaja/CrashBest/results"
 OUTPUT="/datasets/nmaja/CrashBest/results/agg_results"
 
 python3 -m explainability.causal_graph_aggregator --results_dir $DATASET --output_dir  $OUTPUT 
