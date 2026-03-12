@@ -1,18 +1,19 @@
 #!/bin/bash
 #SBATCH --job-name=feat_extractor
-#SBATCH --output=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/sbatch_feat_extr_results_tau3.txt
-#SBATCH --error=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/sbatch_feat_extr_errors_tau3.txt
+#SBATCH --output=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/sbatch_feat_extr_results_tau2.txt
+#SBATCH --error=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/sbatch_feat_extr_errors_tau2.txt
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --partition=bigbatch
 
 MAX_JOBS=4   # how many scenes to run at once
+TRACK_DIR = "/datasets/nmaja/CrashBest/results"
 
 run_scene () {
     SCENE_NUM=$(printf "%06d" $1)
     SCENE="C_${SCENE_NUM}_"
     echo "Starting $SCENE"
-    python3 -m execute.extract_features --track_path "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images/results/${SCENE_NUM}tracks.parquet" --env_path "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/CCD_images/results/${SCENE_NUM}env.parquet" --tau_max 3
+    python3 -m execute.extract_features --track_path "${TRACK_DIR}/${SCENE_NUM}_tracks.parquet" --env_path "${TRACK_DIR}/${SCENE_NUM}_env.parquet" --tau_max 2
     echo "Finished $SCENE"
 }
 
