@@ -157,7 +157,7 @@ class CausalGraphAggregator:
         all_edges: Dict[Tuple[str, str, int], Dict] = defaultdict(lambda: {
             "p_fdr": [],
             "weight": [],
-            "directions": [],
+         # "directions": [],
             "scenes": [],
             "counts": []
         })
@@ -172,7 +172,7 @@ class CausalGraphAggregator:
                 # Handle both list and scalar p
                 p = row["p_fdr"] if isinstance(row["p_fdr"], list) else [row["p_fdr"]]
                 weight = row["weight"] if isinstance(row["weight"], list) else [row["weight"]]
-                directions = row["directions"] if isinstance(row["directions"], list) else [row["directions"]]
+                # directions = row["directions"] if isinstance(row["directions"], list) else [row["directions"]]
 
                 all_edges[edge_key]["p_fdr"].extend(p)
                 all_edges[edge_key]["weight"].extend(weight)
@@ -242,18 +242,18 @@ class CausalGraphAggregator:
                 filter_counts["insufficient_weight"] += 1
                 continue
 
-            # Filter 5: Direction consistency
-            directions = np.array(data["directions"], dtype= object)
-            all_directiions = np.concatenate([np.array(row, dtype=float) for row in directions])
-            pos_frac = np.mean( all_directiions > 0)
-            neg_frac = np.mean(all_directiions < 0)
-            direction_consistency = max(pos_frac, neg_frac)
+            # # Filter 5: Direction consistency
+            # directions = np.array(data["directions"], dtype= object)
+            # all_directiions = np.concatenate([np.array(row, dtype=float) for row in directions])
+            # pos_frac = np.mean( all_directiions > 0)
+            # neg_frac = np.mean(all_directiions < 0)
+            # direction_consistency = max(pos_frac, neg_frac)
 
-            if direction_consistency < min_direction_consistency:
-                filter_counts["inconsistent_direction"] += 1
-                continue
+            # if direction_consistency < min_direction_consistency:
+            #     filter_counts["inconsistent_direction"] += 1
+            #     continue
 
-            dominant_direction = "positive" if pos_frac > neg_frac else "negative"
+            # dominant_direction = "positive" if pos_frac > neg_frac else "negative"
 
             # Edge passes all filters
             filter_counts["accepted"] += 1
@@ -269,8 +269,8 @@ class CausalGraphAggregator:
                 weight_std=np.std(all_weight),
                 n_scenes=n_scenes,
                 scenes=data["scenes"],
-                direction=dominant_direction,
-                direction_consistency=direction_consistency,
+                # direction=dominant_direction,
+                # direction_consistency=direction_consistency,
                 total_count=sum(data["counts"])
             )
 
@@ -283,8 +283,8 @@ class CausalGraphAggregator:
                 "weight_mean": avg_weight,
                 "weight_std": np.std(all_weight),
                 "n_scenes": n_scenes,
-                "direction": dominant_direction,
-                "direction_consistency": direction_consistency,
+                # "direction": dominant_direction,
+                # "direction_consistency": direction_consistency,
                 "total_observations": sum(data["counts"])
             })
 
@@ -300,7 +300,7 @@ class CausalGraphAggregator:
             print(f"  Domain constraint violations: {filter_counts['domain_constraint']}")
         print(f"  Insufficient p-value (>={p_threshold}): {filter_counts['insufficient_pvalue']}")
         print(f"  Insufficient weight (<{min_weight}): {filter_counts['insufficient_weight']}")
-        print(f"  Inconsistent direction (<{min_direction_consistency}): {filter_counts['inconsistent_direction']}")
+        # print(f"  Inconsistent direction (<{min_direction_consistency}): {filter_counts['inconsistent_direction']}")
         print(f"  ACCEPTED: {filter_counts['accepted']}")
 
         return self.universal_graph
