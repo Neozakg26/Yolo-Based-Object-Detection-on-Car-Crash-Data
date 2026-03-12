@@ -102,7 +102,7 @@ class CausalGraphAggregator:
 
             # Check if edge_stats already exists
             edge_stats_file = results_path / f"{scene_id}_edge_stats.parquet"
-            print(f"  loading Edge stats: {edge_stats_file}")
+            # print(f"  loading Edge stats: {edge_stats_file}")
             if edge_stats_file.exists():
                 # Load pre-computed edge stats
                 edge_stats = pd.read_parquet(edge_stats_file)
@@ -164,7 +164,7 @@ class CausalGraphAggregator:
 
         for scene_id, edge_stats in self.scene_edges.items():
             print (f"scene ID: {scene_id}")
-            print (f"edge stats : {edge_stats}")
+            # print (f"edge stats : {edge_stats}")
             
             for _, row in edge_stats.iterrows():
                 edge_key = (row["src"], row["tgt"], row["tau"])
@@ -195,7 +195,7 @@ class CausalGraphAggregator:
         }
 
         for (src, tgt, tau), data in all_edges.items():
-            # print(f"(src, tgt, tau): {src, tgt, tau}")
+            print(f"(src, tgt, tau): {src, tgt, tau}")
             # print(f"\n data: {data}")
             n_scenes = len(data["scenes"])
 
@@ -236,6 +236,7 @@ class CausalGraphAggregator:
 
             # Filter 4: Effect size
             weight = np.array(data["weight"], dtype=object)
+            print(f"weight {weight}")
             all_weight = np.concatenate([np.array(row, dtype=float) for row in weight])
             avg_weight = np.mean(all_weight)
             if avg_weight < min_weight:
