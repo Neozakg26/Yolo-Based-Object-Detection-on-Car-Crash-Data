@@ -13,7 +13,7 @@ run_scene () {
     SCENE_NUM=$(printf "%06d" $1)
     SCENE="C_${SCENE_NUM}_"
     echo "Starting $SCENE"
-    python3 -m execute.extract_features --track_path "${TRACK_DIR}/${SCENE_NUM}_tracks.parquet" --env_path "${TRACK_DIR}/${SCENE_NUM}_env.parquet" --tau_max 2
+    python3 -m execute.extract_features --track_path "/datasets/nmaja/CrashBest/results/${SCENE_NUM}_tracks.parquet" --env_path "/datasets/nmaja/CrashBest/results/${SCENE_NUM}_env.parquet" --tau_max 2
     echo "Finished $SCENE"
 }
 
