@@ -237,7 +237,7 @@ class CausalGraphAggregator:
             # Filter 4: Effect size
             weight = np.array(data["weight"], dtype=object)
             print(f"weight {weight}")
-            all_weight = np.concatenate([np.array(row, dtype=float) for row in weight])
+            all_weight = np.array(weight, dtype=float).flatten()
             avg_weight = np.mean(all_weight)
             if avg_weight < min_weight:
                 filter_counts["insufficient_weight"] += 1
