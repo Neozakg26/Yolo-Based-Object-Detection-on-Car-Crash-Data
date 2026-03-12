@@ -146,4 +146,5 @@ def main():
 
 
 if __name__ == "__main__":
+    print("Running aggregate_causal_graphs")
     main()
