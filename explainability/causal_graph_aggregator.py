@@ -340,13 +340,13 @@ class CausalGraphAggregator:
             print(f"  {direction}: {count} edges")
 
         # Top edges by weight
-        print(f"Top 10 strongest edges:")
+        print(f"Top 25 strongest edges:")
         edges = [
             (data.get("src"), data.get("tgt"), data.get("tau"), data.get("weight"), data.get("n_scenes"))
             for u, v, data in self.universal_graph.edges(data=True)
         ]
         edges.sort(key=lambda x: x[3], reverse=True)
-        for src, tgt, tau, weight, n_scenes in edges[:10]:
+        for src, tgt, tau, weight, n_scenes in edges[:25]:
             print(f"  {src} -> {tgt} (tau={tau}): weight={weight:.3f}, scenes={n_scenes}")
 
         print("=" * 60 + "\n")
