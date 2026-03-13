@@ -11,6 +11,6 @@ echo "Starting Aggregate Graphs"
 DATASET="/datasets/nmaja/CrashBest/results"
 OUTPUT="/datasets/nmaja/CrashBest/results/agg_results"
 
-python3 -m aggregate_causal_graphs --results_dir $DATASET --output_dir  $OUTPUT --min_scenes 50
+python3 -m aggregate_causal_graphs --results_dir $DATASET --output_dir  $OUTPUT --min_scenes 70
 
 echo "Fnishing Aggregate Graphs"
