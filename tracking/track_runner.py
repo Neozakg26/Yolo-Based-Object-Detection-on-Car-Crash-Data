@@ -72,7 +72,6 @@ class TrackingRunner:
                 2
             )
         
-        cv2.imwrite(f"C:\\Users\\neokg\\Coding_Projects\\yolo-detector\\car_crash_dataset\\tracked_images_results\\frame_{frame_idx:05d}.jpg", frame)
         return
 
     def __estimate_ego_motion__(self,prev_speed,prev_frame, curr_frame):

@@ -371,7 +371,7 @@ def main(args):
     # Images directory (from results)
     # images_dir = str(Path(args.results_dir).parent)
 
-    images_dir = "/datasets/nmaja/CrashBest"
+    images_dir = "/cluster_db_location/CrashBest"
     # Collect fold metrics
     fold_rows = []
     # Aggregate predictions across all folds

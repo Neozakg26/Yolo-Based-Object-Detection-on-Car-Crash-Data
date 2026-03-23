@@ -1,7 +1,7 @@
 #!/bin/bash
 #SBATCH --job-name=glob_inference
-#SBATCH --output=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/global_train_dbn_results.txt
-#SBATCH --error=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/global_train_dbn_errors.txt
+#SBATCH --output=/cluster_project_location/global_train_dbn_results.txt
+#SBATCH --error=/cluster_project_location/global_train_dbn_errors.txt
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --partition=bigbatch

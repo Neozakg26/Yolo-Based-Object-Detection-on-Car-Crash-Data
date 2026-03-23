@@ -1,15 +1,15 @@
 #!/bin/bash
 #SBATCH --job-name=pred1
-#SBATCH --output=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/prediction_out_fold_01.txt
-#SBATCH --error=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/prediction_err_fold_01.txt
+#SBATCH --output=/cluster_project_location/prediction_out_fold_01.txt
+#SBATCH --error=/cluster_project_location/prediction_err_fold_01.txt
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --partition=bigbatch
 
 echo "Starting Accident Prediction"
 
-DATASET="/datasets/nmaja/CrashBest/new_results"
-MODEL_PATH="/datasets/nmaja/CrashBest/results/eval_plots_cv/fold_01/global_model_fold_01.parquet"
+DATASET="/cluster_db_location/CrashBest/new_results"
+MODEL_PATH="/cluster_db_location/CrashBest/results/eval_plots_cv/fold_01/global_model_fold_01.parquet"
 CLASSIFIER="global_model_fold_05.classifier.pkl"
 SCENE_CSV="scene_index.csv"
 

@@ -91,7 +91,7 @@ if __name__ == "__main__":
         })
 
     var_names = ["x","y","w","h","vx","vy"]
-    dir_path = "C:/Users/neokg/Coding_Projects/yolo-detector/car_crash_dataset/tracked_images/results/*.parquet"
+    dir_path = "C:/Users/project_location/tracked_images/results/*.parquet"
 
     for parquet in glob.glob(dir_path):
         df = load_parquet(parquet)

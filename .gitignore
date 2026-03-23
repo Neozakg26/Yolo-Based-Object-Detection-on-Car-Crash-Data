@@ -26,6 +26,12 @@ ytb_list.txt
 
 runs/
 
+#Ignore training results
 cluster_results/*
+cluster_5fold/*
+scene_eval_out/
+scene_eval_out_fold_01/
 
+agg_results_old/*
+agg_results_old_local/*
 

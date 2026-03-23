@@ -1,8 +1,8 @@
-images_dir: "/datasets/nmaja/100k/val"
+images_dir: "/cluster_db_location/100k/val"
 #"car_crash_dataset/train_sample"
-annotations_dir: "/datasets/nmaja/100k/val"
+annotations_dir: "/cluster_db_location/100k/val"
  #"car_crash_dataset/label_sample"
-labels_dir : "/datasets/nmaja/labels/100k/val" 
-#old labels_dir: /datasets/nmaja/100k/val_txt"
+labels_dir : "/cluster_db_location/labels/100k/val" 
+#old labels_dir: /cluster_db_location/100k/val_txt"
 
 copier: "car_crash_dataset/codes/copier.sh"

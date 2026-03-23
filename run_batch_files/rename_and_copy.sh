@@ -1,14 +1,14 @@
 #!/bin/bash
 #SBATCH --job-name=renamer
-#SBATCH --output=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/rename_copy_results.txt
-#SBATCH --error=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/rename_copy_error.txt
+#SBATCH --output=/cluster_project_location/rename_copy_results.txt
+#SBATCH --error=/cluster_project_location/rename_copy_error.txt
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --partition=bigbatch
 
 MAX_JOBS=4
-SOURCE_DIR=/datasets/nmaja/bdd100k/images/seg_track_20/train
-TARGET_DIR=/datasets/nmaja/CrashBest/normal_files
+SOURCE_DIR=/cluster_db_location/bdd100k/images/seg_track_20/train
+TARGET_DIR=/cluster_db_location/CrashBest/normal_files
 
 run_scene () {
     local SCENE_DIR="$1"
