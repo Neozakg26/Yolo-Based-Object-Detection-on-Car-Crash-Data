@@ -4,6 +4,8 @@ __pycache__/
 
 # Logs
 *.log
+*.txt
+logs/
 
 # Ignore all Dataset folders except codes and everything in codes
 car_crash_dataset/*
@@ -21,3 +23,9 @@ downloaded_model/
 yt_download.py
 ytb_list.txt
 *.pt
+
+runs/
+
+cluster_results/*
+
+

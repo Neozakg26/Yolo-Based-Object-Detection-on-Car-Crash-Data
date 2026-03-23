@@ -1,0 +1,2 @@
+fold,risk_accuracy,risk_macro_f1,ego_accuracy,ego_macro_f1,n_frames_eval,n_scenes_test,random_state,preacc_only
+3,0.4952565343659245,0.41257844157343343,0.6756756756756757,0.6690117877277175,10330,296,42,True

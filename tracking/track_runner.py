@@ -8,23 +8,24 @@ class TrackingRunner:
         self.detector = detector
         self.tracker = tracker
 
-    def run(self,image_dir,metadata):
-        limit = int(metadata.get('accident_start_frame'))
+    def run(self,image_dir):
+        # limit = 50 #int(metadata.get('accident_start_frame'))
 
-        if limit is not None:
-            image_paths  = sorted(glob.glob(f"{image_dir}*.jpg"))[:limit]
-        else:
-            image_paths  = sorted(glob.glob(f"{image_dir}*.jpg"))
+        # if limit is not None:
+        #     image_paths  = sorted(glob.glob(f"{image_dir}*.jpg"))[:limit]
+        # else:
+        image_paths  = sorted(glob.glob(f"{image_dir}*.jpg"))
 
         all_tracks= []
         frame_idx = 0
         prev_frame = None
         prev_speed = (0,0)
-
+        print(f"img Paths: {image_paths} in dir {image_dir}")
         for img_path in image_paths:
             frame = cv2.imread(img_path)
             if frame is None:
                 print(f"Frame is None: {frame}")
+                frame_idx +=1
                 continue
             
             #Extract Ego Motion    
@@ -44,13 +45,13 @@ class TrackingRunner:
             self.tracker.update(detections= detections, frame= frame, 
                                          frame_idx= frame_idx,
                                          ego_motion=(ego_dx,ego_dy,ego_speed,ego_accel),
-                                         metadata=metadata,
+                                        #  metadata=metadata,
                                          all_tracks=all_tracks)
             
             
             prev_frame = frame
             frame_idx +=1
-
+        print(f" Frame ID: {frame_idx}")
         return all_tracks
     
     def draw_tracks(self, frame, tracks,frame_idx):
