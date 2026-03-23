@@ -1,5 +1,5 @@
 # Must define train, val, and names fields. Example:
-path: /home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/yolo_dataset
+path: /cluster_project_location/yolo_dataset
 train: images/train
 val: images/val
 

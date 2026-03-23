@@ -1,15 +1,15 @@
 #!/bin/bash
 #SBATCH --job-name=tracker
-#SBATCH --output=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/sbatch_tracker_results.txt
-#SBATCH --error=/home-mscluster/nmaja/Yolo-Based-Object-Detection-on-Car-Crash-Data/sbatch_tracker_errors.txt
+#SBATCH --output=/cluster_project_location/sbatch_tracker_results.txt
+#SBATCH --error=/cluster_project_location/sbatch_tracker_errors.txt
 #SBATCH --nodes=1
 #SBATCH --ntasks=1
 #SBATCH --partition=bigbatch
 
 MAX_JOBS=4
 
-CRASH_ROOT="/datasets/nmaja/CrashBest"
-NORMAL_ROOT="/datasets/nmaja/CrashBest/normal_files"
+CRASH_ROOT="/cluster_db_location/CrashBest"
+NORMAL_ROOT="/cluster_db_location/CrashBest/normal_files"
 SCENE_CSV="scene_index.csv"
 
 mkdir -p logs
